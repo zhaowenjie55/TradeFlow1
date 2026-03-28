@@ -136,26 +136,8 @@ onMounted(async () => {
           />
         </div>
 
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <label for="margin" class="text-xs font-medium uppercase tracking-wide text-slate-500">{{ t('task.profit') }}</label>
-            <span class="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-900 dark:text-slate-300">{{ form.targetProfitMargin }}%</span>
-          </div>
-          <input
-            id="margin"
-            v-model="form.targetProfitMargin"
-            type="range"
-            min="5"
-            max="50"
-            step="1"
-            class="h-2 w-full cursor-pointer rounded-full bg-slate-200 accent-blue-500 dark:bg-slate-800 dark:accent-slate-500"
-            :disabled="isBusy"
-          />
-        </div>
 
-        <div class="rounded-lg bg-slate-100 p-3 text-xs leading-relaxed text-slate-500 dark:bg-slate-900 dark:text-slate-400">
-          {{ taskStore.fallbackTriggered ? t('task.fallbackNotice') : t('task.modeNotice') }}
-        </div>
+
 
         <div
           v-if="taskStore.errorMessage"

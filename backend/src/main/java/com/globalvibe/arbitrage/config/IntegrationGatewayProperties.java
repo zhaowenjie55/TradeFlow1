@@ -1,0 +1,36 @@
+package com.globalvibe.arbitrage.config;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@Data
+@ConfigurationProperties(prefix = "app.integration")
+public class IntegrationGatewayProperties {
+
+    private LlmProperties llm = new LlmProperties();
+    private DomesticProperties domestic = new DomesticProperties();
+    private OverseasProperties overseas = new OverseasProperties();
+
+    @Data
+    public static class LlmProperties {
+        private boolean enabled = false;
+        private String rewriteEndpoint;
+        private String analysisEndpoint;
+        private String apiKey;
+    }
+
+    @Data
+    public static class DomesticProperties {
+        private boolean enabled = false;
+        private String searchEndpoint;
+        private String detailEndpoint;
+        private String apiKey;
+    }
+
+    @Data
+    public static class OverseasProperties {
+        private boolean enabled = false;
+        private String searchEndpoint;
+        private String apiKey;
+    }
+}
