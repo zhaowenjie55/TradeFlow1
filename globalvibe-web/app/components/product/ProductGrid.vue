@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import ProductCard from '~/components/product/ProductCard.vue'
+import { getReadableOriginalTitle, getReadableProductName } from '~/utils/presentation'
+
+const props = withDefaults(defineProps<{
+  compact?: boolean
+}>(), {
+  compact: false,
+})
 
 const productsStore = useProductsStore()
 const taskStore = useTaskStore()
 const { analyzeProduct } = useTaskRunner()
 const { t } = useAppI18n()
 const containerRef = ref<HTMLElement | null>(null)
-const topHeight = ref(36)
+const topHeight = ref(22)
 
 const gridCols = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3'
 
@@ -63,7 +70,7 @@ const startResize = (event: MouseEvent) => {
 
     const rect = container.getBoundingClientRect()
     const next = ((moveEvent.clientY - rect.top) / rect.height) * 100
-    topHeight.value = Math.min(62, Math.max(24, next))
+    topHeight.value = Math.min(58, Math.max(18, next))
   }
 
   const handleMouseUp = () => {
@@ -78,40 +85,56 @@ const startResize = (event: MouseEvent) => {
   document.body.style.cursor = 'row-resize'
   document.body.style.userSelect = 'none'
 }
+
+const selectedDisplayTitle = computed(() => {
+  if (!productsStore.currentCandidate?.title) return ''
+  return getReadableProductName(productsStore.currentCandidate.title)
+})
+
+const selectedOriginalTitle = computed(() => {
+  if (!productsStore.currentCandidate?.title) return ''
+  return getReadableOriginalTitle(productsStore.currentCandidate.title, selectedDisplayTitle.value)
+})
+
+const canResize = computed(() => !props.compact)
 </script>
 
 <template>
   <div ref="containerRef" class="flex h-full min-h-0 flex-col">
-    <div class="tradeflow-scrollbar min-h-0 overflow-auto border-b border-slate-200 dark:border-slate-800" :style="{ flexBasis: `${topHeight}%` }">
-      <div class="px-6 py-4">
+    <div
+      class="tradeflow-scrollbar min-h-0 overflow-auto"
+      :class="canResize ? 'border-b border-[var(--tf-border)]' : ''"
+      :style="canResize ? { flexBasis: `${topHeight}%` } : undefined"
+    >
+      <div :class="[props.compact ? 'px-4 py-4' : 'px-4 py-4 xl:px-5']">
         <div class="flex items-start justify-between gap-4">
           <div>
             <div class="flex items-center gap-2">
               <UIcon name="i-heroicons-shopping-bag" class="h-5 w-5 text-slate-400 dark:text-slate-500" />
-              <span class="font-medium text-slate-700 dark:text-slate-300">{{ t('products.title') }}</span>
+              <span class="text-lg font-semibold text-slate-800 dark:text-slate-100">{{ t('products.title') }}</span>
               <span v-if="productsStore.filteredCandidates.length > 0" class="ml-1 text-sm text-slate-400 dark:text-slate-500">
                 {{ t('products.count', { count: productsStore.filteredCandidates.length }) }}
               </span>
             </div>
-            <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            <p class="mt-1 max-w-2xl text-[13px] leading-5 text-slate-500 dark:text-slate-400">
               {{ t('products.subtitle') }}
             </p>
           </div>
 
           <span
             v-if="taskStore.status !== 'IDLE'"
-            class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-900 dark:text-slate-300"
+            class="rounded-full border border-[var(--tf-border)] bg-white/80 px-3 py-1 text-[12px] text-slate-600 dark:bg-slate-950/80 dark:text-slate-300"
           >
             {{ t(`stage.${taskStore.stage}`) }}
           </span>
         </div>
 
-        <div class="mt-4 grid gap-3 xl:grid-cols-3">
+        <div class="mt-3 flex flex-wrap gap-2.5">
           <div
             v-for="(step, index) in workflowSteps"
             :key="step.key"
             :class="[
-              'rounded-2xl border p-4 transition-colors',
+              'min-w-[11rem] flex-1 rounded-2xl border px-3.5 py-3 transition-colors',
               workflowCardClass(step.state),
             ]"
           >
@@ -121,7 +144,7 @@ const startResize = (event: MouseEvent) => {
               </span>
               <p class="text-sm font-semibold">{{ t(step.titleKey) }}</p>
             </div>
-            <p class="mt-2 text-xs leading-relaxed opacity-90">
+            <p class="mt-1.5 text-[12px] leading-5 opacity-90">
               {{ t(step.descriptionKey) }}
             </p>
           </div>
@@ -129,46 +152,49 @@ const startResize = (event: MouseEvent) => {
 
         <div
           v-if="productsStore.filteredCandidates.length > 0"
-          class="mt-4 rounded-xl bg-slate-100 px-4 py-3 text-sm text-slate-600 dark:bg-slate-900 dark:text-slate-300"
+          class="mt-3 rounded-2xl border border-[var(--tf-border)] bg-[var(--tf-bg-soft)] px-4 py-2.5 text-[13px] text-slate-600 dark:text-slate-300"
         >
           {{ productsStore.isAnalyzingReport ? t('products.selectionHint') : t('products.selectionReady') }}
         </div>
 
         <div
           v-if="productsStore.currentCandidate"
-          class="mt-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/50"
+          class="tradeflow-panel mt-3 rounded-[var(--tf-radius-xl)] px-4 py-3.5"
         >
-          <div class="flex flex-col gap-4 xl:flex-row xl:items-start">
-            <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+          <div class="flex flex-col gap-3 xl:flex-row xl:items-start">
+            <div class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
               <img
                 v-if="productsStore.currentCandidate.imageUrl"
                 :src="productsStore.currentCandidate.imageUrl"
                 :alt="productsStore.currentCandidate.title"
-                class="h-16 w-16 object-cover"
+                class="h-14 w-14 object-cover"
               />
               <UIcon v-else name="i-heroicons-photo" class="h-8 w-8 text-slate-400 dark:text-slate-600" />
             </div>
 
             <div class="min-w-0 flex-1">
-              <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">
+              <p class="tradeflow-section-title">
                 {{ t('products.selectedTitle') }}
               </p>
-              <h3 class="mt-1 truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
-                {{ productsStore.currentCandidate.title }}
+              <h3 class="mt-1.5 text-[17px] font-semibold leading-6 text-slate-900 dark:text-slate-100">
+                {{ selectedDisplayTitle }}
               </h3>
-              <p class="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+              <p v-if="selectedOriginalTitle" class="mt-1 line-clamp-1 text-[13px] leading-5 text-slate-500 dark:text-slate-400">
+                {{ selectedOriginalTitle }}
+              </p>
+              <p class="mt-1.5 text-[13px] leading-5 text-slate-500 dark:text-slate-400">
                 {{
                   productsStore.isAnalyzingReport
-                    ? t('products.selectedDescriptionLoading', { title: productsStore.currentCandidate.title })
-                    : t('products.selectedDescriptionReady', { title: productsStore.currentCandidate.title })
+                    ? t('products.selectedDescriptionLoading', { title: selectedDisplayTitle })
+                    : t('products.selectedDescriptionReady', { title: selectedDisplayTitle })
                 }}
               </p>
-              <p v-if="productsStore.currentCandidate.recommendationReason" class="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+              <p v-if="productsStore.currentCandidate.recommendationReason" class="mt-2 line-clamp-2 text-[13px] leading-5 text-slate-500 dark:text-slate-400">
                 {{ productsStore.currentCandidate.recommendationReason }}
               </p>
             </div>
 
-            <div class="grid grid-cols-1 gap-3 text-xs text-slate-500 sm:grid-cols-3 xl:text-right dark:text-slate-400">
+            <div class="grid grid-cols-3 gap-3 text-[12px] text-slate-500 xl:min-w-[15rem] xl:text-right dark:text-slate-400">
               <div>
                 <p>{{ t('products.price') }}</p>
                 <p class="mt-1 font-semibold text-slate-700 dark:text-slate-200">
@@ -194,6 +220,7 @@ const startResize = (event: MouseEvent) => {
     </div>
 
     <button
+      v-if="canResize"
       type="button"
       aria-label="Resize product panels"
       class="group flex h-4 shrink-0 cursor-row-resize items-center justify-center bg-white/70 transition-colors hover:bg-slate-100 dark:bg-slate-900/70 dark:hover:bg-slate-800"
@@ -202,7 +229,7 @@ const startResize = (event: MouseEvent) => {
       <span class="h-1 w-14 rounded-full bg-slate-300 transition-colors group-hover:bg-slate-400 dark:bg-slate-700 dark:group-hover:bg-slate-500" />
     </button>
 
-    <div class="tradeflow-scrollbar min-h-0 flex-1 overflow-auto p-6">
+    <div :class="['tradeflow-scrollbar overflow-auto', canResize ? 'min-h-0 flex-1 p-4 xl:p-5' : 'p-4 pt-0 md:p-5 md:pt-0']">
       <div v-if="productsStore.isLoading && productsStore.filteredCandidates.length === 0" :class="['grid gap-6', gridCols]">
         <div
           v-for="i in 8"
@@ -226,7 +253,7 @@ const startResize = (event: MouseEvent) => {
         </p>
       </div>
 
-      <div v-else :class="['grid gap-6', gridCols]">
+      <div v-else :class="['grid gap-3.5 xl:gap-4', gridCols]">
         <ProductCard
           v-for="product in productsStore.filteredCandidates"
           :key="product.productId"

@@ -22,6 +22,10 @@ const emit = defineEmits<{
 
 const isOpen = ref(false)
 const rootRef = ref<HTMLElement | null>(null)
+const triggerRef = ref<HTMLButtonElement | null>(null)
+const optionRefs = ref<Array<HTMLButtonElement | null>>([])
+const activeIndex = ref(0)
+const openDirection = ref<'down' | 'up'>('down')
 
 const normalizedOptions = computed<SelectOption[]>(() =>
   props.options.map(option => typeof option === 'string'
@@ -35,26 +39,106 @@ const selectedOption = computed(() =>
 
 const buttonLabel = computed(() => selectedOption.value?.label ?? props.modelValue ?? props.placeholder)
 
+const updateDirection = () => {
+  if (!triggerRef.value) return
+
+  const rect = triggerRef.value.getBoundingClientRect()
+  const viewportHeight = window.innerHeight
+  const estimatedMenuHeight = Math.min(320, normalizedOptions.value.length * 44 + 16)
+  openDirection.value = viewportHeight - rect.bottom < estimatedMenuHeight && rect.top > estimatedMenuHeight
+    ? 'up'
+    : 'down'
+}
+
+const focusActiveOption = () => {
+  nextTick(() => {
+    optionRefs.value[activeIndex.value]?.focus()
+  })
+}
+
+const openMenu = () => {
+  if (props.disabled) return
+  activeIndex.value = Math.max(0, normalizedOptions.value.findIndex(option => option.value === props.modelValue))
+  updateDirection()
+  isOpen.value = true
+  focusActiveOption()
+}
+
+const closeMenu = () => {
+  isOpen.value = false
+}
+
 const toggleOpen = () => {
   if (props.disabled) return
-  isOpen.value = !isOpen.value
+  if (isOpen.value) {
+    closeMenu()
+    return
+  }
+  openMenu()
 }
 
 const handleSelect = (value: string) => {
   emit('update:modelValue', value)
-  isOpen.value = false
+  closeMenu()
+  nextTick(() => triggerRef.value?.focus())
 }
 
 const handleFocusOut = (event: FocusEvent) => {
   const nextTarget = event.relatedTarget as Node | null
   if (rootRef.value && nextTarget && rootRef.value.contains(nextTarget)) return
-  isOpen.value = false
+  closeMenu()
+}
+
+const handleTriggerKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault()
+    openMenu()
+  }
+}
+
+const handleOptionKeydown = (event: KeyboardEvent, index: number) => {
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    closeMenu()
+    nextTick(() => triggerRef.value?.focus())
+    return
+  }
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault()
+    activeIndex.value = (index + 1) % normalizedOptions.value.length
+    focusActiveOption()
+  }
+
+  if (event.key === 'ArrowUp') {
+    event.preventDefault()
+    activeIndex.value = (index - 1 + normalizedOptions.value.length) % normalizedOptions.value.length
+    focusActiveOption()
+  }
+
+  if (event.key === 'Home') {
+    event.preventDefault()
+    activeIndex.value = 0
+    focusActiveOption()
+  }
+
+  if (event.key === 'End') {
+    event.preventDefault()
+    activeIndex.value = normalizedOptions.value.length - 1
+    focusActiveOption()
+  }
+
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault()
+    handleSelect(normalizedOptions.value[index].value)
+  }
 }
 </script>
 
 <template>
   <div ref="rootRef" class="relative" @focusout="handleFocusOut">
     <button
+      ref="triggerRef"
       :id="id"
       type="button"
       :disabled="disabled"
@@ -67,6 +151,7 @@ const handleFocusOut = (event: FocusEvent) => {
           : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-950',
       ]"
       @click="toggleOpen"
+      @keydown="handleTriggerKeydown"
     >
       <span class="truncate">{{ buttonLabel }}</span>
       <UIcon
@@ -80,17 +165,21 @@ const handleFocusOut = (event: FocusEvent) => {
 
     <div
       v-if="isOpen"
-      class="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-200/70 dark:border-slate-800 dark:bg-slate-950 dark:shadow-black/20"
+      class="absolute left-0 right-0 z-30 overflow-hidden rounded-2xl border border-[var(--tf-border)] bg-[var(--tf-bg-panel)] p-1.5 shadow-xl"
+      :class="openDirection === 'down' ? 'top-[calc(100%+0.5rem)]' : 'bottom-[calc(100%+0.5rem)]'"
     >
       <button
-        v-for="option in normalizedOptions"
+        v-for="(option, index) in normalizedOptions"
         :key="option.value"
+        :ref="element => { optionRefs[index] = element as HTMLButtonElement | null }"
         type="button"
+        role="option"
         class="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm transition-colors"
         :class="option.value === modelValue
-          ? 'bg-slate-100 font-medium text-slate-800 dark:bg-slate-900 dark:text-slate-100'
-          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100'"
+          ? 'bg-[var(--tf-accent-soft)] font-medium text-[var(--tf-text)]'
+          : 'text-slate-600 hover:bg-white/70 hover:text-slate-800 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-slate-100'"
         @mousedown.prevent
+        @keydown="handleOptionKeydown($event, index)"
         @click="handleSelect(option.value)"
       >
         <span class="truncate">{{ option.label }}</span>

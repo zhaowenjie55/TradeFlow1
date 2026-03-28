@@ -47,29 +47,31 @@ const updateLocale = (value: AppLocale) => {
 
 <template>
   <NuxtLayout name="default">
-    <div class="tradeflow-scrollbar h-full overflow-auto p-8">
-      <h1 class="text-2xl font-semibold text-slate-800 dark:text-slate-100">{{ t('settings.title') }}</h1>
-      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">{{ t('settings.subtitle') }}</p>
+    <div class="tradeflow-scrollbar min-h-[calc(100dvh-4.5rem)] overflow-auto p-4 md:p-6 xl:p-8">
+      <div class="mx-auto max-w-3xl">
+        <h1 class="text-2xl font-semibold text-slate-800 dark:text-slate-100">{{ t('settings.title') }}</h1>
+        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">{{ t('settings.subtitle') }}</p>
 
-      <div class="mt-8 max-w-2xl space-y-5">
-        <div class="rounded-2xl bg-white p-5 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
-          <label for="settings-language" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ t('settings.language') }}</label>
-          <AppSelect id="settings-language" v-model="currentLocale" :options="localeOptions" class="mt-3" />
+        <div class="mt-8 space-y-5">
+          <div class="tradeflow-card rounded-[var(--tf-radius-xl)] p-5">
+            <label for="settings-language" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ t('settings.language') }}</label>
+            <AppSelect id="settings-language" v-model="currentLocale" :options="localeOptions" class="mt-3" />
+          </div>
+
+          <div class="tradeflow-card rounded-[var(--tf-radius-xl)] p-5">
+            <label for="settings-market" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ t('settings.defaultMarket') }}</label>
+            <AppSelect id="settings-market" v-model="defaultMarket" :options="config?.markets ?? []" class="mt-3" />
+          </div>
+          <button
+            type="button"
+            class="rounded-2xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+            @click="saveSettings"
+          >
+            {{ t('settings.save') }}
+          </button>
+
+          <p v-if="saved" class="text-sm text-green-600 dark:text-green-400">{{ t('settings.savedHint') }}</p>
         </div>
-
-        <div class="rounded-2xl bg-white p-5 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
-          <label for="settings-market" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ t('settings.defaultMarket') }}</label>
-          <AppSelect id="settings-market" v-model="defaultMarket" :options="config?.markets ?? []" class="mt-3" />
-        </div>
-        <button
-          type="button"
-          class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
-          @click="saveSettings"
-        >
-          {{ t('settings.save') }}
-        </button>
-
-        <p v-if="saved" class="text-sm text-green-600 dark:text-green-400">{{ t('settings.savedHint') }}</p>
       </div>
     </div>
   </NuxtLayout>

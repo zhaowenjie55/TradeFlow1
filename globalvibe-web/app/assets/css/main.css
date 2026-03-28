@@ -2,9 +2,71 @@
 
 @import "tailwindcss";
 
+:root {
+  --tf-bg: #eef2f8;
+  --tf-bg-elevated: rgba(255, 255, 255, 0.84);
+  --tf-bg-panel: rgba(255, 255, 255, 0.92);
+  --tf-bg-soft: #f7f9fc;
+  --tf-bg-strong: #ffffff;
+  --tf-border: rgba(148, 163, 184, 0.24);
+  --tf-border-strong: rgba(100, 116, 139, 0.26);
+  --tf-text: #0f172a;
+  --tf-text-secondary: #475569;
+  --tf-text-muted: #64748b;
+  --tf-accent: #2563eb;
+  --tf-accent-soft: rgba(37, 99, 235, 0.12);
+  --tf-success-soft: rgba(16, 185, 129, 0.14);
+  --tf-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+  --tf-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.06);
+  --tf-radius-xl: 20px;
+  --tf-radius-2xl: 28px;
+  --tf-duration: 220ms;
+}
+
+.dark {
+  --tf-bg: #0b1020;
+  --tf-bg-elevated: rgba(12, 18, 32, 0.86);
+  --tf-bg-panel: rgba(15, 23, 42, 0.94);
+  --tf-bg-soft: rgba(15, 23, 42, 0.82);
+  --tf-bg-strong: #0f172a;
+  --tf-border: rgba(71, 85, 105, 0.38);
+  --tf-border-strong: rgba(100, 116, 139, 0.46);
+  --tf-text: #e2e8f0;
+  --tf-text-secondary: #cbd5e1;
+  --tf-text-muted: #94a3b8;
+  --tf-accent: #60a5fa;
+  --tf-accent-soft: rgba(96, 165, 250, 0.14);
+  --tf-success-soft: rgba(52, 211, 153, 0.16);
+  --tf-shadow: 0 28px 80px rgba(2, 6, 23, 0.48);
+  --tf-shadow-soft: 0 16px 36px rgba(2, 6, 23, 0.34);
+}
+
+html,
+body,
+#__nuxt {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.1), transparent 28%),
+    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 24%),
+    var(--tf-bg);
+  color: var(--tf-text);
+}
+
+body {
+  font-family:
+    'SF Pro Display',
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    Inter,
+    system-ui,
+    sans-serif;
+}
+
 .tradeflow-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(148, 163, 184, 0.55) transparent;
+  scrollbar-gutter: stable;
 }
 
 .tradeflow-scrollbar::-webkit-scrollbar {
@@ -37,4 +99,67 @@
 
 .dark .tradeflow-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(100, 116, 139, 0.95);
+}
+
+.tradeflow-shell {
+  min-height: 100dvh;
+  color: var(--tf-text);
+}
+
+.tradeflow-glass {
+  background: var(--tf-bg-elevated);
+  backdrop-filter: blur(18px);
+}
+
+.tradeflow-panel {
+  border: 1px solid var(--tf-border);
+  background: var(--tf-bg-panel);
+  box-shadow: var(--tf-shadow-soft);
+}
+
+.tradeflow-card {
+  border: 1px solid var(--tf-border);
+  background: var(--tf-bg-strong);
+  box-shadow: var(--tf-shadow-soft);
+}
+
+.tradeflow-card-soft {
+  border: 1px solid var(--tf-border);
+  background: var(--tf-bg-soft);
+}
+
+.tradeflow-muted {
+  color: var(--tf-text-muted);
+}
+
+.tradeflow-subtle {
+  color: var(--tf-text-secondary);
+}
+
+.tradeflow-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tf-text-muted);
+}
+
+.tradeflow-surface-accent {
+  background: linear-gradient(135deg, var(--tf-accent-soft), rgba(255, 255, 255, 0.02));
+}
+
+.tradeflow-log-entry {
+  animation: tradeflow-log-entry-in 220ms ease-out;
+}
+
+@keyframes tradeflow-log-entry-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
