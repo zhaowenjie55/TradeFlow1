@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: tradeflow-arbitrage-backend
+  threads:
+    virtual:
+      enabled: true
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/tradeflow}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+
+server:
+  port: ${SERVER_PORT:8080}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  task:
+    phase1-candidate-limit: 20
+    processing-delay-millis: 250
+    default-mode: AUTO_FALLBACK
+  integration:
+    llm:
+      enabled: ${LLM_GATEWAY_ENABLED:false}
+      rewrite-endpoint: ${LLM_REWRITE_ENDPOINT:}
+      analysis-endpoint: ${LLM_ANALYSIS_ENDPOINT:}
+      api-key: ${LLM_API_KEY:}
+    domestic:
+      enabled: ${DOMESTIC_GATEWAY_ENABLED:false}
+      search-endpoint: ${DOMESTIC_SEARCH_ENDPOINT:}
+      detail-endpoint: ${DOMESTIC_DETAIL_ENDPOINT:}
+      api-key: ${DOMESTIC_API_KEY:}
+    overseas:
+      enabled: ${OVERSEAS_GATEWAY_ENABLED:false}
+      search-endpoint: ${OVERSEAS_SEARCH_ENDPOINT:}
+      api-key: ${OVERSEAS_API_KEY:}
+  vector:
+    enabled: ${VECTOR_ENABLED:true}
+    bootstrap-on-startup: ${VECTOR_BOOTSTRAP_ON_STARTUP:true}
+    domestic-platform: ${VECTOR_DOMESTIC_PLATFORM:TAOBAO}
+    fixed-keyword: ${VECTOR_FIXED_KEYWORD:亚克力透明收纳架}
+    max-results: ${VECTOR_MAX_RESULTS:12}
+    min-score: ${VECTOR_MIN_SCORE:0.55}
+    dimension: ${VECTOR_DIMENSION:512}

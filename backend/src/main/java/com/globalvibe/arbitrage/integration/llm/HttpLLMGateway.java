@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,23 +68,24 @@ public class HttpLLMGateway {
             throw new IllegalStateException("LLM analysis endpoint is not configured.");
         }
 
+        Map<String, Object> requestBody = new LinkedHashMap<>();
+        requestBody.put("task", "arbitrage_report");
+        requestBody.put("product_title", request.productTitle());
+        requestBody.put("market", request.market());
+        requestBody.put("rewritten_query", request.rewrittenQuery());
+        requestBody.put("decision", request.decision());
+        requestBody.put("risk_level", request.riskLevel());
+        requestBody.put("target_selling_price", request.targetSellingPrice());
+        requestBody.put("total_cost", request.totalCost());
+        requestBody.put("estimated_profit", request.estimatedProfit());
+        requestBody.put("estimated_margin", request.estimatedMargin());
+        requestBody.put("benchmark_title", request.benchmarkTitle());
+        requestBody.put("domestic_match_titles", request.domesticMatchTitles());
+
         Map<String, Object> response = restClient.post()
                 .uri(endpoint)
                 .headers(headers -> applyApiKey(headers, integrationGatewayProperties.getLlm().getApiKey()))
-                .body(Map.of(
-                        "task", "arbitrage_report",
-                        "product_title", request.productTitle(),
-                        "market", request.market(),
-                        "rewritten_query", request.rewrittenQuery(),
-                        "decision", request.decision(),
-                        "risk_level", request.riskLevel(),
-                        "target_selling_price", request.targetSellingPrice(),
-                        "total_cost", request.totalCost(),
-                        "estimated_profit", request.estimatedProfit(),
-                        "estimated_margin", request.estimatedMargin(),
-                        "benchmark_title", request.benchmarkTitle(),
-                        "domestic_match_titles", request.domesticMatchTitles()
-                ))
+                .body(requestBody)
                 .retrieve()
                 .body(Map.class);
 

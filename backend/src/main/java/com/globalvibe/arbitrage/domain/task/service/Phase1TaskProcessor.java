@@ -159,7 +159,7 @@ public class Phase1TaskProcessor {
                     Product product = products.get(index);
                     return SearchRunResult.builder()
                             .searchRunId(searchRunId)
-                            .platform(product.platform().name())
+                            .platform(product.platform().value())
                             .externalItemId(product.id())
                             .rankNo(index + 1)
                             .title(product.title())

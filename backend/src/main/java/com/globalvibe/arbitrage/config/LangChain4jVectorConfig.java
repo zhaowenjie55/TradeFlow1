@@ -12,6 +12,6 @@ public class LangChain4jVectorConfig {
 
     @Bean
     public EmbeddingModel productEmbeddingModel() {
-        return BgeSmallZhV15EmbeddingModelFactory.create();
+        return new BgeSmallZhV15EmbeddingModelFactory().create();
     }
 }

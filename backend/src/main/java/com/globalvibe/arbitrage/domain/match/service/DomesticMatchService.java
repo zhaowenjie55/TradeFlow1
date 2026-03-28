@@ -107,7 +107,7 @@ public class DomesticMatchService {
                 liveProducts.forEach(product -> merged.put(product.id(), product));
             } else {
                 List<Product> historicalProducts = domesticProductFallbackService.searchHistoricalProducts(
-                        MarketplaceType.TAOBAO,
+                        MarketplaceType.ALIBABA_1688,
                         term,
                         searchLimit
                 );
@@ -162,7 +162,7 @@ public class DomesticMatchService {
                 .taskId(taskId)
                 .candidateId(candidateId)
                 .sourceProductId(sourceProductId)
-                .platform(product.platform().name())
+                .platform(product.platform().value())
                 .externalItemId(product.id())
                 .title(product.title())
                 .price(product.price())

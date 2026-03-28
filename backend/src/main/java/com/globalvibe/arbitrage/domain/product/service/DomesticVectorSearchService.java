@@ -66,7 +66,7 @@ public class DomesticVectorSearchService {
     }
 
     private MarketplaceType domesticPlatform() {
-        return MarketplaceType.valueOf(properties.getDomesticPlatform());
+        return MarketplaceType.fromValue(properties.getDomesticPlatform());
     }
 
     private String toIndexDocument(Product product) {
@@ -93,7 +93,7 @@ public class DomesticVectorSearchService {
 
     private Map<String, Object> buildMetadata(Product product) {
         return Map.of(
-                "platform", product.platform().name(),
+                "platform", product.platform().value(),
                 "productId", product.id(),
                 "title", product.title(),
                 "fixedKeyword", properties.getFixedKeyword()

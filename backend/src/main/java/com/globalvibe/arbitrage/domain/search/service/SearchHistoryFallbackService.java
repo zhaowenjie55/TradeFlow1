@@ -17,6 +17,6 @@ public class SearchHistoryFallbackService {
     }
 
     public List<Product> findLatestAmazonProducts(String queryText, int limit) {
-        return searchRunRepository.findLatestProductsByQuery(MarketplaceType.AMAZON.name(), queryText, limit);
+        return searchRunRepository.findLatestProductsByQuery(MarketplaceType.AMAZON.value(), queryText, limit);
     }
 }

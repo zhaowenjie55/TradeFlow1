@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Repository
@@ -27,8 +30,8 @@ public class ProductEmbeddingRepository {
 
     public void deleteByPlatform(MarketplaceType platform) {
         jdbcTemplate.update(
-                "DELETE FROM gv_product_embedding WHERE platform = ?",
-                platform.name()
+                "DELETE FROM gv_product_embedding WHERE " + platformPredicate("platform", platform),
+                platform.databaseValues().toArray()
         );
     }
 
@@ -43,9 +46,9 @@ public class ProductEmbeddingRepository {
                             embedding = EXCLUDED.embedding,
                             metadata_jsonb = EXCLUDED.metadata_jsonb,
                             updated_at = NOW()
-                        """,
+                """,
                 buildEmbeddingId(platform, product.id()),
-                platform.name(),
+                platform.value(),
                 product.id(),
                 indexedText,
                 toVectorLiteral(embedding),
@@ -78,14 +81,14 @@ public class ProductEmbeddingRepository {
                             ORDER BY s.created_at DESC
                             LIMIT 1
                         ) s ON TRUE
-                        WHERE e.platform = ?
+                        WHERE %s
                           AND (1 - (e.embedding <=> CAST(? AS vector))) >= ?
                         ORDER BY e.embedding <=> CAST(? AS vector), p.updated_at DESC
                         LIMIT ?
-                        """,
+                        """.formatted(platformPredicate("e.platform", platform)),
                 (rs, rowNum) -> new Product(
                         rs.getString("product_id"),
-                        MarketplaceType.valueOf(rs.getString("platform")),
+                        MarketplaceType.fromValue(rs.getString("platform")),
                         rs.getString("title"),
                         rs.getBigDecimal("price"),
                         rs.getString("image"),
@@ -95,16 +98,12 @@ public class ProductEmbeddingRepository {
                         defaultIfNull(jdbcJsonSupport.fromJson(jsonText(rs, "attributes_json"), MAP_TYPE), Map.of()),
                         defaultIfNull(jdbcJsonSupport.fromJson(jsonText(rs, "raw_data_json"), MAP_TYPE), Map.of())
                 ),
-                platform.name(),
-                vectorLiteral,
-                minScore,
-                vectorLiteral,
-                limit
+                withPlatformValues(platform, vectorLiteral, minScore, vectorLiteral, limit)
         );
     }
 
     private String buildEmbeddingId(MarketplaceType platform, String productId) {
-        return platform.name().toLowerCase() + ":" + productId;
+        return platform.value().toLowerCase(Locale.ROOT) + ":" + productId;
     }
 
     private String toVectorLiteral(float[] vector) {
@@ -136,5 +135,15 @@ public class ProductEmbeddingRepository {
 
     private <T> T defaultIfNull(T value, T fallback) {
         return value == null ? fallback : value;
+    }
+
+    private String platformPredicate(String column, MarketplaceType platform) {
+        return column + " IN (" + String.join(", ", Collections.nCopies(platform.databaseValues().size(), "?")) + ")";
+    }
+
+    private Object[] withPlatformValues(MarketplaceType platform, Object... additionalParameters) {
+        List<Object> parameters = new ArrayList<>(platform.databaseValues());
+        Collections.addAll(parameters, additionalParameters);
+        return parameters.toArray();
     }
 }

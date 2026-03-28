@@ -69,11 +69,11 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
         DetailLookupResult detailLookupResult = matches.isEmpty()
                 ? new DetailLookupResult(null, false)
                 : resolveDomesticDetail(matches.getFirst().externalItemId());
-        ProductDetailSnapshot taobaoDetail = detailLookupResult.detailSnapshot();
+        ProductDetailSnapshot detail1688 = detailLookupResult.detailSnapshot();
         ArbitrageReport report = productAnalysisService.buildReport(
                 "report-" + phase2Task.getTaskId(),
                 candidate,
-                taobaoDetail,
+                detail1688,
                 queryRewrite.rewrittenText(),
                 matches
         );
@@ -86,12 +86,12 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
                                 : "已完成 Amazon 标题到国内搜索词的改写。"),
                         log("phase2.domestic-search", matchExecutionResult.fallbackUsed()
                                 ? "国内搜索未命中实时结果，已回退到数据库中的历史国内商品数据。"
-                                : "已完成淘宝候选搜索与相似度匹配。"),
+                                : "已完成 1688 候选搜索与相似度匹配。"),
                         log("phase2.product-detail", detailLookupResult.fallbackUsed()
-                                ? "淘宝详情读取失败，已回退到数据库中的历史详情快照。"
-                                : taobaoDetail != null
-                                ? "已加载淘宝详情数据，纳入品牌、属性与 SKU 信息。"
-                                : "未命中淘宝详情数据，当前退回关键词搜索结果分析。"),
+                                ? "1688 详情读取失败，已回退到数据库中的历史详情快照。"
+                                : detail1688 != null
+                                ? "已加载 1688 详情数据，纳入品牌、属性与 SKU 信息。"
+                                : "未命中 1688 详情数据，当前退回关键词搜索结果分析。"),
                         log("phase2.pricing", "已结合 Amazon 海外售价与国内采购价生成利润估算。"),
                         log("phase2.report", "二阶段分析已完成，报告已生成。")
                 ),
@@ -105,7 +105,7 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
 
     private DetailLookupResult resolveDomesticDetail(String productId) {
         try {
-            ProductDetailSnapshot liveDetail = productCatalogSyncService.syncTaobaoDetail(productId).orElse(null);
+            ProductDetailSnapshot liveDetail = productCatalogSyncService.sync1688Detail(productId).orElse(null);
             if (liveDetail != null) {
                 return new DetailLookupResult(liveDetail, false);
             }

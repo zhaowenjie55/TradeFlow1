@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -87,11 +89,11 @@ public class PostgresProductRepository implements ProductRepository {
                             ORDER BY s.created_at DESC
                             LIMIT 1
                         ) s ON TRUE
-                        WHERE p.platform = ?
+                        WHERE __PLATFORM_PREDICATE__
                         ORDER BY p.updated_at DESC, p.title ASC
-                        """,
+                        """.replace("__PLATFORM_PREDICATE__", platformPredicate("p.platform", platform)),
                 productRowMapper(),
-                platform.name()
+                withPlatformValues(platform)
         );
     }
 
@@ -113,16 +115,13 @@ public class PostgresProductRepository implements ProductRepository {
                             ORDER BY s.created_at DESC
                             LIMIT 1
                         ) s ON TRUE
-                        WHERE p.platform = ?
+                        WHERE __PLATFORM_PREDICATE__
                           AND LOWER(p.title) % LOWER(?)
                         ORDER BY similarity(LOWER(p.title), LOWER(?)) DESC, p.updated_at DESC
                         LIMIT ?
-                        """,
+                        """.replace("__PLATFORM_PREDICATE__", platformPredicate("p.platform", platform)),
                 productRowMapper(),
-                platform.name(),
-                keyword,
-                keyword,
-                limit
+                withPlatformValues(platform, keyword, keyword, limit)
         );
         if (!trigramMatches.isEmpty()) {
             return trigramMatches;
@@ -140,15 +139,13 @@ public class PostgresProductRepository implements ProductRepository {
                             ORDER BY s.created_at DESC
                             LIMIT 1
                         ) s ON TRUE
-                        WHERE p.platform = ?
+                        WHERE __PLATFORM_PREDICATE__
                           AND LOWER(p.title) LIKE CONCAT('%', LOWER(?), '%')
                         ORDER BY p.updated_at DESC
                         LIMIT ?
-                        """,
+                        """.replace("__PLATFORM_PREDICATE__", platformPredicate("p.platform", platform)),
                 productRowMapper(),
-                platform.name(),
-                keyword.replace(" ", ""),
-                limit
+                withPlatformValues(platform, keyword.replace(" ", ""), limit)
         );
     }
 
@@ -196,7 +193,7 @@ public class PostgresProductRepository implements ProductRepository {
                     updated_at = NOW()
                 """,
                 detailSnapshot.productId(),
-                detailSnapshot.platform().name(),
+                detailSnapshot.platform().value(),
                 detailSnapshot.title(),
                 detailSnapshot.price(),
                 detailSnapshot.brand(),
@@ -236,7 +233,7 @@ public class PostgresProductRepository implements ProductRepository {
     private RowMapper<Product> productRowMapper() {
         return (rs, rowNum) -> new Product(
                 rs.getString("product_id"),
-                MarketplaceType.valueOf(rs.getString("platform")),
+                MarketplaceType.fromValue(rs.getString("platform")),
                 rs.getString("title"),
                 rs.getBigDecimal("price"),
                 rs.getString("image"),
@@ -251,7 +248,7 @@ public class PostgresProductRepository implements ProductRepository {
     private RowMapper<ProductDetailSnapshot> detailRowMapper() {
         return (rs, rowNum) -> new ProductDetailSnapshot(
                 rs.getString("product_id"),
-                MarketplaceType.valueOf(rs.getString("platform")),
+                MarketplaceType.fromValue(rs.getString("platform")),
                 rs.getString("title"),
                 rs.getBigDecimal("price"),
                 rs.getString("brand"),
@@ -300,7 +297,7 @@ public class PostgresProductRepository implements ProductRepository {
                     attributes_jsonb = EXCLUDED.attributes_jsonb,
                     updated_at = NOW()
                 """,
-                product.platform().name(),
+                product.platform().value(),
                 product.id(),
                 product.title(),
                 product.price(),
@@ -320,7 +317,7 @@ public class PostgresProductRepository implements ProductRepository {
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 "snap-" + UUID.randomUUID(),
-                product.platform().name(),
+                product.platform().value(),
                 product.id(),
                 queryText,
                 product.title(),
@@ -342,7 +339,7 @@ public class PostgresProductRepository implements ProductRepository {
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 "snap-" + UUID.randomUUID(),
-                detailSnapshot.platform().name(),
+                detailSnapshot.platform().value(),
                 detailSnapshot.productId(),
                 null,
                 detailSnapshot.title(),
@@ -354,5 +351,15 @@ public class PostgresProductRepository implements ProductRepository {
                 jdbcJsonSupport.toJsonb(detailSnapshot.rawData()),
                 OffsetDateTime.now()
         );
+    }
+
+    private String platformPredicate(String column, MarketplaceType platform) {
+        return column + " IN (" + String.join(", ", Collections.nCopies(platform.databaseValues().size(), "?")) + ")";
+    }
+
+    private Object[] withPlatformValues(MarketplaceType platform, Object... additionalParameters) {
+        List<Object> parameters = new ArrayList<>(platform.databaseValues());
+        Collections.addAll(parameters, additionalParameters);
+        return parameters.toArray();
     }
 }

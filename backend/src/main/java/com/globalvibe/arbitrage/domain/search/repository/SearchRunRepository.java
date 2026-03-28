@@ -23,7 +23,7 @@ public interface SearchRunRepository {
                         .limit(limit)
                         .map(result -> new Product(
                                 result.externalItemId(),
-                                com.globalvibe.arbitrage.domain.marketplace.model.MarketplaceType.valueOf(result.platform()),
+                                com.globalvibe.arbitrage.domain.marketplace.model.MarketplaceType.fromValue(result.platform()),
                                 result.title(),
                                 result.price(),
                                 result.image(),

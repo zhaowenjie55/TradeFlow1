@@ -51,7 +51,7 @@ public class ProductCatalogSyncService {
         return products;
     }
 
-    public Optional<ProductDetailSnapshot> syncTaobaoDetail(String productId) {
+    public Optional<ProductDetailSnapshot> sync1688Detail(String productId) {
         Optional<ProductDetailSnapshot> detailSnapshot = domesticMarketplaceGateway.loadDetail(productId);
         detailSnapshot.ifPresent(detail -> {
             productRepository.saveDetail(detail);
@@ -67,7 +67,7 @@ public class ProductCatalogSyncService {
         return productRepository.findById(detailSnapshot.productId())
                 .orElseGet(() -> productRepository.save(new Product(
                         detailSnapshot.productId(),
-                        MarketplaceType.TAOBAO,
+                        MarketplaceType.ALIBABA_1688,
                         detailSnapshot.title(),
                         detailSnapshot.price(),
                         detailSnapshot.image(),

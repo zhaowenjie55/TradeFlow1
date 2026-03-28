@@ -14,7 +14,7 @@ public class ProductViewAssembler {
     public ProductDetailVO toDetail(Product product, ProductDetailSnapshot detailSnapshot) {
         return new ProductDetailVO(
                 product.id(),
-                product.platform().name(),
+                product.platform().value(),
                 detailSnapshot != null ? detailSnapshot.title() : product.title(),
                 detailSnapshot != null ? detailSnapshot.price() : product.price(),
                 detailSnapshot != null ? detailSnapshot.image() : product.image(),

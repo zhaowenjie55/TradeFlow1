@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS gv_product_embedding (
     platform VARCHAR(32) NOT NULL,
     external_item_id VARCHAR(128) NOT NULL,
     indexed_text TEXT NOT NULL,
-    embedding vector(512) NOT NULL,
+    embedding vector(1024) NOT NULL,
     metadata_jsonb JSONB NOT NULL DEFAULT '{}'::jsonb,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),

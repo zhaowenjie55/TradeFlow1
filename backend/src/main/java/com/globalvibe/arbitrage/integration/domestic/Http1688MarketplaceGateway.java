@@ -17,12 +17,12 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class HttpTaobaoMarketplaceGateway {
+public class Http1688MarketplaceGateway {
 
     private final RestClient restClient;
     private final IntegrationGatewayProperties integrationGatewayProperties;
 
-    public HttpTaobaoMarketplaceGateway(IntegrationGatewayProperties integrationGatewayProperties) {
+    public Http1688MarketplaceGateway(IntegrationGatewayProperties integrationGatewayProperties) {
         this.restClient = RestClient.builder().build();
         this.integrationGatewayProperties = integrationGatewayProperties;
     }
@@ -71,7 +71,7 @@ public class HttpTaobaoMarketplaceGateway {
         for (JsonNode item : items) {
             products.add(new Product(
                     item.path("num_iid").asText(),
-                    MarketplaceType.TAOBAO,
+                    MarketplaceType.ALIBABA_1688,
                     item.path("title").asText(),
                     decimal(item.path("price")),
                     normalizeImage(item.path("pic_url").asText()),
@@ -112,7 +112,7 @@ public class HttpTaobaoMarketplaceGateway {
 
         return Optional.of(new ProductDetailSnapshot(
                 item.path("num_iid").asText(),
-                MarketplaceType.TAOBAO,
+                MarketplaceType.ALIBABA_1688,
                 item.path("title").asText(),
                 decimal(item.path("price")),
                 item.path("brand").asText(),

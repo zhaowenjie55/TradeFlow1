@@ -14,16 +14,16 @@ import java.util.Optional;
 public class RoutingDomesticMarketplaceGateway implements DomesticMarketplaceGateway {
 
     private final IntegrationGatewayProperties integrationGatewayProperties;
-    private final HttpTaobaoMarketplaceGateway httpTaobaoMarketplaceGateway;
+    private final Http1688MarketplaceGateway http1688MarketplaceGateway;
     private final SimulatedDomesticMarketplaceGateway simulatedDomesticMarketplaceGateway;
 
     public RoutingDomesticMarketplaceGateway(
             IntegrationGatewayProperties integrationGatewayProperties,
-            HttpTaobaoMarketplaceGateway httpTaobaoMarketplaceGateway,
+            Http1688MarketplaceGateway http1688MarketplaceGateway,
             SimulatedDomesticMarketplaceGateway simulatedDomesticMarketplaceGateway
     ) {
         this.integrationGatewayProperties = integrationGatewayProperties;
-        this.httpTaobaoMarketplaceGateway = httpTaobaoMarketplaceGateway;
+        this.http1688MarketplaceGateway = http1688MarketplaceGateway;
         this.simulatedDomesticMarketplaceGateway = simulatedDomesticMarketplaceGateway;
     }
 
@@ -33,7 +33,7 @@ public class RoutingDomesticMarketplaceGateway implements DomesticMarketplaceGat
             return simulatedDomesticMarketplaceGateway.searchProducts(keyword);
         }
         try {
-            return httpTaobaoMarketplaceGateway.searchProducts(keyword);
+            return http1688MarketplaceGateway.searchProducts(keyword);
         } catch (RuntimeException ex) {
             throw new IllegalStateException("国内实时货源搜索失败，将转入数据库货源兜底: " + ex.getMessage(), ex);
         }
@@ -45,7 +45,7 @@ public class RoutingDomesticMarketplaceGateway implements DomesticMarketplaceGat
             return simulatedDomesticMarketplaceGateway.loadDetail(productId);
         }
         try {
-            return httpTaobaoMarketplaceGateway.loadDetail(productId);
+            return http1688MarketplaceGateway.loadDetail(productId);
         } catch (RuntimeException ex) {
             throw new IllegalStateException("国内详情抓取失败，将转入数据库详情兜底: " + ex.getMessage(), ex);
         }

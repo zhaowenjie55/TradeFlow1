@@ -18,7 +18,7 @@ spring:
       mode: always
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8080}
 
 springdoc:
   api-docs:
@@ -49,7 +49,7 @@ app:
   vector:
     enabled: ${VECTOR_ENABLED:true}
     bootstrap-on-startup: ${VECTOR_BOOTSTRAP_ON_STARTUP:true}
-    domestic-platform: ${VECTOR_DOMESTIC_PLATFORM:TAOBAO}
+    domestic-platform: ${VECTOR_DOMESTIC_PLATFORM:1688}
     fixed-keyword: ${VECTOR_FIXED_KEYWORD:亚克力透明收纳架}
     max-results: ${VECTOR_MAX_RESULTS:12}
     min-score: ${VECTOR_MIN_SCORE:0.55}

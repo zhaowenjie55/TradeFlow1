@@ -9,7 +9,7 @@ public class VectorSearchProperties {
 
     private boolean enabled = true;
     private boolean bootstrapOnStartup = true;
-    private String domesticPlatform = "TAOBAO";
+    private String domesticPlatform = "1688";
     private String fixedKeyword = "亚克力透明收纳架";
     private int maxResults = 12;
     private double minScore = 0.55D;

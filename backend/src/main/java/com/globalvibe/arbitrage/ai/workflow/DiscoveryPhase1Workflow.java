@@ -71,7 +71,7 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
                     product.id(),
                     product.title(),
                     product.image(),
-                    product.platform().name(),
+                    product.platform().value(),
                     product.price(),
                     estimatedMargin,
                     index <= 2 ? "低风险" : index <= 5 ? "中风险" : "待核验",

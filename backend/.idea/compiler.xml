@@ -3,7 +3,7 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for arbitrage-backend" enabled="true">
+      <profile name="Annotation profile for tradeflow-backend" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -11,12 +11,14 @@
           <entry name="$PROJECT_DIR$/../../../../CodingEnvironment/javas/apache-maven-3.6.3/repository/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="arbitrage-backend" />
+        <module name="tradeflow-backend" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="arbitrage-backend" options="-parameters" />
+      <module name="tradeflow-backend" options="-parameters" />
     </option>
   </component>
 </project>

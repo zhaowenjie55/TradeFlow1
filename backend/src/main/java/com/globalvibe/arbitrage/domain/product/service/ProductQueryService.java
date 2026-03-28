@@ -30,7 +30,7 @@ public class ProductQueryService {
         Optional<ProductDetailSnapshot> detailSnapshot = productRepository.findDetailByProductId(productId);
 
         if (detailSnapshot.isEmpty()) {
-            detailSnapshot = productCatalogSyncService.syncTaobaoDetail(productId);
+            detailSnapshot = productCatalogSyncService.sync1688Detail(productId);
         }
 
         if (product.isEmpty() && detailSnapshot.isPresent()) {
