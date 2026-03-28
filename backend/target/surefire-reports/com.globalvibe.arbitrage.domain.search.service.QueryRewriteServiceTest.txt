@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.globalvibe.arbitrage.domain.search.service.QueryRewriteServiceTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.072 s -- in com.globalvibe.arbitrage.domain.search.service.QueryRewriteServiceTest

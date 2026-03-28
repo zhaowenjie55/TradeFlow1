@@ -57,6 +57,20 @@ const resolveMatchUrl = (match: ReportDetail['domesticMatches'][number]) => {
   return match.detailUrl ?? match.searchUrl ?? '#'
 }
 
+const costItems = computed(() => {
+  if (!report.value) return []
+
+  return [
+    { key: 'sourcingCost', value: report.value.costBreakdown.sourcingCost },
+    { key: 'domesticShippingCost', value: report.value.costBreakdown.domesticShippingCost },
+    { key: 'logisticsCost', value: report.value.costBreakdown.logisticsCost },
+    { key: 'platformFee', value: report.value.costBreakdown.platformFee },
+    { key: 'exchangeRateCost', value: report.value.costBreakdown.exchangeRateCost },
+    { key: 'totalCost', value: report.value.costBreakdown.totalCost },
+    { key: 'targetSellingPrice', value: report.value.costBreakdown.targetSellingPrice },
+  ]
+})
+
 const buildMarkdownDocument = () => {
   if (!report.value) return null
 
@@ -78,6 +92,7 @@ const buildMarkdownDocument = () => {
     `## ${t('report.costs')}`,
     '',
     `- ${t('report.sourcingCost')}: $${currentReport.costBreakdown.sourcingCost ?? '--'}`,
+    `- ${t('report.domesticShippingCost')}: $${currentReport.costBreakdown.domesticShippingCost ?? '--'}`,
     `- ${t('report.logisticsCost')}: $${currentReport.costBreakdown.logisticsCost ?? '--'}`,
     `- ${t('report.platformFee')}: $${currentReport.costBreakdown.platformFee ?? '--'}`,
     `- ${t('report.exchangeRateCost')}: $${currentReport.costBreakdown.exchangeRateCost ?? '--'}`,
@@ -215,21 +230,13 @@ const downloadDocument = () => {
           {{ t('report.costs') }}
         </h5>
         <div class="grid grid-cols-2 gap-3">
-          <div class="rounded-xl bg-slate-100 p-4 text-xs dark:bg-slate-900">
-            <p class="text-slate-500">{{ t('report.sourcingCost') }}</p>
-            <p class="mt-2 font-semibold text-slate-800 dark:text-slate-200">${{ report.costBreakdown.sourcingCost ?? '--' }}</p>
-          </div>
-          <div class="rounded-xl bg-slate-100 p-4 text-xs dark:bg-slate-900">
-            <p class="text-slate-500">{{ t('report.logisticsCost') }}</p>
-            <p class="mt-2 font-semibold text-slate-800 dark:text-slate-200">${{ report.costBreakdown.logisticsCost ?? '--' }}</p>
-          </div>
-          <div class="rounded-xl bg-slate-100 p-4 text-xs dark:bg-slate-900">
-            <p class="text-slate-500">{{ t('report.platformFee') }}</p>
-            <p class="mt-2 font-semibold text-slate-800 dark:text-slate-200">${{ report.costBreakdown.platformFee ?? '--' }}</p>
-          </div>
-          <div class="rounded-xl bg-slate-100 p-4 text-xs dark:bg-slate-900">
-            <p class="text-slate-500">{{ t('report.exchangeRateCost') }}</p>
-            <p class="mt-2 font-semibold text-slate-800 dark:text-slate-200">${{ report.costBreakdown.exchangeRateCost ?? '--' }}</p>
+          <div
+            v-for="item in costItems"
+            :key="item.key"
+            class="rounded-xl bg-slate-100 p-4 text-xs dark:bg-slate-900"
+          >
+            <p class="text-slate-500">{{ t(`report.${item.key}`) }}</p>
+            <p class="mt-2 font-semibold text-slate-800 dark:text-slate-200">${{ item.value ?? '--' }}</p>
           </div>
         </div>
       </div>

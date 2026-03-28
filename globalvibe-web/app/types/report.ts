@@ -27,6 +27,7 @@ export interface ReportSummary {
 
 export interface ReportCostBreakdown {
   sourcingCost: number | null
+  domesticShippingCost: number | null
   logisticsCost: number | null
   platformFee: number | null
   exchangeRateCost: number | null

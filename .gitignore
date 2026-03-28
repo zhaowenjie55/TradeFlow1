@@ -1,0 +1,5 @@
+/models/*
+!/models/README.md
+!/models/bge-m3/
+/models/bge-m3/*
+!/models/bge-m3/.gitkeep

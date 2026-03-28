@@ -22,13 +22,19 @@ const form = reactive<AnalysisFormValues>({
 
 const isBusy = computed(() => isSubmitting.value || taskStore.isPolling || productsStore.isAnalyzingReport)
 const marketOptions = computed(() => config.value?.markets?.length ? config.value.markets : [defaultMarket])
+const statusNoticeKey = computed(() => {
+  if (taskStore.fallbackTriggered) return 'task.fallbackNotice'
+  if (taskStore.mode === 'MOCK') return 'task.mockNotice'
+  if (taskStore.mode === 'AUTO_FALLBACK') return 'task.modeNotice'
+  return null
+})
 
 const syncFromSettings = () => {
   form.market = settingsStore.settings.defaultMarket || defaultMarket
 }
 
 const fillSample = () => {
-  form.keyword = 'Rechargeable Wireless Mouse'
+  form.keyword = 'Acrylic Desktop Organizer'
   form.targetProfitMargin = 30
   form.topN = 8
   syncFromSettings()
@@ -95,6 +101,11 @@ onMounted(async () => {
             </div>
             <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">{{ t(`stage.${taskStore.stage}`) }}</p>
           </div>
+        </div>
+
+        <div class="rounded-xl border border-blue-100 bg-blue-50/80 p-4 text-xs leading-relaxed text-blue-700 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-300">
+          <p class="font-medium text-blue-800 dark:text-slate-100">{{ t('task.backendNotice') }}</p>
+          <p v-if="statusNoticeKey" class="mt-2 text-blue-700/90 dark:text-slate-400">{{ t(statusNoticeKey) }}</p>
         </div>
 
         <div class="space-y-2">

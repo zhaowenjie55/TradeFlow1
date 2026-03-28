@@ -182,6 +182,7 @@
     "matchReason": "Match Reason",
     "matchNote": "Buying Note",
     "sourcingCost": "Sourcing Cost",
+    "domesticShippingCost": "Domestic Shipping",
     "logisticsCost": "Logistics Cost",
     "platformFee": "Platform Fee",
     "exchangeRateCost": "FX Cost",

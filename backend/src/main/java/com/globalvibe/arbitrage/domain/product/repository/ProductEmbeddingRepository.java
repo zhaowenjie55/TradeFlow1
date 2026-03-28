@@ -18,7 +18,7 @@ import java.util.Map;
 @Repository
 public class ProductEmbeddingRepository {
 
-    private static final TypeReference<Map<String, Object>> MAP_TYPE = new TypeReference<>() {};
+    private static final TypeReference<Map<String, Object>> MAP_TYPE = new MapTypeReference();
 
     private final JdbcTemplate jdbcTemplate;
     private final JdbcJsonSupport jdbcJsonSupport;
@@ -102,7 +102,7 @@ public class ProductEmbeddingRepository {
                         ),
                         rs.getDouble("vector_score")
                 ),
-                withPlatformValues(platform, vectorLiteral, vectorLiteral, minScore, vectorLiteral, limit)
+                semanticSearchParameters(platform, vectorLiteral, minScore, limit)
         );
     }
 
@@ -145,9 +145,19 @@ public class ProductEmbeddingRepository {
         return column + " IN (" + String.join(", ", Collections.nCopies(platform.databaseValues().size(), "?")) + ")";
     }
 
-    private Object[] withPlatformValues(MarketplaceType platform, Object... additionalParameters) {
-        List<Object> parameters = new ArrayList<>(platform.databaseValues());
-        Collections.addAll(parameters, additionalParameters);
+    private Object[] semanticSearchParameters(
+            MarketplaceType platform,
+            String vectorLiteral,
+            double minScore,
+            int limit
+    ) {
+        List<Object> parameters = new ArrayList<>();
+        parameters.add(vectorLiteral);
+        parameters.addAll(platform.databaseValues());
+        parameters.add(vectorLiteral);
+        parameters.add(minScore);
+        parameters.add(vectorLiteral);
+        parameters.add(limit);
         return parameters.toArray();
     }
 
@@ -155,5 +165,8 @@ public class ProductEmbeddingRepository {
             Product product,
             double score
     ) {
+    }
+
+    private static final class MapTypeReference extends TypeReference<Map<String, Object>> {
     }
 }

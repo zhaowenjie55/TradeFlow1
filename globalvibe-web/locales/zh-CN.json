@@ -182,6 +182,7 @@
     "matchReason": "匹配说明",
     "matchNote": "选品提示",
     "sourcingCost": "采购成本",
+    "domesticShippingCost": "国内运费",
     "logisticsCost": "物流成本",
     "platformFee": "平台佣金",
     "exchangeRateCost": "汇率成本",
