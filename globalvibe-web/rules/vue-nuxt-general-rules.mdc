@@ -1,0 +1,17 @@
+---
+description: Applies to Nuxt 4 and Vue 3 files, prioritizing Nuxt conventions, Nuxt UI, and typed frontend implementation.
+globs: **/*.{vue,ts,js}
+---
+- Target stack is Nuxt 4 + Vue 3 + TypeScript.
+- Use `<script setup lang="ts">` for Vue SFCs unless a file already follows another required pattern.
+- Prefer Nuxt auto-imports for Vue and Nuxt composables when supported by the project.
+- Prefer Nuxt file-based routing and route middleware. Do not add manual router setup or a direct `vue-router` dependency unless a task explicitly requires it.
+- Prefer Nuxt UI components before custom Tailwind-only widgets.
+- Prefer `UIcon` with Nuxt UI compatible icon names such as `i-heroicons-*`.
+- Keep code DRY, typed, and fully implemented. Do not leave placeholders or `TODO` comments unless the user asked for scaffolding.
+- Prefer early returns over nested conditionals.
+- Use descriptive names and `const` function expressions.
+- Prefix event handlers with `handle`.
+- Keep mock data, domain types, and UI concerns separated.
+- Avoid `<style>` blocks unless a layout/library override cannot be expressed cleanly in templates.
+- Preserve existing architecture unless the task requires a refactor.

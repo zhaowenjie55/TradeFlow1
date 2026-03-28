@@ -1,0 +1,12 @@
+---
+description: Rules for Vue templates, focusing on semantics, accessibility, and Nuxt UI first usage.
+globs: **/*.vue
+---
+- Apply these rules to the `<template>` block of Vue files.
+- Prefer Nuxt UI building blocks before raw HTML recreations of the same control.
+- Use Tailwind utility classes for styling. Avoid inline `style` unless a reactive value or third-party layout requirement makes it necessary.
+- Use Vue shorthand bindings and listeners.
+- Use semantic HTML where it improves structure and readability.
+- Interactive controls must be accessible by default.
+- If a non-button element is clickable, add `role="button"`, `tabindex="0"`, an appropriate accessible label, and keyboard handling.
+- Avoid unnecessary wrapper elements when a semantic or Nuxt UI component already solves the structure.

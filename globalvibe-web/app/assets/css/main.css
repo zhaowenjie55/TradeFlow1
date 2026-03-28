@@ -1,0 +1,40 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import "tailwindcss";
+
+.globalvibe-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.55) transparent;
+}
+
+.globalvibe-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.globalvibe-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.globalvibe-scrollbar::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background-clip: padding-box;
+  background-color: rgba(148, 163, 184, 0.45);
+}
+
+.globalvibe-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 116, 139, 0.7);
+}
+
+.dark .globalvibe-scrollbar {
+  scrollbar-color: rgba(71, 85, 105, 0.85) transparent;
+}
+
+.dark .globalvibe-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(71, 85, 105, 0.75);
+}
+
+.dark .globalvibe-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 116, 139, 0.95);
+}

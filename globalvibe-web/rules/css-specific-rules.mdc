@@ -1,0 +1,14 @@
+---
+description: Rules for CSS usage in this Nuxt project, favoring Tailwind utilities and minimal custom CSS.
+globs: **/*.css, **/*.vue
+---
+- Tailwind-first: prefer utility classes in templates.
+- Avoid `@apply` unless a third-party override or repeated global utility pattern truly requires it.
+- Avoid `<style>` blocks in Vue files unless needed for library overrides, splitter behavior, or complex animations.
+- If a Vue `<style>` block is necessary, keep it small and scoped unless it intentionally targets global selectors from a third-party library.
+- Custom CSS is acceptable for:
+  1. global theme tokens and CSS variables
+  2. third-party component overrides
+  3. layout behavior that Tailwind cannot express well
+  4. complex keyframe animations
+- Keep custom CSS modern, minimal, and easy to delete later if the UI is migrated fully into Nuxt UI primitives.

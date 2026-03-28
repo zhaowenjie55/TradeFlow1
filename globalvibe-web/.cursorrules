@@ -1,0 +1,39 @@
+Project: GlobalVibe Agent
+
+This repository uses Nuxt 4, Vue 3, TypeScript, Tailwind CSS, Pinia, VueUse, and Nuxt UI.
+
+Follow these defaults when editing code:
+
+1. Framework and routing
+- Prefer Nuxt 4 conventions and built-in capabilities.
+- Use Nuxt file-based routing.
+- Do not add `vue-router` unless a task explicitly needs low-level router APIs outside Nuxt's built-in integration.
+- Prefer Nuxt auto-imports for supported composables.
+
+2. UI choices
+- Prefer Nuxt UI components before building raw Tailwind equivalents.
+- Prefer `UIcon` with Nuxt UI compatible icon names such as `i-heroicons-*`.
+
+3. Vue and TypeScript
+- Use `<script setup lang="ts">` for Vue SFCs unless a file already requires a different pattern.
+- Keep code strongly typed and modular.
+- Prefer `const` function expressions.
+- Prefix event handlers with `handle`.
+- Prefer early returns over deep nesting.
+
+4. Styling
+- Prefer Tailwind utility classes in templates.
+- Avoid custom CSS unless it is needed for theme tokens, third-party overrides, layout edge cases, or complex animations.
+- Avoid Vue `<style>` blocks unless they are clearly necessary.
+
+5. Architecture
+- This project is frontend-first and mock-data-driven.
+- Keep business data in composables, stores, and shared types instead of page-level UI hardcoding.
+- Preserve the current multi-panel workbench experience unless a redesign is explicitly requested.
+
+6. Delivery expectations
+- Make direct, production-ready edits.
+- Avoid placeholders, incomplete scaffolding, and stray `TODO` comments unless the user asked for them.
+- Briefly state important assumptions when changing architecture or versions.
+
+More specific rules live in `rules/*.mdc`.
