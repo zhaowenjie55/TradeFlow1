@@ -3,3 +3,12 @@
 !/models/bge-m3/
 /models/bge-m3/*
 !/models/bge-m3/.gitkeep
+
+# Java build output（避免 target/classes 污染 git 状态）
+backend/target/
+**/target/
+
+# 本地密钥与覆盖配置（勿提交）
+.env
+backend/.env
+*.local

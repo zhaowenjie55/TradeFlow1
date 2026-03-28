@@ -34,7 +34,7 @@ export interface CreateAnalysisTaskRequest {
   limit: number
   targetProfitMargin: number
   constraints: TaskConstraintRequest[]
-  mode: TaskMode
+  mode?: TaskMode
 }
 
 export interface Phase1CreateTaskResponse {

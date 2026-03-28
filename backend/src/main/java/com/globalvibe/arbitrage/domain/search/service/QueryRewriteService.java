@@ -3,6 +3,7 @@ package com.globalvibe.arbitrage.domain.search.service;
 import com.globalvibe.arbitrage.config.VectorSearchProperties;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
 import com.globalvibe.arbitrage.domain.search.repository.QueryRewriteRepository;
+import com.globalvibe.arbitrage.domain.task.model.TaskMode;
 import com.globalvibe.arbitrage.integration.llm.LLMGateway;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +31,14 @@ public class QueryRewriteService {
     }
 
     public RewriteExecutionResult rewrite(String sourceText) {
-        return rewrite(null, null, null, sourceText);
+        return rewrite(null, null, null, sourceText, TaskMode.REAL);
     }
 
     public RewriteExecutionResult rewrite(String taskId, String candidateId, String sourceProductId, String sourceText) {
+        return rewrite(taskId, candidateId, sourceProductId, sourceText, TaskMode.REAL);
+    }
+
+    public RewriteExecutionResult rewrite(String taskId, String candidateId, String sourceProductId, String sourceText, TaskMode mode) {
         try {
             LLMGateway.RewriteResult result = llmGateway.rewriteTitle(sourceText);
             List<String> normalizedKeywords = normalizeKeywords(result.keywords(), result.rewrittenText());
@@ -45,12 +50,16 @@ public class QueryRewriteService {
                     .rewrittenText(normalizeRewrittenText(result.rewrittenText()))
                     .keywords(normalizedKeywords)
                     .gatewaySource(result.provider())
+                    .gatewayModel(result.model())
                     .fallbackUsed(result.fallbackUsed())
                     .fallbackReason(result.fallbackReason())
                     .createdAt(OffsetDateTime.now())
                     .build());
             return new RewriteExecutionResult(rewrite, result.fallbackUsed());
         } catch (RuntimeException ex) {
+            if (mode == TaskMode.REAL) {
+                throw new IllegalStateException("真实 GLM 改写失败: " + ex.getMessage(), ex);
+            }
             Optional<QueryRewrite> fallback = candidateId == null
                     ? queryRewriteRepository.findLatestBySourceText(sourceText)
                     : queryRewriteRepository.findLatestByCandidateId(candidateId)
@@ -72,6 +81,7 @@ public class QueryRewriteService {
                 .rewrittenText(normalizeRewrittenText(rewrite.rewrittenText()))
                 .keywords(normalizeKeywords(rewrite.keywords(), rewrite.rewrittenText()))
                 .gatewaySource(rewrite.gatewaySource())
+                .gatewayModel(rewrite.gatewayModel())
                 .fallbackUsed(rewrite.fallbackUsed())
                 .fallbackReason(rewrite.fallbackReason())
                 .createdAt(rewrite.createdAt())

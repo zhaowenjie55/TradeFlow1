@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify-json/heroicons": "^1.2.3",
     "@nuxt/ui": "^4.5.1",
     "@nuxtjs/color-mode": "^3.5.2",
     "@pinia/nuxt": "^0.11.3",
@@ -18,5 +19,8 @@
     "pinia": "^3.0.4",
     "splitpanes": "^4.0.4",
     "vue": "^3.5.30"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0"
   }
 }

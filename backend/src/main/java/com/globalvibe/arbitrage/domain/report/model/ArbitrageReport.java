@@ -20,6 +20,7 @@ public record ArbitrageReport(
         ReportRiskAssessment riskAssessment,
         List<String> recommendations,
         List<DomesticProductMatch> domesticMatches,
+        AnalysisTrace analysisTrace,
         Map<String, Object> auditData
 ) {
 }

@@ -1,5 +1,10 @@
 package com.globalvibe.arbitrage.domain.report.service;
 
+import com.globalvibe.arbitrage.domain.report.dto.AnalysisTraceLlmVO;
+import com.globalvibe.arbitrage.domain.report.dto.AnalysisTracePricingVO;
+import com.globalvibe.arbitrage.domain.report.dto.AnalysisTraceRetrievalVO;
+import com.globalvibe.arbitrage.domain.report.dto.AnalysisTraceRewriteVO;
+import com.globalvibe.arbitrage.domain.report.dto.AnalysisTraceVO;
 import com.globalvibe.arbitrage.domain.report.dto.DomesticProductMatchVO;
 import com.globalvibe.arbitrage.domain.report.dto.ReportCostBreakdownVO;
 import com.globalvibe.arbitrage.domain.report.dto.ReportDetailVO;
@@ -8,6 +13,7 @@ import com.globalvibe.arbitrage.domain.report.dto.ReportListItemResponse;
 import com.globalvibe.arbitrage.domain.report.dto.ReportRiskAssessmentVO;
 import com.globalvibe.arbitrage.domain.report.dto.ReportSummaryVO;
 import com.globalvibe.arbitrage.domain.report.model.ArbitrageReport;
+import com.globalvibe.arbitrage.domain.report.model.AnalysisTrace;
 import com.globalvibe.arbitrage.domain.report.model.DomesticProductMatch;
 import com.globalvibe.arbitrage.domain.report.model.ReportAggregate;
 import com.globalvibe.arbitrage.domain.report.model.ReportCostBreakdown;
@@ -55,6 +61,7 @@ public class ReportViewAssembler {
                 toRiskAssessment(report.riskAssessment()),
                 report.recommendations() == null ? List.of() : report.recommendations(),
                 report.domesticMatches() == null ? List.of() : report.domesticMatches().stream().map(this::toDomesticMatch).toList(),
+                toAnalysisTrace(report.analysisTrace()),
                 null
         );
     }
@@ -77,6 +84,7 @@ public class ReportViewAssembler {
                 toRiskAssessment(report.riskAssessment()),
                 report.recommendations() == null ? List.of() : report.recommendations(),
                 report.domesticMatches() == null ? List.of() : report.domesticMatches().stream().map(this::toDomesticMatch).toList(),
+                toAnalysisTrace(report.analysisTrace()),
                 buildDownloadDocument(report, aggregate.reportMarkdown())
         );
     }
@@ -135,7 +143,42 @@ public class ReportViewAssembler {
                 match.similarityScore(),
                 match.detailUrl(),
                 match.searchUrl(),
-                match.reason()
+                match.reason(),
+                match.matchSource(),
+                match.retrievalTerms(),
+                match.scoreBreakdown(),
+                match.evidence()
+        );
+    }
+
+    private AnalysisTraceVO toAnalysisTrace(AnalysisTrace analysisTrace) {
+        if (analysisTrace == null) {
+            return null;
+        }
+        return new AnalysisTraceVO(
+                analysisTrace.rewrite() == null ? null : new AnalysisTraceRewriteVO(
+                        analysisTrace.rewrite().sourceTitle(),
+                        analysisTrace.rewrite().rewrittenText(),
+                        analysisTrace.rewrite().keywords(),
+                        analysisTrace.rewrite().provider()
+                ),
+                analysisTrace.retrieval() == null ? null : new AnalysisTraceRetrievalVO(
+                        analysisTrace.retrieval().retrievalTerms(),
+                        analysisTrace.retrieval().matchSource(),
+                        analysisTrace.retrieval().scoreBreakdown(),
+                        analysisTrace.retrieval().evidence()
+                ),
+                analysisTrace.pricing() == null ? null : new AnalysisTracePricingVO(
+                        analysisTrace.pricing().currency(),
+                        analysisTrace.pricing().usdToCnyRate(),
+                        analysisTrace.pricing().formulaLines(),
+                        analysisTrace.pricing().assumptions()
+                ),
+                analysisTrace.llm() == null ? null : new AnalysisTraceLlmVO(
+                        analysisTrace.llm().provider(),
+                        analysisTrace.llm().model(),
+                        analysisTrace.llm().generatedAt()
+                )
         );
     }
 

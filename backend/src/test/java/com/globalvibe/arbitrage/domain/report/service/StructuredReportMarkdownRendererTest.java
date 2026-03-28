@@ -43,6 +43,7 @@ class StructuredReportMarkdownRendererTest {
                 new ReportRiskAssessment(80, List.of("factor"), List.of("note")),
                 List.of("建议1"),
                 List.of(),
+                null,
                 Map.of("priceAmountUsd", new BigDecimal("12.99"))
         );
 

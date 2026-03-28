@@ -123,6 +123,7 @@ onMounted(async () => {
         <div class="space-y-2">
           <label for="market" class="text-xs font-medium uppercase tracking-wide text-slate-500">{{ t('task.market') }}</label>
           <AppSelect
+            id="market"
             v-model="form.market"
             :options="marketOptions"
             :disabled="isBusy"

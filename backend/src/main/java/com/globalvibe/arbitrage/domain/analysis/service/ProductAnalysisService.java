@@ -6,6 +6,11 @@ import com.globalvibe.arbitrage.domain.match.model.CandidateMatchRecord;
 import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.domain.product.model.ProductDetailSnapshot;
 import com.globalvibe.arbitrage.domain.product.repository.ProductRepository;
+import com.globalvibe.arbitrage.domain.report.model.AnalysisTrace;
+import com.globalvibe.arbitrage.domain.report.model.AnalysisTraceLlm;
+import com.globalvibe.arbitrage.domain.report.model.AnalysisTracePricing;
+import com.globalvibe.arbitrage.domain.report.model.AnalysisTraceRetrieval;
+import com.globalvibe.arbitrage.domain.report.model.AnalysisTraceRewrite;
 import com.globalvibe.arbitrage.domain.report.model.ArbitrageReport;
 import com.globalvibe.arbitrage.domain.report.model.DomesticProductMatch;
 import com.globalvibe.arbitrage.domain.report.model.ReportCostBreakdown;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,11 +65,13 @@ public class ProductAnalysisService {
         BigDecimal amazonPriceUsd = candidate.overseasPrice() != null
                 ? scale(candidate.overseasPrice())
                 : extractDecimal(sourceProduct, "priceAmountUsd").orElse(BigDecimal.ZERO);
-        BigDecimal amazonPriceRmb = scale(amazonPriceUsd.multiply(pricingProperties.getUsdToCnyRate()));
+        BigDecimal usdToCnyRate = pricingProperties.getUsdToCnyRate();
+        BigDecimal amazonPriceRmb = scale(amazonPriceUsd.multiply(usdToCnyRate));
         BigDecimal sourcingCost = benchmark != null && benchmark.price() != null
                 ? scale(benchmark.price())
                 : scale(amazonPriceRmb.multiply(pricingProperties.getFallbackSourcingRate()));
         String shippingText = resolveShippingText(domesticDetail);
+        boolean usedDefaultShipping = shippingText == null || shippingText.isBlank();
         BigDecimal domesticShippingCost = parseShippingCost(shippingText);
         BigDecimal logisticsCost = scale(amazonPriceRmb.multiply(pricingProperties.getCrossBorderLogisticsRate()));
         BigDecimal platformFee = scale(amazonPriceRmb.multiply(pricingProperties.getPlatformFeeRate()));
@@ -78,20 +86,15 @@ public class ProductAnalysisService {
                 ? BigDecimal.ZERO
                 : scale(estimatedProfit.divide(amazonPriceRmb, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)));
 
-        String benchmarkTitle = benchmark != null ? benchmark.title() : "未找到稳定国内货源";
-        String detailBrand = domesticDetail != null ? domesticDetail.brand() : "未知品牌";
-        String decision = expectedMargin.compareTo(BigDecimal.valueOf(18)) >= 0 ? "recommended"
-                : expectedMargin.compareTo(BigDecimal.valueOf(8)) >= 0 ? "cautious"
-                : "not_recommended";
-        String riskLevel = resolveRiskLevel(expectedMargin);
+        String benchmarkTitle = benchmark != null ? benchmark.title() : "暂无稳定 1688 对标货源";
         LLMGateway.ReportNarrativeResult narrative = llmGateway.generateReportNarrative(
                 new LLMGateway.ReportNarrativeRequest(
                         candidate.title(),
                         candidate.market(),
                         queryRewrite.rewrittenText(),
                         queryRewrite.keywords(),
-                        decision,
-                        riskLevel,
+                        resolveDecision(expectedMargin),
+                        resolveRiskLevel(expectedMargin),
                         amazonPriceUsd,
                         amazonPriceRmb,
                         sourcingCost,
@@ -106,6 +109,29 @@ public class ProductAnalysisService {
                         topDomesticMatches.stream().map(CandidateMatchRecord::title).toList()
                 )
         );
+
+        AnalysisTrace analysisTrace = buildAnalysisTrace(
+                candidate,
+                queryRewrite,
+                benchmark,
+                narrative,
+                shippingText,
+                usedDefaultShipping,
+                usdToCnyRate,
+                amazonPriceUsd,
+                amazonPriceRmb,
+                sourcingCost,
+                domesticShippingCost,
+                logisticsCost,
+                platformFee,
+                exchangeRateCost,
+                totalCost,
+                estimatedProfit,
+                expectedMargin
+        );
+
+        String decision = resolveDecision(expectedMargin);
+        String riskLevel = resolveRiskLevel(expectedMargin);
 
         return new ArbitrageReport(
                 reportId,
@@ -134,7 +160,7 @@ public class ProductAnalysisService {
                 new ReportRiskAssessment(
                         resolveRiskScore(expectedMargin),
                         List.of("price-competitiveness", "category-demand", "market-benchmark"),
-                        buildRiskNotes(narrative, domesticDetail != null, benchmark != null, detailBrand, shippingText)
+                        buildRiskNotes(domesticDetail, benchmark, shippingText, usedDefaultShipping)
                 ),
                 buildRecommendations(narrative),
                 topDomesticMatches.stream().map(item -> new DomesticProductMatch(
@@ -147,35 +173,90 @@ public class ProductAnalysisService {
                         item.similarityScore().setScale(0, RoundingMode.HALF_UP).intValue(),
                         item.link(),
                         buildSearchUrl(queryRewrite.rewrittenText()),
-                        item.reason()
+                        item.reason(),
+                        item.matchSource(),
+                        item.retrievalTerms(),
+                        item.scoreBreakdown(),
+                        item.evidence()
                 )).toList(),
-                buildAuditData(sourceProduct, queryRewrite, amazonPriceUsd, amazonPriceRmb, shippingText, narrative)
+                analysisTrace,
+                buildAuditData(sourceProduct, queryRewrite, amazonPriceUsd, amazonPriceRmb, shippingText, narrative, analysisTrace)
         );
     }
 
-    private List<String> buildRiskNotes(
+    private AnalysisTrace buildAnalysisTrace(
+            CandidateProduct candidate,
+            QueryRewrite queryRewrite,
+            CandidateMatchRecord benchmark,
             LLMGateway.ReportNarrativeResult narrative,
-            boolean hasDetail,
-            boolean hasBenchmark,
-            String detailBrand,
-            String shippingText
+            String shippingText,
+            boolean usedDefaultShipping,
+            BigDecimal usdToCnyRate,
+            BigDecimal amazonPriceUsd,
+            BigDecimal amazonPriceRmb,
+            BigDecimal sourcingCost,
+            BigDecimal domesticShippingCost,
+            BigDecimal logisticsCost,
+            BigDecimal platformFee,
+            BigDecimal exchangeRateCost,
+            BigDecimal totalCost,
+            BigDecimal estimatedProfit,
+            BigDecimal expectedMargin
     ) {
-        java.util.ArrayList<String> notes = new java.util.ArrayList<>();
-        if (narrative.riskNotes() != null) {
-            notes.addAll(narrative.riskNotes());
-        }
-        notes.add(hasDetail
-                ? "已纳入历史详情快照中的品牌、属性与 SKU 信息，当前参考品牌为 " + detailBrand + "。"
-                : "未命中实时详情，当前主要基于历史标题和价格数据做分析。");
-        notes.add(hasBenchmark
-                ? "已找到可用于解释价差的国内历史货源样本。"
-                : "当前没有高置信国内货源，建议把本次结果定位为趋势验证而非直接上架结论。");
-        if (shippingText != null && !shippingText.isBlank()) {
-            notes.add("国内运费按商品快照中的 “" + shippingText + "” 解析。");
-        }
-        if (narrative.fallbackUsed() && narrative.fallbackReason() != null && !narrative.fallbackReason().isBlank()) {
-            notes.add(narrative.fallbackReason());
-        }
+        AnalysisTraceRewrite rewrite = new AnalysisTraceRewrite(
+                candidate.title(),
+                queryRewrite.rewrittenText(),
+                queryRewrite.keywords(),
+                queryRewrite.gatewaySource()
+        );
+        AnalysisTraceRetrieval retrieval = new AnalysisTraceRetrieval(
+                benchmark != null && benchmark.retrievalTerms() != null ? benchmark.retrievalTerms() : List.of(queryRewrite.rewrittenText()),
+                benchmark != null ? benchmark.matchSource() : "CATALOG_TEXT",
+                benchmark != null && benchmark.scoreBreakdown() != null ? benchmark.scoreBreakdown() : Map.of(),
+                benchmark != null && benchmark.evidence() != null ? benchmark.evidence() : List.of("商品库未返回额外检索证据。")
+        );
+        AnalysisTracePricing pricing = new AnalysisTracePricing(
+                "CNY",
+                usdToCnyRate,
+                List.of(
+                        "Amazon 售价(CNY) = Amazon 售价(USD) " + lineValue(amazonPriceUsd) + " x 汇率 " + lineValue(usdToCnyRate) + " = " + lineValue(amazonPriceRmb),
+                        "总成本 = 采购成本 " + lineValue(sourcingCost) + " + 国内运费 " + lineValue(domesticShippingCost) + " + 跨境物流 " + lineValue(logisticsCost) + " + 平台费 " + lineValue(platformFee) + " + 汇损 " + lineValue(exchangeRateCost) + " = " + lineValue(totalCost),
+                        "预计利润 = Amazon 售价(CNY) " + lineValue(amazonPriceRmb) + " - 总成本 " + lineValue(totalCost) + " = " + lineValue(estimatedProfit),
+                        "预计利润率 = 预计利润 " + lineValue(estimatedProfit) + " / Amazon 售价(CNY) " + lineValue(amazonPriceRmb) + " = " + lineValue(expectedMargin) + "%"
+                ),
+                List.of(
+                        "跨境物流费率: " + lineValue(pricingProperties.getCrossBorderLogisticsRate().multiply(new BigDecimal("100"))) + "%",
+                        "平台费率: " + lineValue(pricingProperties.getPlatformFeeRate().multiply(new BigDecimal("100"))) + "%",
+                        "汇损费率: " + lineValue(pricingProperties.getExchangeLossRate().multiply(new BigDecimal("100"))) + "%",
+                        usedDefaultShipping
+                                ? "国内运费未从商品详情提取，使用默认值 ¥" + lineValue(pricingProperties.getDefaultDomesticShippingCost())
+                                : "国内运费来自商品详情字段: " + shippingText
+                )
+        );
+        AnalysisTraceLlm llm = new AnalysisTraceLlm(
+                narrative.provider(),
+                narrative.model(),
+                narrative.generatedAt()
+        );
+        return new AnalysisTrace(rewrite, retrieval, pricing, llm);
+    }
+
+    private List<String> buildRiskNotes(
+            ProductDetailSnapshot domesticDetail,
+            CandidateMatchRecord benchmark,
+            String shippingText,
+            boolean usedDefaultShipping
+    ) {
+        List<String> notes = new ArrayList<>();
+        notes.add(domesticDetail != null
+                ? "已纳入商品详情快照中的品牌、属性与 SKU 信息。"
+                : "当前未命中商品详情快照，品牌和属性信息仍建议人工复核。");
+        notes.add(benchmark != null
+                ? "已找到可解释价差的 1688 对标货源。"
+                : "暂无高置信对标货源，建议将本次结果作为初筛样本。");
+        notes.add(usedDefaultShipping
+                ? "国内运费采用配置默认值，建议补录真实运费后再确认利润。"
+                : "国内运费已从商品详情解析: " + shippingText);
         return notes;
     }
 
@@ -184,14 +265,20 @@ public class ProductAnalysisService {
             return narrative.recommendations();
         }
         return List.of(
-                "建议优先核对国内 SKU 规格与 Amazon 主卖点一致性。",
-                "建议补充运费、税费、佣金等真实成本后再做最终利润确认。",
-                "建议结合 Amazon 评论数和评分判断海外市场竞争强度。"
+                "优先核对国内 SKU 规格与 Amazon 主卖点是否一致。",
+                "补充真实头程、税费与平台佣金后再确认最终利润。",
+                "结合 Amazon 评论量与评分继续判断需求稳定性。"
         );
     }
 
-    private BigDecimal scale(BigDecimal value) {
-        return value.setScale(2, RoundingMode.HALF_UP);
+    private String resolveDecision(BigDecimal margin) {
+        if (margin.compareTo(BigDecimal.valueOf(18)) >= 0) {
+            return "recommended";
+        }
+        if (margin.compareTo(BigDecimal.valueOf(8)) >= 0) {
+            return "cautious";
+        }
+        return "not_recommended";
     }
 
     private String resolveRiskLevel(BigDecimal margin) {
@@ -215,7 +302,7 @@ public class ProductAnalysisService {
     }
 
     private String buildSearchUrl(String rewrittenQuery) {
-        String keyword = rewrittenQuery == null || rewrittenQuery.isBlank() ? "亚克力透明收纳架" : rewrittenQuery;
+        String keyword = rewrittenQuery == null || rewrittenQuery.isBlank() ? "1688 货源" : rewrittenQuery;
         return "https://s.1688.com/selloffer/offer_search.htm?keywords=" + java.net.URLEncoder.encode(keyword, java.nio.charset.StandardCharsets.UTF_8);
     }
 
@@ -223,6 +310,7 @@ public class ProductAnalysisService {
         Map<String, Object> params = new LinkedHashMap<>();
         params.put("message", narrative.summaryText());
         params.put("provider", narrative.provider());
+        params.put("model", narrative.model());
         params.put("currency", "CNY");
         return params;
     }
@@ -233,7 +321,8 @@ public class ProductAnalysisService {
             BigDecimal amazonPriceUsd,
             BigDecimal amazonPriceRmb,
             String shippingText,
-            LLMGateway.ReportNarrativeResult narrative
+            LLMGateway.ReportNarrativeResult narrative,
+            AnalysisTrace analysisTrace
     ) {
         Map<String, Object> auditData = new LinkedHashMap<>();
         auditData.put("priceAmountUsd", amazonPriceUsd);
@@ -242,7 +331,11 @@ public class ProductAnalysisService {
         auditData.put("shippingText", shippingText);
         auditData.put("rewrittenText", queryRewrite.rewrittenText());
         auditData.put("rewrittenKeywords", queryRewrite.keywords());
+        auditData.put("rewriteProvider", queryRewrite.gatewaySource());
+        auditData.put("rewriteModel", queryRewrite.gatewayModel());
         auditData.put("narrativeProvider", narrative.provider());
+        auditData.put("narrativeModel", narrative.model());
+        auditData.put("analysisTrace", analysisTrace);
         if (sourceProduct != null && sourceProduct.rawData() != null && !sourceProduct.rawData().isEmpty()) {
             auditData.put("sourceRawData", sourceProduct.rawData());
         }
@@ -285,12 +378,23 @@ public class ProductAnalysisService {
 
     private BigDecimal parseShippingCost(String shippingText) {
         if (shippingText == null || shippingText.isBlank()) {
-            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+            return scale(pricingProperties.getDefaultDomesticShippingCost());
         }
         String normalized = shippingText.replaceAll("[^0-9.]", "");
         if (normalized.isBlank()) {
-            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+            return scale(pricingProperties.getDefaultDomesticShippingCost());
         }
         return scale(new BigDecimal(normalized));
+    }
+
+    private BigDecimal scale(BigDecimal value) {
+        return value.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private String lineValue(BigDecimal value) {
+        if (value == null) {
+            return "--";
+        }
+        return value.setScale(2, RoundingMode.HALF_UP).toPlainString();
     }
 }

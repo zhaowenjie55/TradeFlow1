@@ -170,10 +170,14 @@ CREATE TABLE IF NOT EXISTS gv_query_rewrite (
     rewritten_text TEXT NOT NULL,
     keywords_jsonb JSONB NOT NULL DEFAULT '[]'::jsonb,
     gateway_source VARCHAR(64),
+    gateway_model VARCHAR(128),
     fallback_used BOOLEAN NOT NULL DEFAULT FALSE,
     fallback_reason TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE gv_query_rewrite
+    ADD COLUMN IF NOT EXISTS gateway_model VARCHAR(128);
 
 CREATE INDEX IF NOT EXISTS idx_gv_query_rewrite_source_text
     ON gv_query_rewrite (source_text, created_at DESC);
@@ -199,8 +203,20 @@ CREATE TABLE IF NOT EXISTS gv_candidate_match (
     fallback_used BOOLEAN NOT NULL DEFAULT FALSE,
     fallback_reason TEXT,
     reason TEXT,
+    retrieval_terms_jsonb JSONB NOT NULL DEFAULT '[]'::jsonb,
+    score_breakdown_jsonb JSONB NOT NULL DEFAULT '{}'::jsonb,
+    evidence_jsonb JSONB NOT NULL DEFAULT '[]'::jsonb,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE gv_candidate_match
+    ADD COLUMN IF NOT EXISTS retrieval_terms_jsonb JSONB NOT NULL DEFAULT '[]'::jsonb;
+
+ALTER TABLE gv_candidate_match
+    ADD COLUMN IF NOT EXISTS score_breakdown_jsonb JSONB NOT NULL DEFAULT '{}'::jsonb;
+
+ALTER TABLE gv_candidate_match
+    ADD COLUMN IF NOT EXISTS evidence_jsonb JSONB NOT NULL DEFAULT '[]'::jsonb;
 
 CREATE INDEX IF NOT EXISTS idx_gv_candidate_match_candidate
     ON gv_candidate_match (candidate_id, similarity_score DESC);

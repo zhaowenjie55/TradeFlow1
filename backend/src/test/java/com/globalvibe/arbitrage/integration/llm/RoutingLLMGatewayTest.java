@@ -3,10 +3,8 @@ package com.globalvibe.arbitrage.integration.llm;
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -15,49 +13,43 @@ import static org.mockito.Mockito.when;
 class RoutingLLMGatewayTest {
 
     @Test
-    void shouldUseSimulatedGatewayWhenForceSimulatedEnabled() {
+    void shouldFailWhenForceSimulatedEnabled() {
         IntegrationGatewayProperties properties = new IntegrationGatewayProperties();
         properties.getLlm().setEnabled(true);
         properties.getLlm().setForceSimulated(true);
 
         HttpLLMGateway httpGateway = mock(HttpLLMGateway.class);
-        SimulatedLLMGateway simulatedGateway = mock(SimulatedLLMGateway.class);
-        when(simulatedGateway.rewriteTitle(any(), any())).thenReturn(new LLMGateway.RewriteResult(
-                "亚克力透明收纳架",
-                List.of("亚克力透明收纳架"),
-                true,
-                "SIMULATED_LLM",
-                null
-        ));
 
-        RoutingLLMGateway gateway = new RoutingLLMGateway(properties, httpGateway, simulatedGateway);
-        LLMGateway.RewriteResult result = gateway.rewriteTitle("Acrylic Desktop Organizer");
+        RoutingLLMGateway gateway = new RoutingLLMGateway(properties, httpGateway);
 
-        assertEquals("SIMULATED_LLM", result.provider());
-        verify(httpGateway, never()).rewriteTitle(any());
+        IllegalStateException error = assertThrows(IllegalStateException.class,
+                () -> gateway.rewriteTitle("Acrylic Desktop Organizer"));
+
+        assertEquals("LLM 改写接口被配置为模拟模式，当前链路要求真实 GLM。", error.getMessage());
+        verify(httpGateway, never()).rewriteTitle("Acrylic Desktop Organizer");
     }
 
     @Test
-    void shouldFallbackToSimulatedGatewayWhenHttpGatewayFails() {
+    void shouldUseHttpGatewayWhenConfigured() {
         IntegrationGatewayProperties properties = new IntegrationGatewayProperties();
         properties.getLlm().setEnabled(true);
         properties.getLlm().setForceSimulated(false);
 
         HttpLLMGateway httpGateway = mock(HttpLLMGateway.class);
-        SimulatedLLMGateway simulatedGateway = mock(SimulatedLLMGateway.class);
-        when(httpGateway.rewriteTitle(any())).thenThrow(new IllegalStateException("bad response"));
-        when(simulatedGateway.rewriteTitle(any(), any())).thenReturn(new LLMGateway.RewriteResult(
+        when(httpGateway.rewriteTitle("Acrylic Desktop Organizer")).thenReturn(new LLMGateway.RewriteResult(
                 "亚克力透明收纳架",
-                List.of("亚克力透明收纳架"),
-                true,
-                "SIMULATED_LLM",
-                "bad response"
+                java.util.List.of("亚克力透明收纳架"),
+                false,
+                "GLM_CHAT",
+                "glm-5",
+                null,
+                java.time.OffsetDateTime.now()
         ));
 
-        RoutingLLMGateway gateway = new RoutingLLMGateway(properties, httpGateway, simulatedGateway);
+        RoutingLLMGateway gateway = new RoutingLLMGateway(properties, httpGateway);
         LLMGateway.RewriteResult result = gateway.rewriteTitle("Acrylic Desktop Organizer");
 
-        assertEquals("SIMULATED_LLM", result.provider());
-        verify(simulatedGateway).rewriteTitle(any(), any());
+        assertEquals("GLM_CHAT", result.provider());
+        assertEquals("glm-5", result.model());
     }
 }

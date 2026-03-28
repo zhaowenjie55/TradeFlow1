@@ -15,6 +15,7 @@ public record QueryRewrite(
         String rewrittenText,
         List<String> keywords,
         String gatewaySource,
+        String gatewayModel,
         boolean fallbackUsed,
         String fallbackReason,
         OffsetDateTime createdAt

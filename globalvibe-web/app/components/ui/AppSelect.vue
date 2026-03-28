@@ -5,11 +5,13 @@ interface SelectOption {
 }
 
 const props = withDefaults(defineProps<{
+  id?: string
   modelValue: string
   options: Array<string | SelectOption>
   placeholder?: string
   disabled?: boolean
 }>(), {
+  id: undefined,
   placeholder: '',
   disabled: false,
 })
@@ -53,6 +55,7 @@ const handleFocusOut = (event: FocusEvent) => {
 <template>
   <div ref="rootRef" class="relative" @focusout="handleFocusOut">
     <button
+      :id="id"
       type="button"
       :disabled="disabled"
       :aria-expanded="isOpen"

@@ -6,6 +6,7 @@ import com.globalvibe.arbitrage.domain.search.repository.QueryRewriteRepository;
 import com.globalvibe.arbitrage.integration.llm.LLMGateway;
 import org.junit.jupiter.api.Test;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,7 +28,9 @@ class QueryRewriteServiceTest {
                 List.of("桌面收纳架", "透明收纳架"),
                 false,
                 "GLM_CHAT",
-                null
+                "glm-5",
+                null,
+                OffsetDateTime.now()
         ));
         when(repository.save(any())).thenAnswer(invocation -> invocation.getArgument(0, QueryRewrite.class));
 
@@ -40,5 +43,6 @@ class QueryRewriteServiceTest {
         );
 
         assertTrue(result.queryRewrite().keywords().contains("亚克力透明收纳架"));
+        assertTrue("glm-5".equals(result.queryRewrite().gatewayModel()));
     }
 }

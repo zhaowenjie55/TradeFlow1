@@ -11,7 +11,9 @@ public interface LLMGateway {
             java.util.List<String> keywords,
             boolean fallbackUsed,
             String provider,
-            String fallbackReason
+            String model,
+            String fallbackReason,
+            java.time.OffsetDateTime generatedAt
     ) {
     }
 
@@ -43,7 +45,9 @@ public interface LLMGateway {
             java.util.List<String> riskNotes,
             boolean fallbackUsed,
             String provider,
-            String fallbackReason
+            String model,
+            String fallbackReason,
+            java.time.OffsetDateTime generatedAt
     ) {
     }
 }

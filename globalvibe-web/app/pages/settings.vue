@@ -53,13 +53,13 @@ const updateLocale = (value: AppLocale) => {
 
       <div class="mt-8 max-w-2xl space-y-5">
         <div class="rounded-2xl bg-white p-5 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
-          <label class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ t('settings.language') }}</label>
-          <AppSelect v-model="currentLocale" :options="localeOptions" class="mt-3" />
+          <label for="settings-language" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ t('settings.language') }}</label>
+          <AppSelect id="settings-language" v-model="currentLocale" :options="localeOptions" class="mt-3" />
         </div>
 
         <div class="rounded-2xl bg-white p-5 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
-          <label class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ t('settings.defaultMarket') }}</label>
-          <AppSelect v-model="defaultMarket" :options="config?.markets ?? []" class="mt-3" />
+          <label for="settings-market" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ t('settings.defaultMarket') }}</label>
+          <AppSelect id="settings-market" v-model="defaultMarket" :options="config?.markets ?? []" class="mt-3" />
         </div>
         <button
           type="button"

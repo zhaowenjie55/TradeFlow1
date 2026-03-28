@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.OffsetDateTime;
 
 @Component
 public class HttpLLMGateway {
@@ -68,7 +69,9 @@ public class HttpLLMGateway {
                 keywords,
                 false,
                 "GLM_CHAT",
-                null
+                integrationGatewayProperties.getLlm().getModel(),
+                null,
+                OffsetDateTime.now()
         );
     }
 
@@ -87,7 +90,9 @@ public class HttpLLMGateway {
                 riskNotes,
                 false,
                 "GLM_CHAT",
-                null
+                integrationGatewayProperties.getLlm().getModel(),
+                null,
+                OffsetDateTime.now()
         );
     }
 

@@ -1,5 +1,7 @@
 package com.globalvibe.arbitrage.domain.match.repository;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.globalvibe.arbitrage.common.persistence.JdbcJsonSupport;
 import com.globalvibe.arbitrage.domain.match.model.CandidateMatchRecord;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -7,15 +9,21 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
 public class PostgresCandidateMatchRepository implements CandidateMatchRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private static final TypeReference<List<String>> STRING_LIST = new TypeReference<>() {};
+    private static final TypeReference<Map<String, BigDecimal>> BIG_DECIMAL_MAP = new TypeReference<>() {};
 
-    public PostgresCandidateMatchRepository(JdbcTemplate jdbcTemplate) {
+    private final JdbcTemplate jdbcTemplate;
+    private final JdbcJsonSupport jdbcJsonSupport;
+
+    public PostgresCandidateMatchRepository(JdbcTemplate jdbcTemplate, JdbcJsonSupport jdbcJsonSupport) {
         this.jdbcTemplate = jdbcTemplate;
+        this.jdbcJsonSupport = jdbcJsonSupport;
     }
 
     @Override
@@ -25,8 +33,9 @@ public class PostgresCandidateMatchRepository implements CandidateMatchRepositor
                         INSERT INTO gv_candidate_match (
                             match_id, task_id, candidate_id, source_product_id, platform, external_item_id,
                             title, price, similarity_score, match_source, search_keyword,
-                            fallback_used, fallback_reason, reason, created_at
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            fallback_used, fallback_reason, reason, retrieval_terms_jsonb,
+                            score_breakdown_jsonb, evidence_jsonb, created_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                 match.matchId() != null ? match.matchId() : "match-" + UUID.randomUUID(),
                 match.taskId(),
@@ -42,6 +51,9 @@ public class PostgresCandidateMatchRepository implements CandidateMatchRepositor
                 match.fallbackUsed(),
                 match.fallbackReason(),
                 match.reason(),
+                jdbcJsonSupport.toJsonb(match.retrievalTerms()),
+                jdbcJsonSupport.toJsonb(match.scoreBreakdown()),
+                jdbcJsonSupport.toJsonb(match.evidence()),
                 match.createdAt() != null ? match.createdAt() : OffsetDateTime.now()
         ));
     }
@@ -52,7 +64,9 @@ public class PostgresCandidateMatchRepository implements CandidateMatchRepositor
                         SELECT m.task_id, m.candidate_id, m.source_product_id, m.match_id,
                                m.platform, m.external_item_id, m.title, m.price,
                                m.similarity_score, m.match_source, m.search_keyword,
-                               m.fallback_used, m.fallback_reason, m.reason, m.created_at, p.image, p.link
+                               m.fallback_used, m.fallback_reason, m.reason,
+                               m.retrieval_terms_jsonb, m.score_breakdown_jsonb, m.evidence_jsonb,
+                               m.created_at, p.image, p.link
                         FROM gv_candidate_match m
                         LEFT JOIN gv_platform_item p
                           ON p.platform = m.platform AND p.external_item_id = m.external_item_id
@@ -77,6 +91,9 @@ public class PostgresCandidateMatchRepository implements CandidateMatchRepositor
                         .fallbackUsed(Boolean.TRUE.equals(rs.getObject("fallback_used", Boolean.class)))
                         .fallbackReason(rs.getString("fallback_reason"))
                         .reason(rs.getString("reason"))
+                        .retrievalTerms(jdbcJsonSupport.fromJson(jsonText(rs, "retrieval_terms_jsonb"), STRING_LIST))
+                        .scoreBreakdown(jdbcJsonSupport.fromJson(jsonText(rs, "score_breakdown_jsonb"), BIG_DECIMAL_MAP))
+                        .evidence(jdbcJsonSupport.fromJson(jsonText(rs, "evidence_jsonb"), STRING_LIST))
                         .createdAt(rs.getObject("created_at", OffsetDateTime.class))
                         .build(),
                 candidateId,
@@ -90,7 +107,9 @@ public class PostgresCandidateMatchRepository implements CandidateMatchRepositor
                         SELECT ranked.task_id, ranked.candidate_id, ranked.source_product_id, ranked.match_id,
                                ranked.platform, ranked.external_item_id, ranked.title, ranked.price,
                                ranked.similarity_score, ranked.match_source, ranked.search_keyword,
-                               ranked.fallback_used, ranked.fallback_reason, ranked.reason, ranked.created_at, p.image, p.link
+                               ranked.fallback_used, ranked.fallback_reason, ranked.reason,
+                               ranked.retrieval_terms_jsonb, ranked.score_breakdown_jsonb, ranked.evidence_jsonb,
+                               ranked.created_at, p.image, p.link
                         FROM (
                             SELECT m.*,
                                    ROW_NUMBER() OVER (
@@ -122,6 +141,9 @@ public class PostgresCandidateMatchRepository implements CandidateMatchRepositor
                         .fallbackUsed(Boolean.TRUE.equals(rs.getObject("fallback_used", Boolean.class)))
                         .fallbackReason(rs.getString("fallback_reason"))
                         .reason(rs.getString("reason"))
+                        .retrievalTerms(jdbcJsonSupport.fromJson(jsonText(rs, "retrieval_terms_jsonb"), STRING_LIST))
+                        .scoreBreakdown(jdbcJsonSupport.fromJson(jsonText(rs, "score_breakdown_jsonb"), BIG_DECIMAL_MAP))
+                        .evidence(jdbcJsonSupport.fromJson(jsonText(rs, "evidence_jsonb"), STRING_LIST))
                         .createdAt(rs.getObject("created_at", OffsetDateTime.class))
                         .build(),
                 taskId,
@@ -135,7 +157,9 @@ public class PostgresCandidateMatchRepository implements CandidateMatchRepositor
                         SELECT m.task_id, m.candidate_id, m.source_product_id, m.match_id,
                                m.platform, m.external_item_id, m.title, m.price,
                                m.similarity_score, m.match_source, m.search_keyword,
-                               m.fallback_used, m.fallback_reason, m.reason, m.created_at, p.image, p.link
+                               m.fallback_used, m.fallback_reason, m.reason,
+                               m.retrieval_terms_jsonb, m.score_breakdown_jsonb, m.evidence_jsonb,
+                               m.created_at, p.image, p.link
                         FROM gv_candidate_match m
                         LEFT JOIN gv_platform_item p
                           ON p.platform = m.platform AND p.external_item_id = m.external_item_id
@@ -160,10 +184,18 @@ public class PostgresCandidateMatchRepository implements CandidateMatchRepositor
                         .fallbackUsed(Boolean.TRUE.equals(rs.getObject("fallback_used", Boolean.class)))
                         .fallbackReason(rs.getString("fallback_reason"))
                         .reason(rs.getString("reason"))
+                        .retrievalTerms(jdbcJsonSupport.fromJson(jsonText(rs, "retrieval_terms_jsonb"), STRING_LIST))
+                        .scoreBreakdown(jdbcJsonSupport.fromJson(jsonText(rs, "score_breakdown_jsonb"), BIG_DECIMAL_MAP))
+                        .evidence(jdbcJsonSupport.fromJson(jsonText(rs, "evidence_jsonb"), STRING_LIST))
                         .createdAt(rs.getObject("created_at", OffsetDateTime.class))
                         .build(),
                 sourceProductId,
                 limit
         );
+    }
+
+    private String jsonText(java.sql.ResultSet rs, String column) throws java.sql.SQLException {
+        Object value = rs.getObject(column);
+        return value == null ? null : value.toString();
     }
 }

@@ -3,6 +3,7 @@ const agentStore = useAgentStore()
 const taskStore = useTaskStore()
 const { t } = useAppI18n()
 const logContainer = ref<HTMLElement | null>(null)
+const liveTimestamp = ref('')
 
 watch(
   () => agentStore.taskLogs.length,
@@ -23,6 +24,19 @@ const levelColors: Record<string, string> = {
 }
 
 const formatTime = (date: string) => new Date(date).toLocaleTimeString()
+
+onMounted(() => {
+  liveTimestamp.value = new Date().toLocaleTimeString()
+})
+
+watch(
+  () => taskStore.isPolling,
+  (isPolling) => {
+    if (isPolling) {
+      liveTimestamp.value = new Date().toLocaleTimeString()
+    }
+  }
+)
 </script>
 
 <template>
@@ -54,7 +68,7 @@ const formatTime = (date: string) => new Date(date).toLocaleTimeString()
       </div>
 
       <div v-if="taskStore.isPolling" class="flex gap-3 rounded-lg bg-slate-100 px-3 py-2 dark:bg-slate-900">
-        <span class="flex-shrink-0 font-mono text-slate-400 dark:text-slate-500">{{ new Date().toLocaleTimeString() }}</span>
+        <span class="flex-shrink-0 font-mono text-slate-400 dark:text-slate-500">{{ liveTimestamp }}</span>
         <span class="text-slate-500 dark:text-slate-400">
           <span class="animate-pulse">...</span>
         </span>

@@ -14,4 +14,5 @@ public class PricingProperties {
     private BigDecimal platformFeeRate = new BigDecimal("0.15");
     private BigDecimal exchangeLossRate = new BigDecimal("0.03");
     private BigDecimal fallbackSourcingRate = new BigDecimal("0.45");
+    private BigDecimal defaultDomesticShippingCost = new BigDecimal("6.00");
 }

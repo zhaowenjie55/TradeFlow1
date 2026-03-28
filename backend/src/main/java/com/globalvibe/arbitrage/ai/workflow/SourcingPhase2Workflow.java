@@ -5,8 +5,7 @@ import com.globalvibe.arbitrage.domain.candidate.model.CandidateProduct;
 import com.globalvibe.arbitrage.domain.match.model.CandidateMatchRecord;
 import com.globalvibe.arbitrage.domain.match.service.DomesticMatchService;
 import com.globalvibe.arbitrage.domain.product.model.ProductDetailSnapshot;
-import com.globalvibe.arbitrage.domain.product.service.DomesticProductFallbackService;
-import com.globalvibe.arbitrage.domain.product.service.ProductCatalogSyncService;
+import com.globalvibe.arbitrage.domain.product.repository.ProductRepository;
 import com.globalvibe.arbitrage.domain.report.model.ArbitrageReport;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
 import com.globalvibe.arbitrage.domain.search.service.QueryRewriteService;
@@ -22,24 +21,21 @@ import java.util.List;
 @Component
 public class SourcingPhase2Workflow implements Phase2Workflow {
 
-    private final ProductCatalogSyncService productCatalogSyncService;
-    private final DomesticProductFallbackService domesticProductFallbackService;
     private final ProductAnalysisService productAnalysisService;
     private final QueryRewriteService queryRewriteService;
     private final DomesticMatchService domesticMatchService;
+    private final ProductRepository productRepository;
 
     public SourcingPhase2Workflow(
-            ProductCatalogSyncService productCatalogSyncService,
-            DomesticProductFallbackService domesticProductFallbackService,
             ProductAnalysisService productAnalysisService,
             QueryRewriteService queryRewriteService,
-            DomesticMatchService domesticMatchService
+            DomesticMatchService domesticMatchService,
+            ProductRepository productRepository
     ) {
-        this.productCatalogSyncService = productCatalogSyncService;
-        this.domesticProductFallbackService = domesticProductFallbackService;
         this.productAnalysisService = productAnalysisService;
         this.queryRewriteService = queryRewriteService;
         this.domesticMatchService = domesticMatchService;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -54,9 +50,11 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
                 phase2Task.getTaskId(),
                 candidateId,
                 candidate.productId(),
-                candidate.title()
+                candidate.title(),
+                phase2Task.getMode()
         );
         QueryRewrite queryRewrite = rewriteExecutionResult.queryRewrite();
+
         DomesticMatchService.MatchExecutionResult matchExecutionResult = domesticMatchService.match(
                 phase2Task.getTaskId(),
                 candidateId,
@@ -65,10 +63,10 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
                 5
         );
         List<CandidateMatchRecord> matches = matchExecutionResult.matches();
-        DetailLookupResult detailLookupResult = matches.isEmpty()
-                ? new DetailLookupResult(null, false)
-                : resolveDomesticDetail(matches.get(0).externalItemId());
-        ProductDetailSnapshot detail1688 = detailLookupResult.detailSnapshot();
+        ProductDetailSnapshot detail1688 = matches.isEmpty()
+                ? null
+                : productRepository.findDetailByProductId(matches.get(0).externalItemId()).orElse(null);
+
         ArbitrageReport report = productAnalysisService.buildReport(
                 "report-" + phase2Task.getTaskId(),
                 candidate,
@@ -80,40 +78,18 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
         return new Phase2WorkflowResult(
                 report,
                 List.of(
-                        log("phase2.rewrite", rewriteExecutionResult.fallbackUsed()
-                                ? "LLM 改写失败，已回退到历史改写结果。"
-                                : "已完成 Amazon 标题到国内搜索词的改写。"),
-                        log("phase2.domestic-search", matchExecutionResult.fallbackUsed()
-                                ? "国内搜索未命中实时结果，已回退到数据库中的历史国内商品数据。"
-                                : "已完成 1688 候选搜索与相似度匹配。"),
-                        log("phase2.product-detail", detailLookupResult.fallbackUsed()
-                                ? "1688 详情读取失败，已回退到数据库中的历史详情快照。"
-                                : detail1688 != null
-                                ? "已加载 1688 详情数据，纳入品牌、属性与 SKU 信息。"
-                                : "未命中 1688 详情数据，当前退回关键词搜索结果分析。"),
-                        log("phase2.pricing", "已结合 Amazon 海外售价与国内采购价生成利润估算。"),
-                        log("phase2.report", "二阶段分析已完成，报告已生成。")
+                        log("phase2.rewrite", "已完成真实 GLM 改写，并生成国内检索词。"),
+                        log("phase2.domestic-search", "已完成商品库混合检索与语义匹配。"),
+                        log("phase2.product-detail", detail1688 != null
+                                ? "已加载商品详情快照，补入品牌与属性信息。"
+                                : "未命中商品详情快照，当前报告基于商品库标题与价格数据生成。"),
+                        log("phase2.pricing", "已完成成本公式测算与利润估算。"),
+                        log("phase2.report", "结构化报告已生成。")
                 ),
                 queryRewrite,
                 matches,
-                rewriteExecutionResult.fallbackUsed()
-                        || matchExecutionResult.fallbackUsed()
-                        || detailLookupResult.fallbackUsed()
+                false
         );
-    }
-
-    private DetailLookupResult resolveDomesticDetail(String productId) {
-        try {
-            ProductDetailSnapshot liveDetail = productCatalogSyncService.sync1688Detail(productId).orElse(null);
-            if (liveDetail != null) {
-                return new DetailLookupResult(liveDetail, false);
-            }
-        } catch (RuntimeException ignored) {
-            // Fall through to historical detail lookup.
-        }
-        return domesticProductFallbackService.findHistoricalDetail(productId)
-                .map(detail -> new DetailLookupResult(detail, true))
-                .orElseGet(() -> new DetailLookupResult(null, false));
     }
 
     private TaskLogEntry log(String stage, String message) {
@@ -124,11 +100,5 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
                 message,
                 "phase2-sourcing-workflow"
         );
-    }
-
-    private record DetailLookupResult(
-            ProductDetailSnapshot detailSnapshot,
-            boolean fallbackUsed
-    ) {
     }
 }

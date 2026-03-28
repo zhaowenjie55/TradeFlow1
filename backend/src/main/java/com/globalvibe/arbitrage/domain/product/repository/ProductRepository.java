@@ -19,6 +19,8 @@ public interface ProductRepository {
 
     List<Product> searchByPlatformAndKeyword(MarketplaceType platform, String keyword, int limit);
 
+    List<Product> searchByPlatformAndKeywordIncludingDetails(MarketplaceType platform, String keyword, int limit);
+
     List<Product> findAll();
 
     void saveDetail(ProductDetailSnapshot detailSnapshot);

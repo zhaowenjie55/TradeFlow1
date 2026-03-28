@@ -7,6 +7,7 @@ const { t, locale, setLocale } = useAppI18n()
 const taskStore = useTaskStore()
 const settingsStore = useSettingsStore()
 const isLocaleMenuOpen = ref(false)
+const isHydrated = ref(false)
 
 const localeOptions: Array<{ value: AppLocale, label: string }> = [
   { value: 'zh-CN', label: '中文' },
@@ -51,6 +52,10 @@ const handleLocaleFocusOut = (event: FocusEvent) => {
 
   isLocaleMenuOpen.value = false
 }
+
+onMounted(() => {
+  isHydrated.value = true
+})
 </script>
 
 <template>
@@ -69,27 +74,28 @@ const handleLocaleFocusOut = (event: FocusEvent) => {
         <button
           type="button"
           class="flex h-10 items-center gap-3 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-600 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:border-slate-700"
-          :aria-expanded="isLocaleMenuOpen"
+          :aria-expanded="isHydrated ? isLocaleMenuOpen : false"
           aria-haspopup="listbox"
+          :disabled="!isHydrated"
           @click="isLocaleMenuOpen = !isLocaleMenuOpen"
         >
           <span class="shrink-0 text-xs font-medium uppercase tracking-[0.14em] text-slate-400 dark:text-slate-500">
             {{ t('app.locale') }}
           </span>
           <span class="min-w-[5.5rem] text-left text-sm font-medium text-slate-700 dark:text-slate-200">
-            {{ currentLocaleLabel }}
+            {{ isHydrated ? currentLocaleLabel : '中文' }}
           </span>
           <UIcon
             name="i-heroicons-chevron-down"
             :class="[
               'h-4 w-4 text-slate-400 transition-transform dark:text-slate-500',
-              isLocaleMenuOpen ? 'rotate-180' : '',
+              isHydrated && isLocaleMenuOpen ? 'rotate-180' : '',
             ]"
           />
         </button>
 
         <div
-          v-if="isLocaleMenuOpen"
+          v-if="isHydrated && isLocaleMenuOpen"
           class="absolute right-0 top-[calc(100%+0.5rem)] z-30 min-w-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-200/70 dark:border-slate-800 dark:bg-slate-950 dark:shadow-black/20"
         >
           <button
@@ -116,11 +122,12 @@ const handleLocaleFocusOut = (event: FocusEvent) => {
       <button
         type="button"
         class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors duration-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:bg-slate-900 dark:hover:text-slate-200"
-        :aria-label="colorMode.value === 'dark' ? t('app.light') : t('app.dark')"
+        :aria-label="isHydrated && colorMode.value === 'dark' ? t('app.light') : t('app.dark')"
+        :disabled="!isHydrated"
         @click="handleToggleTheme"
       >
         <UIcon
-          :name="colorMode.value === 'dark' ? 'i-heroicons-sun' : 'i-heroicons-moon'"
+          :name="isHydrated && colorMode.value === 'dark' ? 'i-heroicons-sun' : 'i-heroicons-moon'"
           class="h-[18px] w-[18px]"
         />
       </button>

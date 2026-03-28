@@ -119,7 +119,6 @@ export const useTaskRunner = () => {
         limit: params.topN,
         targetProfitMargin: Number((params.targetProfitMargin / 100).toFixed(4)),
         constraints: parseConstraints(),
-        mode: 'AUTO_FALLBACK',
       })
 
       taskStore.setActivePhase1Task(response, params)

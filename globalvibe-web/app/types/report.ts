@@ -18,6 +18,10 @@ export interface DomesticProductMatch {
   detailUrl: string | null
   searchUrl: string | null
   reason: string | null
+  matchSource: string | null
+  retrievalTerms: string[]
+  scoreBreakdown: Record<string, number>
+  evidence: string[]
 }
 
 export interface ReportSummary {
@@ -42,6 +46,40 @@ export interface ReportRiskAssessment {
   notes: string[] | null
 }
 
+export interface AnalysisTraceRewrite {
+  sourceTitle: string
+  rewrittenText: string
+  keywords: string[]
+  provider: string
+}
+
+export interface AnalysisTraceRetrieval {
+  retrievalTerms: string[]
+  matchSource: string
+  scoreBreakdown: Record<string, number>
+  evidence: string[]
+}
+
+export interface AnalysisTracePricing {
+  currency: string
+  usdToCnyRate: number
+  formulaLines: string[]
+  assumptions: string[]
+}
+
+export interface AnalysisTraceLlm {
+  provider: string
+  model: string
+  generatedAt: string
+}
+
+export interface AnalysisTrace {
+  rewrite: AnalysisTraceRewrite | null
+  retrieval: AnalysisTraceRetrieval | null
+  pricing: AnalysisTracePricing | null
+  llm: AnalysisTraceLlm | null
+}
+
 export interface ReportDetail {
   taskId: string
   reportId: string
@@ -58,6 +96,7 @@ export interface ReportDetail {
   riskAssessment: ReportRiskAssessment
   recommendations: string[]
   domesticMatches: DomesticProductMatch[]
+  analysisTrace?: AnalysisTrace | null
   downloadDocument?: ReportDownloadDocument
 }
 

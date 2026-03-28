@@ -4,6 +4,8 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Map;
 
 @Builder
 public record CandidateMatchRecord(
@@ -23,6 +25,9 @@ public record CandidateMatchRecord(
         boolean fallbackUsed,
         String fallbackReason,
         String reason,
+        List<String> retrievalTerms,
+        Map<String, BigDecimal> scoreBreakdown,
+        List<String> evidence,
         OffsetDateTime createdAt
 ) {
 }

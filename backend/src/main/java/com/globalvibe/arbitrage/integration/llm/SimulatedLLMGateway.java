@@ -3,6 +3,7 @@ package com.globalvibe.arbitrage.integration.llm;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,7 +53,9 @@ public class SimulatedLLMGateway {
                 riskNotes,
                 true,
                 "SIMULATED_LLM",
-                normalizeFallbackReason(fallbackReason)
+                "simulated-llm",
+                normalizeFallbackReason(fallbackReason),
+                OffsetDateTime.now()
         );
     }
 
@@ -62,7 +65,9 @@ public class SimulatedLLMGateway {
                 keywords,
                 true,
                 "SIMULATED_LLM",
-                normalizeFallbackReason(fallbackReason)
+                "simulated-llm",
+                normalizeFallbackReason(fallbackReason),
+                OffsetDateTime.now()
         );
     }
 

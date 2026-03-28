@@ -44,7 +44,40 @@ public class StructuredReportMarkdownRenderer implements ReportMarkdownRenderer 
                         .append(" / ")
                         .append(match.price())
                         .append("\n");
+                if (match.reason() != null && !match.reason().isBlank()) {
+                    builder.append("  - 说明: ").append(match.reason()).append("\n");
+                }
+                if (match.scoreBreakdown() != null && !match.scoreBreakdown().isEmpty()) {
+                    builder.append("  - 分数拆解: ").append(match.scoreBreakdown()).append("\n");
+                }
             });
+        }
+        if (report.analysisTrace() != null) {
+            builder.append("\n## Analysis Trace\n");
+            if (report.analysisTrace().rewrite() != null) {
+                builder.append("- 改写词: ").append(report.analysisTrace().rewrite().rewrittenText()).append("\n");
+                builder.append("- 改写关键词: ").append(report.analysisTrace().rewrite().keywords()).append("\n");
+                builder.append("- 改写提供方: ").append(report.analysisTrace().rewrite().provider()).append("\n");
+            }
+            if (report.analysisTrace().retrieval() != null) {
+                builder.append("- 检索词: ").append(report.analysisTrace().retrieval().retrievalTerms()).append("\n");
+                builder.append("- 匹配来源: ").append(report.analysisTrace().retrieval().matchSource()).append("\n");
+                builder.append("- 检索证据: ").append(report.analysisTrace().retrieval().evidence()).append("\n");
+            }
+            if (report.analysisTrace().pricing() != null) {
+                builder.append("- 定价假设: ").append(report.analysisTrace().pricing().assumptions()).append("\n");
+                report.analysisTrace().pricing().formulaLines()
+                        .forEach(line -> builder.append("  - ").append(line).append("\n"));
+            }
+            if (report.analysisTrace().llm() != null) {
+                builder.append("- LLM: ")
+                        .append(report.analysisTrace().llm().provider())
+                        .append(" / ")
+                        .append(report.analysisTrace().llm().model())
+                        .append(" / ")
+                        .append(report.analysisTrace().llm().generatedAt())
+                        .append("\n");
+            }
         }
         if (report.recommendations() != null && !report.recommendations().isEmpty()) {
             builder.append("\n## 建议\n");

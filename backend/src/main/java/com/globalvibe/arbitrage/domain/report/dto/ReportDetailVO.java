@@ -20,6 +20,7 @@ public record ReportDetailVO(
         ReportRiskAssessmentVO riskAssessment,
         List<String> recommendations,
         List<DomesticProductMatchVO> domesticMatches,
+        AnalysisTraceVO analysisTrace,
         ReportDownloadDocumentVO downloadDocument
 ) {
 }

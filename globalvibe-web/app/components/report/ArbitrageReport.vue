@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ReportDetail } from '~/types'
+import type { DomesticProductMatch, ReportDetail } from '~/types'
 
 const props = withDefaults(defineProps<{
   report?: ReportDetail | null
@@ -53,8 +53,34 @@ const resolveSummary = () => {
   return t(report.value.summary.insightKey, toTextParams(report.value.summary.insightParams))
 }
 
-const resolveMatchUrl = (match: ReportDetail['domesticMatches'][number]) => {
+const resolveMatchUrl = (match: DomesticProductMatch) => {
   return match.detailUrl ?? match.searchUrl ?? '#'
+}
+
+const formatCurrency = (value?: number | null) => {
+  if (value === null || value === undefined || Number.isNaN(value)) return '--'
+  return `¥${Number(value).toFixed(2)}`
+}
+
+const formatPercent = (value?: number | null, withPlus = false) => {
+  if (value === null || value === undefined || Number.isNaN(value)) return '--'
+  const prefix = withPlus && value > 0 ? '+' : ''
+  return `${prefix}${Number(value).toFixed(1)}%`
+}
+
+const formatDateTime = (value?: string | null) => {
+  if (!value) return '--'
+  return new Date(value).toLocaleString()
+}
+
+const formatList = (items?: string[] | null) => {
+  if (!items?.length) return '--'
+  return items.join(' / ')
+}
+
+const scoreEntries = (scoreBreakdown?: Record<string, number> | null) => {
+  if (!scoreBreakdown) return []
+  return Object.entries(scoreBreakdown)
 }
 
 const costItems = computed(() => {
@@ -79,11 +105,11 @@ const buildMarkdownDocument = () => {
     `# ${currentReport.title}`,
     '',
     `- ${t('products.market')}: ${currentReport.market}`,
-    `- ${t('report.generatedAt')}: ${new Date(currentReport.generatedAt).toLocaleString()}`,
+    `- ${t('report.generatedAt')}: ${formatDateTime(currentReport.generatedAt)}`,
     `- ${t('report.decision')}: ${t(`decision.${currentReport.decision}`)}`,
     `- ${t('report.riskLevel')}: ${t(`risk.${currentReport.riskLevel}`)}`,
-    `- ${t('report.expectedMargin')}: ${currentReport.expectedMargin ?? '--'}%`,
-    `- ${t('report.estimatedProfit')}: $${currentReport.costBreakdown.estimatedProfit ?? '--'}`,
+    `- ${t('report.expectedMargin')}: ${formatPercent(currentReport.expectedMargin)}`,
+    `- ${t('report.estimatedProfit')}: ${formatCurrency(currentReport.costBreakdown.estimatedProfit)}`,
     '',
     `## ${t('report.summary')}`,
     '',
@@ -91,35 +117,64 @@ const buildMarkdownDocument = () => {
     '',
     `## ${t('report.costs')}`,
     '',
-    `- ${t('report.sourcingCost')}: $${currentReport.costBreakdown.sourcingCost ?? '--'}`,
-    `- ${t('report.domesticShippingCost')}: $${currentReport.costBreakdown.domesticShippingCost ?? '--'}`,
-    `- ${t('report.logisticsCost')}: $${currentReport.costBreakdown.logisticsCost ?? '--'}`,
-    `- ${t('report.platformFee')}: $${currentReport.costBreakdown.platformFee ?? '--'}`,
-    `- ${t('report.exchangeRateCost')}: $${currentReport.costBreakdown.exchangeRateCost ?? '--'}`,
-    `- ${t('report.totalCost')}: $${currentReport.costBreakdown.totalCost ?? '--'}`,
-    `- ${t('report.targetSellingPrice')}: $${currentReport.costBreakdown.targetSellingPrice ?? '--'}`,
-    '',
-    `## ${t('report.risk')}`,
-    '',
-    `- ${t('report.riskScore')}: ${currentReport.riskAssessment.score ?? '--'}`,
-    ...currentReport.riskAssessment.factors.map(factor => `- ${t(`riskFactors.${factor}`)}`),
-    ...(currentReport.riskAssessment.notes ?? []).map(note => `- ${note}`),
-    '',
-    `## ${t('report.recommendations')}`,
-    '',
-    ...currentReport.recommendations.map(rec => `- ${rec}`),
+    `- ${t('report.sourcingCost')}: ${formatCurrency(currentReport.costBreakdown.sourcingCost)}`,
+    `- ${t('report.domesticShippingCost')}: ${formatCurrency(currentReport.costBreakdown.domesticShippingCost)}`,
+    `- ${t('report.logisticsCost')}: ${formatCurrency(currentReport.costBreakdown.logisticsCost)}`,
+    `- ${t('report.platformFee')}: ${formatCurrency(currentReport.costBreakdown.platformFee)}`,
+    `- ${t('report.exchangeRateCost')}: ${formatCurrency(currentReport.costBreakdown.exchangeRateCost)}`,
+    `- ${t('report.totalCost')}: ${formatCurrency(currentReport.costBreakdown.totalCost)}`,
+    `- ${t('report.targetSellingPrice')}: ${formatCurrency(currentReport.costBreakdown.targetSellingPrice)}`,
     '',
     `## ${t('report.domesticMatches')}`,
     '',
     ...currentReport.domesticMatches.flatMap(match => [
       `### ${match.platform} - ${match.title}`,
-      `- ${t('report.matchPrice')}: $${match.price ?? '--'}`,
+      `- ${t('report.matchPrice')}: ${formatCurrency(match.price)}`,
       `- ${t('report.matchSimilarity')}: ${match.similarityScore}%`,
-      `- ${t('report.matchLink')}: ${resolveMatchUrl(match)}`,
+      `- ${t('report.matchSource')}: ${match.matchSource ?? '--'}`,
+      `- ${t('report.retrievalTerms')}: ${formatList(match.retrievalTerms)}`,
       ...(match.reason ? [`- ${t('report.matchReason')}: ${match.reason}`] : []),
+      ...scoreEntries(match.scoreBreakdown).map(([key, value]) => `- ${t('report.scoreBreakdown')} ${key}: ${Number(value).toFixed(2)}`),
+      ...match.evidence.map(item => `- ${t('report.evidence')}: ${item}`),
+      `- ${t('report.matchLink')}: ${resolveMatchUrl(match)}`,
       '',
     ]),
   ]
+
+  if (currentReport.analysisTrace) {
+    lines.push(`## ${t('report.analysisTrace')}`, '')
+    if (currentReport.analysisTrace.rewrite) {
+      lines.push(`- ${t('report.sourceTitle')}: ${currentReport.analysisTrace.rewrite.sourceTitle}`)
+      lines.push(`- ${t('report.rewrittenText')}: ${currentReport.analysisTrace.rewrite.rewrittenText}`)
+      lines.push(`- ${t('report.keywords')}: ${formatList(currentReport.analysisTrace.rewrite.keywords)}`)
+      lines.push(`- ${t('report.provider')}: ${currentReport.analysisTrace.rewrite.provider}`)
+    }
+    if (currentReport.analysisTrace.retrieval) {
+      lines.push(`- ${t('report.retrievalTerms')}: ${formatList(currentReport.analysisTrace.retrieval.retrievalTerms)}`)
+      lines.push(`- ${t('report.matchSource')}: ${currentReport.analysisTrace.retrieval.matchSource}`)
+      lines.push(...scoreEntries(currentReport.analysisTrace.retrieval.scoreBreakdown).map(([key, value]) => `- ${t('report.scoreBreakdown')} ${key}: ${Number(value).toFixed(2)}`))
+      lines.push(...currentReport.analysisTrace.retrieval.evidence.map(item => `- ${t('report.evidence')}: ${item}`))
+    }
+    if (currentReport.analysisTrace.pricing) {
+      lines.push(`- ${t('report.currency')}: ${currentReport.analysisTrace.pricing.currency}`)
+      lines.push(`- ${t('report.usdToCnyRate')}: ${Number(currentReport.analysisTrace.pricing.usdToCnyRate).toFixed(2)}`)
+      lines.push(...currentReport.analysisTrace.pricing.formulaLines.map(item => `- ${t('report.formulaLines')}: ${item}`))
+      lines.push(...currentReport.analysisTrace.pricing.assumptions.map(item => `- ${t('report.assumptions')}: ${item}`))
+    }
+    if (currentReport.analysisTrace.llm) {
+      lines.push(`- ${t('report.provider')}: ${currentReport.analysisTrace.llm.provider}`)
+      lines.push(`- ${t('report.model')}: ${currentReport.analysisTrace.llm.model}`)
+      lines.push(`- ${t('report.generatedAt')}: ${formatDateTime(currentReport.analysisTrace.llm.generatedAt)}`)
+    }
+    lines.push('')
+  }
+
+  lines.push(`## ${t('report.risk')}`, '')
+  lines.push(`- ${t('report.riskScore')}: ${currentReport.riskAssessment.score ?? '--'}`)
+  lines.push(...currentReport.riskAssessment.factors.map(factor => `- ${t(`riskFactors.${factor}`)}`))
+  lines.push(...(currentReport.riskAssessment.notes ?? []).map(note => `- ${note}`))
+  lines.push('', `## ${t('report.recommendations')}`, '')
+  lines.push(...currentReport.recommendations.map(rec => `- ${rec}`))
 
   return {
     fileName: `${sanitizeFileName(currentReport.title)}-report.md`,
@@ -199,6 +254,9 @@ const downloadDocument = () => {
               <span class="rounded-full bg-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                 {{ t(`risk.${report.riskLevel}`) }}
               </span>
+              <span class="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-950 dark:text-slate-300">
+                {{ formatDateTime(report.generatedAt) }}
+              </span>
             </div>
           </div>
         </div>
@@ -212,11 +270,11 @@ const downloadDocument = () => {
         <div class="grid grid-cols-2 gap-3">
           <div class="rounded-xl bg-slate-100 p-5 dark:bg-slate-900">
             <p class="text-[10px] uppercase tracking-wide text-slate-500">{{ t('report.estimatedProfit') }}</p>
-            <p class="mt-2 text-2xl font-bold text-slate-800 dark:text-slate-200">${{ report.costBreakdown.estimatedProfit ?? '--' }}</p>
+            <p class="mt-2 text-2xl font-bold text-slate-800 dark:text-slate-200">{{ formatCurrency(report.costBreakdown.estimatedProfit) }}</p>
           </div>
           <div class="rounded-xl bg-slate-100 p-5 dark:bg-slate-900">
             <p class="text-[10px] uppercase tracking-wide text-slate-500">{{ t('report.expectedMargin') }}</p>
-            <p class="mt-2 text-2xl font-bold text-green-600 dark:text-slate-200">+{{ report.expectedMargin ?? '--' }}%</p>
+            <p class="mt-2 text-2xl font-bold text-green-600 dark:text-slate-200">{{ formatPercent(report.expectedMargin, true) }}</p>
           </div>
         </div>
         <p class="rounded-xl bg-slate-100 p-4 text-sm leading-relaxed text-slate-600 dark:bg-slate-900 dark:text-slate-400">
@@ -236,7 +294,79 @@ const downloadDocument = () => {
             class="rounded-xl bg-slate-100 p-4 text-xs dark:bg-slate-900"
           >
             <p class="text-slate-500">{{ t(`report.${item.key}`) }}</p>
-            <p class="mt-2 font-semibold text-slate-800 dark:text-slate-200">${{ item.value ?? '--' }}</p>
+            <p class="mt-2 font-semibold text-slate-800 dark:text-slate-200">{{ formatCurrency(item.value) }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="report.analysisTrace" class="space-y-4">
+        <h5 class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <UIcon name="i-heroicons-command-line" class="h-3.5 w-3.5" />
+          {{ t('report.analysisTrace') }}
+        </h5>
+        <div class="grid gap-3 md:grid-cols-2">
+          <div class="rounded-2xl bg-slate-100 p-4 text-xs leading-relaxed text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+            <p class="font-semibold text-slate-800 dark:text-slate-100">{{ t('report.rewrite') }}</p>
+            <div v-if="report.analysisTrace.rewrite" class="mt-3 space-y-2">
+              <p><span class="text-slate-500">{{ t('report.sourceTitle') }}:</span> {{ report.analysisTrace.rewrite.sourceTitle }}</p>
+              <p><span class="text-slate-500">{{ t('report.rewrittenText') }}:</span> {{ report.analysisTrace.rewrite.rewrittenText }}</p>
+              <p><span class="text-slate-500">{{ t('report.keywords') }}:</span> {{ formatList(report.analysisTrace.rewrite.keywords) }}</p>
+              <p><span class="text-slate-500">{{ t('report.provider') }}:</span> {{ report.analysisTrace.rewrite.provider }}</p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-slate-100 p-4 text-xs leading-relaxed text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+            <p class="font-semibold text-slate-800 dark:text-slate-100">{{ t('report.retrieval') }}</p>
+            <div v-if="report.analysisTrace.retrieval" class="mt-3 space-y-3">
+              <p><span class="text-slate-500">{{ t('report.retrievalTerms') }}:</span> {{ formatList(report.analysisTrace.retrieval.retrievalTerms) }}</p>
+              <p><span class="text-slate-500">{{ t('report.matchSource') }}:</span> {{ report.analysisTrace.retrieval.matchSource }}</p>
+              <div>
+                <p class="text-slate-500">{{ t('report.scoreBreakdown') }}</p>
+                <div class="mt-2 flex flex-wrap gap-2">
+                  <span
+                    v-for="[key, value] in scoreEntries(report.analysisTrace.retrieval.scoreBreakdown)"
+                    :key="`trace-score-${key}`"
+                    class="rounded-full bg-white px-2.5 py-1 font-medium text-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                  >
+                    {{ key }} {{ Number(value).toFixed(2) }}
+                  </span>
+                </div>
+              </div>
+              <ul class="space-y-1.5">
+                <li v-for="(item, idx) in report.analysisTrace.retrieval.evidence" :key="`trace-evidence-${idx}`">
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-slate-100 p-4 text-xs leading-relaxed text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+            <p class="font-semibold text-slate-800 dark:text-slate-100">{{ t('report.pricingTrace') }}</p>
+            <div v-if="report.analysisTrace.pricing" class="mt-3 space-y-3">
+              <p><span class="text-slate-500">{{ t('report.currency') }}:</span> {{ report.analysisTrace.pricing.currency }}</p>
+              <p><span class="text-slate-500">{{ t('report.usdToCnyRate') }}:</span> {{ Number(report.analysisTrace.pricing.usdToCnyRate).toFixed(2) }}</p>
+              <div>
+                <p class="text-slate-500">{{ t('report.formulaLines') }}</p>
+                <ul class="mt-2 space-y-1.5">
+                  <li v-for="(item, idx) in report.analysisTrace.pricing.formulaLines" :key="`trace-formula-${idx}`">{{ item }}</li>
+                </ul>
+              </div>
+              <div>
+                <p class="text-slate-500">{{ t('report.assumptions') }}</p>
+                <ul class="mt-2 space-y-1.5">
+                  <li v-for="(item, idx) in report.analysisTrace.pricing.assumptions" :key="`trace-assumption-${idx}`">{{ item }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-slate-100 p-4 text-xs leading-relaxed text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+            <p class="font-semibold text-slate-800 dark:text-slate-100">{{ t('report.llm') }}</p>
+            <div v-if="report.analysisTrace.llm" class="mt-3 space-y-2">
+              <p><span class="text-slate-500">{{ t('report.provider') }}:</span> {{ report.analysisTrace.llm.provider }}</p>
+              <p><span class="text-slate-500">{{ t('report.model') }}:</span> {{ report.analysisTrace.llm.model }}</p>
+              <p><span class="text-slate-500">{{ t('report.generatedAt') }}:</span> {{ formatDateTime(report.analysisTrace.llm.generatedAt) }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -285,11 +415,7 @@ const downloadDocument = () => {
           >
             <div class="flex items-start gap-3">
               <div v-if="match.image" class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-white dark:bg-slate-950">
-                <img
-                  :src="match.image"
-                  :alt="match.title"
-                  class="h-16 w-16 object-cover"
-                />
+                <img :src="match.image" :alt="match.title" class="h-16 w-16 object-cover" />
               </div>
 
               <div class="min-w-0 flex-1">
@@ -300,12 +426,15 @@ const downloadDocument = () => {
                   <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
                     {{ t('report.matchSimilarity') }} {{ match.similarityScore }}%
                   </span>
+                  <span class="rounded-full bg-slate-200 px-2.5 py-1 text-[10px] font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    {{ match.matchSource ?? '--' }}
+                  </span>
                 </div>
                 <p class="mt-3 text-sm font-semibold leading-relaxed text-slate-800 dark:text-slate-100">
                   {{ match.title }}
                 </p>
                 <div class="mt-2 flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
-                  <span>{{ t('report.matchPrice') }}: <span class="font-semibold text-slate-700 dark:text-slate-200">${{ match.price ?? '--' }}</span></span>
+                  <span>{{ t('report.matchPrice') }}: <span class="font-semibold text-slate-700 dark:text-slate-200">{{ formatCurrency(match.price) }}</span></span>
                   <a
                     :href="resolveMatchUrl(match)"
                     target="_blank"
@@ -319,6 +448,21 @@ const downloadDocument = () => {
                 <p v-if="match.reason" class="mt-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                   {{ match.reason }}
                 </p>
+                <p v-if="match.retrievalTerms?.length" class="mt-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  {{ t('report.retrievalTerms') }}: {{ formatList(match.retrievalTerms) }}
+                </p>
+                <div v-if="scoreEntries(match.scoreBreakdown).length" class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    v-for="[key, value] in scoreEntries(match.scoreBreakdown)"
+                    :key="`${match.id}-${key}`"
+                    class="rounded-full bg-white px-2.5 py-1 text-[10px] font-medium text-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                  >
+                    {{ key }} {{ Number(value).toFixed(2) }}
+                  </span>
+                </div>
+                <ul v-if="match.evidence?.length" class="mt-3 space-y-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  <li v-for="(item, idx) in match.evidence" :key="`${match.id}-evidence-${idx}`">{{ item }}</li>
+                </ul>
               </div>
             </div>
           </div>

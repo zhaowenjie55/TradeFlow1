@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
   application:
     name: tradeflow-arbitrage-backend
   threads:
@@ -9,9 +11,10 @@ spring:
     serialization:
       write-dates-as-timestamps: false
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/tradeflow}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    url: jdbc:postgresql://47.103.117.192:5432/tradeflow
+    username: postgres
+    password: admin123456
+
     driver-class-name: org.postgresql.Driver
   sql:
     init:
@@ -56,6 +59,7 @@ app:
     platform-fee-rate: ${PLATFORM_FEE_RATE:0.15}
     exchange-loss-rate: ${EXCHANGE_LOSS_RATE:0.03}
     fallback-sourcing-rate: ${FALLBACK_SOURCING_RATE:0.45}
+    default-domestic-shipping-cost: ${DEFAULT_DOMESTIC_SHIPPING_COST:6.00}
   vector:
     enabled: ${VECTOR_ENABLED:true}
     provider: ${VECTOR_PROVIDER:local-bge-m3}

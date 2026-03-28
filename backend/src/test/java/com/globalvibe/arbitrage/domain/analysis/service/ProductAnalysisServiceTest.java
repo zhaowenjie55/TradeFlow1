@@ -36,7 +36,9 @@ class ProductAnalysisServiceTest {
                 List.of("风险1"),
                 false,
                 "GLM_CHAT",
-                null
+                "glm-5",
+                null,
+                OffsetDateTime.now()
         ));
         when(productRepository.findById("amz-acrylic-01")).thenReturn(java.util.Optional.of(new Product(
                 "amz-acrylic-01",
@@ -66,6 +68,8 @@ class ProductAnalysisServiceTest {
                 .rewriteId("rewrite-1")
                 .rewrittenText("亚克力透明收纳架")
                 .keywords(List.of("亚克力透明收纳架", "亚克力桌面收纳架"))
+                .gatewaySource("GLM_CHAT")
+                .gatewayModel("glm-5")
                 .build();
         CandidateMatchRecord match = CandidateMatchRecord.builder()
                 .matchId("match-1")
@@ -78,6 +82,10 @@ class ProductAnalysisServiceTest {
                 .price(new BigDecimal("15.00"))
                 .similarityScore(new BigDecimal("88.00"))
                 .reason("reason")
+                .matchSource("CATALOG_HYBRID")
+                .retrievalTerms(List.of("亚克力透明收纳架", "亚克力桌面收纳架"))
+                .scoreBreakdown(Map.of("titleOverlap", new BigDecimal("32.00")))
+                .evidence(List.of("检索词: 亚克力透明收纳架"))
                 .createdAt(OffsetDateTime.now())
                 .build();
         ProductDetailSnapshot detailSnapshot = new ProductDetailSnapshot(
@@ -107,5 +115,6 @@ class ProductAnalysisServiceTest {
         assertEquals(new BigDecimal("48.62"), report.expectedMargin());
         assertEquals(new BigDecimal("12.99"), (BigDecimal) report.auditData().get("priceAmountUsd"));
         assertEquals("5元", report.auditData().get("shippingText"));
+        assertEquals("glm-5", report.analysisTrace().llm().model());
     }
 }

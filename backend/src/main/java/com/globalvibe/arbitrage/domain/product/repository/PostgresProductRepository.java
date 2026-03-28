@@ -150,6 +150,77 @@ public class PostgresProductRepository implements ProductRepository {
     }
 
     @Override
+    public List<Product> searchByPlatformAndKeywordIncludingDetails(MarketplaceType platform, String keyword, int limit) {
+        if (keyword == null || keyword.isBlank()) {
+            return findByPlatform(platform).stream().limit(limit).toList();
+        }
+        List<Product> trigramMatches = jdbcTemplate.query("""
+                        SELECT p.platform, p.external_item_id AS product_id, p.title, p.price, p.image, p.link,
+                               p.rating, p.reviews, COALESCE(p.attributes_jsonb, '{}'::jsonb) AS attributes_json,
+                               s.raw_jsonb AS raw_data_json
+                        FROM gv_platform_item p
+                        LEFT JOIN product_detail_snapshot d
+                          ON d.product_id = p.external_item_id
+                        LEFT JOIN LATERAL (
+                            SELECT raw_jsonb
+                            FROM gv_platform_item_snapshot s
+                            WHERE s.platform = p.platform
+                              AND s.external_item_id = p.external_item_id
+                            ORDER BY s.created_at DESC
+                            LIMIT 1
+                        ) s ON TRUE
+                        WHERE __PLATFORM_PREDICATE__
+                          AND (
+                            LOWER(p.title) % LOWER(?)
+                            OR LOWER(COALESCE(d.title, '')) % LOWER(?)
+                            OR LOWER(COALESCE(d.brand, '')) % LOWER(?)
+                          )
+                        ORDER BY GREATEST(
+                            similarity(LOWER(p.title), LOWER(?)),
+                            similarity(LOWER(COALESCE(d.title, '')), LOWER(?)),
+                            similarity(LOWER(COALESCE(d.brand, '')), LOWER(?))
+                        ) DESC,
+                        p.updated_at DESC
+                        LIMIT ?
+                        """.replace("__PLATFORM_PREDICATE__", platformPredicate("p.platform", platform)),
+                productRowMapper(),
+                withPlatformValues(platform, keyword, keyword, keyword, keyword, keyword, keyword, limit)
+        );
+        if (!trigramMatches.isEmpty()) {
+            return trigramMatches;
+        }
+        return jdbcTemplate.query("""
+                        SELECT p.platform, p.external_item_id AS product_id, p.title, p.price, p.image, p.link,
+                               p.rating, p.reviews, COALESCE(p.attributes_jsonb, '{}'::jsonb) AS attributes_json,
+                               s.raw_jsonb AS raw_data_json
+                        FROM gv_platform_item p
+                        LEFT JOIN product_detail_snapshot d
+                          ON d.product_id = p.external_item_id
+                        LEFT JOIN LATERAL (
+                            SELECT raw_jsonb
+                            FROM gv_platform_item_snapshot s
+                            WHERE s.platform = p.platform
+                              AND s.external_item_id = p.external_item_id
+                            ORDER BY s.created_at DESC
+                            LIMIT 1
+                        ) s ON TRUE
+                        WHERE __PLATFORM_PREDICATE__
+                          AND (
+                            LOWER(p.title) LIKE CONCAT('%', LOWER(?), '%')
+                            OR LOWER(COALESCE(d.title, '')) LIKE CONCAT('%', LOWER(?), '%')
+                            OR LOWER(COALESCE(d.brand, '')) LIKE CONCAT('%', LOWER(?), '%')
+                            OR LOWER(COALESCE(d.description, '')) LIKE CONCAT('%', LOWER(?), '%')
+                            OR LOWER(COALESCE(d.attributes_json::text, '')) LIKE CONCAT('%', LOWER(?), '%')
+                          )
+                        ORDER BY p.updated_at DESC
+                        LIMIT ?
+                        """.replace("__PLATFORM_PREDICATE__", platformPredicate("p.platform", platform)),
+                productRowMapper(),
+                withPlatformValues(platform, keyword, keyword, keyword, keyword, keyword, limit)
+        );
+    }
+
+    @Override
     public List<Product> findAll() {
         return jdbcTemplate.query(
                 """

@@ -33,8 +33,8 @@ public class PostgresQueryRewriteRepository implements QueryRewriteRepository {
         jdbcTemplate.update("""
                 INSERT INTO gv_query_rewrite (
                     rewrite_id, task_id, candidate_id, source_product_id, source_text,
-                    rewritten_text, keywords_jsonb, gateway_source, fallback_used, fallback_reason, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    rewritten_text, keywords_jsonb, gateway_source, gateway_model, fallback_used, fallback_reason, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 rewriteId,
                 queryRewrite.taskId(),
@@ -44,6 +44,7 @@ public class PostgresQueryRewriteRepository implements QueryRewriteRepository {
                 queryRewrite.rewrittenText(),
                 jdbcJsonSupport.toJsonb(queryRewrite.keywords()),
                 queryRewrite.gatewaySource(),
+                queryRewrite.gatewayModel(),
                 queryRewrite.fallbackUsed(),
                 queryRewrite.fallbackReason(),
                 createdAt
@@ -57,6 +58,7 @@ public class PostgresQueryRewriteRepository implements QueryRewriteRepository {
                 .rewrittenText(queryRewrite.rewrittenText())
                 .keywords(queryRewrite.keywords())
                 .gatewaySource(queryRewrite.gatewaySource())
+                .gatewayModel(queryRewrite.gatewayModel())
                 .fallbackUsed(queryRewrite.fallbackUsed())
                 .fallbackReason(queryRewrite.fallbackReason())
                 .createdAt(createdAt)
@@ -127,6 +129,7 @@ public class PostgresQueryRewriteRepository implements QueryRewriteRepository {
                 .rewrittenText(rs.getString("rewritten_text"))
                 .keywords(jdbcJsonSupport.fromJson(jsonText(rs, "keywords_jsonb"), STRING_LIST))
                 .gatewaySource(rs.getString("gateway_source"))
+                .gatewayModel(rs.getString("gateway_model"))
                 .fallbackUsed(Boolean.TRUE.equals(rs.getObject("fallback_used", Boolean.class)))
                 .fallbackReason(rs.getString("fallback_reason"))
                 .createdAt(rs.getObject("created_at", OffsetDateTime.class))
