@@ -3,3 +3,12 @@ spring:
     url: jdbc:postgresql://47.103.117.192:5432/tradeflow
     username: postgres
     password: admin123456
+
+app:
+  integration:
+    llm:
+      api-key: ${LLM_API_KEY:}
+  vector:
+    provider: ${VECTOR_PROVIDER:local-bge-m3}
+    model-path: ${VECTOR_MODEL_PATH:D:\AIModels\bge-m3\model.onnx}
+    tokenizer-path: ${VECTOR_TOKENIZER_PATH:D:\AIModels\bge-m3\tokenizer.json}
