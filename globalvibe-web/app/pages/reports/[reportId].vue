@@ -22,7 +22,7 @@ onMounted(async () => {
 
 <template>
   <NuxtLayout name="default">
-    <div class="globalvibe-scrollbar h-full overflow-auto p-8">
+    <div class="tradeflow-scrollbar h-full overflow-auto p-8">
       <div class="flex items-center gap-3">
         <NuxtLink
           to="/reports"

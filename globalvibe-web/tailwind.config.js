@@ -13,7 +13,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // GlobalVibe 主题色系统
+        // TradeFlow 主题色系统
         lime: {
           DEFAULT: '#d7ff5c',
           50: '#f5ffda',

@@ -82,7 +82,7 @@ const startResize = (event: MouseEvent) => {
 
 <template>
   <div ref="containerRef" class="flex h-full min-h-0 flex-col">
-    <div class="globalvibe-scrollbar min-h-0 overflow-auto border-b border-slate-200 dark:border-slate-800" :style="{ flexBasis: `${topHeight}%` }">
+    <div class="tradeflow-scrollbar min-h-0 overflow-auto border-b border-slate-200 dark:border-slate-800" :style="{ flexBasis: `${topHeight}%` }">
       <div class="px-6 py-4">
         <div class="flex items-start justify-between gap-4">
           <div>
@@ -202,7 +202,7 @@ const startResize = (event: MouseEvent) => {
       <span class="h-1 w-14 rounded-full bg-slate-300 transition-colors group-hover:bg-slate-400 dark:bg-slate-700 dark:group-hover:bg-slate-500" />
     </button>
 
-    <div class="globalvibe-scrollbar min-h-0 flex-1 overflow-auto p-6">
+    <div class="tradeflow-scrollbar min-h-0 flex-1 overflow-auto p-6">
       <div v-if="productsStore.isLoading && productsStore.filteredCandidates.length === 0" :class="['grid gap-6', gridCols]">
         <div
           v-for="i in 8"

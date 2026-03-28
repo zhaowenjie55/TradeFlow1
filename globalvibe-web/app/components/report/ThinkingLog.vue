@@ -28,7 +28,7 @@ const formatTime = (date: string) => new Date(date).toLocaleTimeString()
 <template>
   <div
     ref="logContainer"
-    class="globalvibe-scrollbar h-full overflow-y-auto px-4 py-3 font-mono text-sm text-slate-500 dark:text-slate-400"
+    class="tradeflow-scrollbar h-full overflow-y-auto px-4 py-3 font-mono text-sm text-slate-500 dark:text-slate-400"
     style="scroll-behavior: smooth"
   >
     <div v-if="agentStore.taskLogs.length === 0" class="flex h-full items-center justify-center">

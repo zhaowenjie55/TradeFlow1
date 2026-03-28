@@ -132,7 +132,7 @@ const downloadDocument = () => {
 </script>
 
 <template>
-  <div class="globalvibe-scrollbar h-full overflow-y-auto px-5 py-6">
+  <div class="tradeflow-scrollbar h-full overflow-y-auto px-5 py-6">
     <div v-if="isLoading" class="flex h-full flex-col items-center justify-center text-center">
       <div class="rounded-2xl bg-slate-100 p-7 dark:bg-slate-900">
         <UIcon name="i-heroicons-arrow-path" class="mx-auto h-10 w-10 animate-spin text-slate-400 dark:text-slate-500" />

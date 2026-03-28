@@ -1,6 +1,6 @@
 spring:
   application:
-    name: globalvibe-arbitrage-backend
+    name: tradeflow-arbitrage-backend
   threads:
     virtual:
       enabled: true
@@ -9,7 +9,7 @@ spring:
     serialization:
       write-dates-as-timestamps: false
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/globalvibe}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/tradeflow}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver

@@ -27,7 +27,7 @@ export default defineNuxtConfig({
     classSuffix: '',
     preference: 'dark',
     fallback: 'dark',
-    storageKey: 'globalvibe-theme',
+    storageKey: 'tradeflow-theme',
   },
 
   css: ['~/assets/css/main.css'],

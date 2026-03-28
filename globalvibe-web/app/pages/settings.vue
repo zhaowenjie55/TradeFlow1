@@ -47,7 +47,7 @@ const updateLocale = (value: AppLocale) => {
 
 <template>
   <NuxtLayout name="default">
-    <div class="globalvibe-scrollbar h-full overflow-auto p-8">
+    <div class="tradeflow-scrollbar h-full overflow-auto p-8">
       <h1 class="text-2xl font-semibold text-slate-800 dark:text-slate-100">{{ t('settings.title') }}</h1>
       <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">{{ t('settings.subtitle') }}</p>
 

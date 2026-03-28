@@ -11,11 +11,11 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.globalvibe</groupId>
-    <artifactId>arbitrage-backend</artifactId>
+    <groupId>com.tradeflow</groupId>
+    <artifactId>tradeflow-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>arbitrage-backend</name>
-    <description>GlobalVibe cross-border arbitrage backend</description>
+    <name>tradeflow-backend</name>
+    <description>TradeFlow cross-border arbitrage backend</description>
 
     <properties>
         <java.version>21</java.version>

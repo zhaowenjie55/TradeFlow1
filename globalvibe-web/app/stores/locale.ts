@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export type AppLocale = 'zh-CN' | 'en'
 
-const STORAGE_KEY = 'globalvibe-locale'
+const STORAGE_KEY = 'tradeflow-locale'
 
 export const useLocaleStore = defineStore('locale', () => {
   const locale = ref<AppLocale>('zh-CN')

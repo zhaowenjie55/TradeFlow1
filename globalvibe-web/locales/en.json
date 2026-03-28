@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "GlobalVibe",
+    "name": "TradeFlow",
     "workspace": "AI Trade Agent Workspace",
     "modeBadge": "Mode: {mode}",
     "locale": "Language",

@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: jdbc:postgresql://47.103.117.192:5432/globalvibe
+    url: jdbc:postgresql://47.103.117.192:5432/tradeflow
     username: postgres
     password: admin123456

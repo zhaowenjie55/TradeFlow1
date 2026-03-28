@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { AppLocale } from './locale'
 
-const STORAGE_KEY = 'globalvibe-settings'
+const STORAGE_KEY = 'tradeflow-settings'
 
 interface AppSettingsState {
   locale: AppLocale

@@ -73,7 +73,7 @@ onMounted(async () => {
     </div>
 
     <div class="flex min-h-0 flex-1 flex-col">
-      <div class="globalvibe-scrollbar flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto pr-2">
+      <div class="tradeflow-scrollbar flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto pr-2">
         <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/60">
           <div class="flex items-center justify-between gap-3">
             <div>
