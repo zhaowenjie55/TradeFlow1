@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public record ReportCostBreakdownVO(
         BigDecimal sourcingCost,
+        BigDecimal domesticShippingCost,
         BigDecimal logisticsCost,
         BigDecimal platformFee,
         BigDecimal exchangeRateCost,

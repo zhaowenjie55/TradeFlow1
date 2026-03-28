@@ -58,23 +58,22 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
         );
         QueryRewrite queryRewrite = rewriteExecutionResult.queryRewrite();
         DomesticMatchService.MatchExecutionResult matchExecutionResult = domesticMatchService.match(
-                phase1Task.getTaskId(),
+                phase2Task.getTaskId(),
                 candidateId,
-                candidate.productId(),
-                candidate.title(),
+                candidate,
                 queryRewrite,
                 5
         );
         List<CandidateMatchRecord> matches = matchExecutionResult.matches();
         DetailLookupResult detailLookupResult = matches.isEmpty()
                 ? new DetailLookupResult(null, false)
-                : resolveDomesticDetail(matches.getFirst().externalItemId());
+                : resolveDomesticDetail(matches.get(0).externalItemId());
         ProductDetailSnapshot detail1688 = detailLookupResult.detailSnapshot();
         ArbitrageReport report = productAnalysisService.buildReport(
                 "report-" + phase2Task.getTaskId(),
                 candidate,
                 detail1688,
-                queryRewrite.rewrittenText(),
+                queryRewrite,
                 matches
         );
 

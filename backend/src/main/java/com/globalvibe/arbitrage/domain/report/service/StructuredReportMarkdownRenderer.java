@@ -3,6 +3,8 @@ package com.globalvibe.arbitrage.domain.report.service;
 import com.globalvibe.arbitrage.domain.report.model.ArbitrageReport;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class StructuredReportMarkdownRenderer implements ReportMarkdownRenderer {
 
@@ -15,9 +17,14 @@ public class StructuredReportMarkdownRenderer implements ReportMarkdownRenderer 
         builder.append("- 风险等级: ").append(report.riskLevel()).append("\n");
         builder.append("- 预计利润率: ").append(report.expectedMargin()).append("%\n");
         if (report.costBreakdown() != null) {
-            builder.append("- 目标售价: ").append(report.costBreakdown().targetSellingPrice()).append("\n");
-            builder.append("- 总成本: ").append(report.costBreakdown().totalCost()).append("\n");
-            builder.append("- 预计利润: ").append(report.costBreakdown().estimatedProfit()).append("\n");
+            builder.append("- Amazon 售价（人民币）: ").append(currency(report.costBreakdown().targetSellingPrice())).append("\n");
+            builder.append("- 采购成本: ").append(currency(report.costBreakdown().sourcingCost())).append("\n");
+            builder.append("- 国内运费: ").append(currency(report.costBreakdown().domesticShippingCost())).append("\n");
+            builder.append("- 跨境物流成本: ").append(currency(report.costBreakdown().logisticsCost())).append("\n");
+            builder.append("- 平台费: ").append(currency(report.costBreakdown().platformFee())).append("\n");
+            builder.append("- 汇损成本: ").append(currency(report.costBreakdown().exchangeRateCost())).append("\n");
+            builder.append("- 总成本: ").append(currency(report.costBreakdown().totalCost())).append("\n");
+            builder.append("- 预计利润: ").append(currency(report.costBreakdown().estimatedProfit())).append("\n");
         }
         if (report.summary() != null && report.summary().insightParams() != null && report.summary().insightParams().containsKey("message")) {
             builder.append("\n## Agent 总结\n\n");
@@ -44,5 +51,12 @@ public class StructuredReportMarkdownRenderer implements ReportMarkdownRenderer 
             report.recommendations().forEach(item -> builder.append("- ").append(item).append("\n"));
         }
         return builder.toString();
+    }
+
+    private String currency(BigDecimal value) {
+        if (value == null) {
+            return "¥0.00";
+        }
+        return "¥" + value.setScale(2, java.math.RoundingMode.HALF_UP).toPlainString();
     }
 }

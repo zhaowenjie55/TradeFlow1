@@ -63,7 +63,7 @@
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-embeddings-bge-small-zh-v15</artifactId>
+            <artifactId>langchain4j-embeddings</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>

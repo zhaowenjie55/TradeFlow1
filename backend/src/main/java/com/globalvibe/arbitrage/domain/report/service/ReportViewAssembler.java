@@ -99,10 +99,11 @@ public class ReportViewAssembler {
 
     private ReportCostBreakdownVO toCostBreakdown(ReportCostBreakdown costBreakdown) {
         if (costBreakdown == null) {
-            return new ReportCostBreakdownVO(null, null, null, null, null, null, null);
+            return new ReportCostBreakdownVO(null, null, null, null, null, null, null, null);
         }
         return new ReportCostBreakdownVO(
                 costBreakdown.sourcingCost(),
+                costBreakdown.domesticShippingCost(),
                 costBreakdown.logisticsCost(),
                 costBreakdown.platformFee(),
                 costBreakdown.exchangeRateCost(),

@@ -51,7 +51,7 @@ public class Phase1TaskProcessor {
                 .orElseThrow(() -> new AnalysisTaskNotFoundException(taskId));
         SearchRun searchRun = createSearchRun(analysisTask);
 
-        updateStatus(analysisTask, TaskStatus.RUNNING, "phase1.queue", "任务已出队，开始执行海外盘点。");
+        updateStatus(analysisTask, TaskStatus.RUNNING, "phase1.queue", "任务已开始执行，准备进行 Amazon 海外盘点。");
         pause();
 
         try {

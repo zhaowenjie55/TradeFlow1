@@ -4,6 +4,7 @@ import com.globalvibe.arbitrage.config.VectorSearchProperties;
 import com.globalvibe.arbitrage.domain.marketplace.model.MarketplaceType;
 import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.domain.product.repository.ProductEmbeddingRepository;
+import com.globalvibe.arbitrage.domain.product.repository.ProductEmbeddingRepository.SemanticSearchHit;
 import com.globalvibe.arbitrage.domain.product.repository.ProductRepository;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -40,28 +41,42 @@ public class DomesticVectorSearchService {
         List<Product> products = productRepository.findByPlatform(platform);
         productEmbeddingRepository.deleteByPlatform(platform);
         for (Product product : products) {
+            String indexedText = toIndexDocument(product);
+            float[] embedding = embeddingModel.embed(indexedText).content().vector();
+            verifyDimension(embedding);
             productEmbeddingRepository.upsert(
                     platform,
                     product,
-                    embeddingModel.embed(toIndexDocument(product)).content().vector(),
-                    toIndexDocument(product),
+                    embedding,
+                    indexedText,
                     buildMetadata(product)
             );
         }
     }
 
     public List<Product> search(String keyword, int limit) {
+        return searchWithScores(keyword, limit).stream()
+                .map(VectorSearchResult::product)
+                .toList();
+    }
+
+    public List<VectorSearchResult> searchWithScores(String keyword, int limit) {
         if (keyword == null || keyword.isBlank()) {
             return List.of();
         }
-        List<Product> vectorMatches = productEmbeddingRepository.semanticSearch(
+        float[] queryVector = embeddingModel.embed(toQueryText(keyword)).content().vector();
+        verifyDimension(queryVector);
+        List<SemanticSearchHit> vectorMatches = productEmbeddingRepository.semanticSearch(
                 domesticPlatform(),
-                embeddingModel.embed(toQueryText(keyword)).content().vector(),
+                queryVector,
                 Math.max(limit, properties.getMaxResults()),
                 properties.getMinScore()
         );
-        Map<String, Product> deduplicated = new LinkedHashMap<>();
-        vectorMatches.forEach(product -> deduplicated.put(product.id(), product));
+        Map<String, VectorSearchResult> deduplicated = new LinkedHashMap<>();
+        vectorMatches.forEach(hit -> deduplicated.put(
+                hit.product().id(),
+                new VectorSearchResult(hit.product(), hit.score())
+        ));
         return deduplicated.values().stream().limit(limit).toList();
     }
 
@@ -73,22 +88,18 @@ public class DomesticVectorSearchService {
         String attributeTokens = product.attributes().entrySet().stream()
                 .map(entry -> entry.getKey() + ":" + entry.getValue())
                 .collect(Collectors.joining(" "));
-        return """
-                商品标题：%s
-                召回关键词：%s
-                商品属性：%s
-                """.formatted(
-                product.title(),
-                properties.getFixedKeyword(),
-                attributeTokens
+        return String.join(" ",
+                safeText(product.title()),
+                safeText(properties.getFixedKeyword()),
+                safeText(attributeTokens)
         ).trim();
     }
 
     private String toQueryText(String keyword) {
-        return """
-                为这个商品检索语句生成向量：%s
-                补充关键词：%s
-                """.formatted(keyword, properties.getFixedKeyword()).trim();
+        return String.join(" ",
+                safeText(keyword),
+                safeText(properties.getFixedKeyword())
+        ).trim();
     }
 
     private Map<String, Object> buildMetadata(Product product) {
@@ -98,5 +109,21 @@ public class DomesticVectorSearchService {
                 "title", product.title(),
                 "fixedKeyword", properties.getFixedKeyword()
         );
+    }
+
+    private void verifyDimension(float[] vector) {
+        if (vector == null || vector.length != properties.getDimension()) {
+            throw new IllegalStateException("Embedding dimension mismatch, expected " + properties.getDimension());
+        }
+    }
+
+    private String safeText(String value) {
+        return value == null ? "" : value.trim();
+    }
+
+    public record VectorSearchResult(
+            Product product,
+            double score
+    ) {
     }
 }

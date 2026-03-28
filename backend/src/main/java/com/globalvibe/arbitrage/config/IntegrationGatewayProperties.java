@@ -13,15 +13,18 @@ public class IntegrationGatewayProperties {
 
     @Data
     public static class LlmProperties {
-        private boolean enabled = false;
-        private String rewriteEndpoint;
-        private String analysisEndpoint;
+        private boolean enabled = true;
+        private boolean forceSimulated = false;
+        private String chatEndpoint;
+        private String model = "glm-5";
         private String apiKey;
+        private double temperature = 0.2D;
     }
 
     @Data
     public static class DomesticProperties {
         private boolean enabled = false;
+        private boolean forceFallback = true;
         private String searchEndpoint;
         private String detailEndpoint;
         private String apiKey;
@@ -30,6 +33,7 @@ public class IntegrationGatewayProperties {
     @Data
     public static class OverseasProperties {
         private boolean enabled = false;
+        private boolean forceFallback = true;
         private String searchEndpoint;
         private String apiKey;
     }

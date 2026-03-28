@@ -56,7 +56,7 @@ public class ProductEmbeddingRepository {
         );
     }
 
-    public List<Product> semanticSearch(MarketplaceType platform, float[] queryVector, int limit, double minScore) {
+    public List<SemanticSearchHit> semanticSearch(MarketplaceType platform, float[] queryVector, int limit, double minScore) {
         String vectorLiteral = toVectorLiteral(queryVector);
         return jdbcTemplate.query("""
                         SELECT p.platform,
@@ -67,6 +67,7 @@ public class ProductEmbeddingRepository {
                                p.link,
                                p.rating,
                                p.reviews,
+                               (1 - (e.embedding <=> CAST(? AS vector))) AS vector_score,
                                COALESCE(p.attributes_jsonb, '{}'::jsonb) AS attributes_json,
                                s.raw_jsonb AS raw_data_json
                         FROM gv_product_embedding e
@@ -86,19 +87,22 @@ public class ProductEmbeddingRepository {
                         ORDER BY e.embedding <=> CAST(? AS vector), p.updated_at DESC
                         LIMIT ?
                         """.formatted(platformPredicate("e.platform", platform)),
-                (rs, rowNum) -> new Product(
-                        rs.getString("product_id"),
-                        MarketplaceType.fromValue(rs.getString("platform")),
-                        rs.getString("title"),
-                        rs.getBigDecimal("price"),
-                        rs.getString("image"),
-                        rs.getString("link"),
-                        nullableDouble(rs, "rating"),
-                        nullableInteger(rs, "reviews"),
-                        defaultIfNull(jdbcJsonSupport.fromJson(jsonText(rs, "attributes_json"), MAP_TYPE), Map.of()),
-                        defaultIfNull(jdbcJsonSupport.fromJson(jsonText(rs, "raw_data_json"), MAP_TYPE), Map.of())
+                (rs, rowNum) -> new SemanticSearchHit(
+                        new Product(
+                                rs.getString("product_id"),
+                                MarketplaceType.fromValue(rs.getString("platform")),
+                                rs.getString("title"),
+                                rs.getBigDecimal("price"),
+                                rs.getString("image"),
+                                rs.getString("link"),
+                                nullableDouble(rs, "rating"),
+                                nullableInteger(rs, "reviews"),
+                                defaultIfNull(jdbcJsonSupport.fromJson(jsonText(rs, "attributes_json"), MAP_TYPE), Map.of()),
+                                defaultIfNull(jdbcJsonSupport.fromJson(jsonText(rs, "raw_data_json"), MAP_TYPE), Map.of())
+                        ),
+                        rs.getDouble("vector_score")
                 ),
-                withPlatformValues(platform, vectorLiteral, minScore, vectorLiteral, limit)
+                withPlatformValues(platform, vectorLiteral, vectorLiteral, minScore, vectorLiteral, limit)
         );
     }
 
@@ -145,5 +149,11 @@ public class ProductEmbeddingRepository {
         List<Object> parameters = new ArrayList<>(platform.databaseValues());
         Collections.addAll(parameters, additionalParameters);
         return parameters.toArray();
+    }
+
+    public record SemanticSearchHit(
+            Product product,
+            double score
+    ) {
     }
 }

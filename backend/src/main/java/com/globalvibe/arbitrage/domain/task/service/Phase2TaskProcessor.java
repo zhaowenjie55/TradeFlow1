@@ -40,7 +40,7 @@ public class Phase2TaskProcessor {
         AnalysisTask phase2Task = analysisTaskRepository.findById(taskId)
                 .orElseThrow(() -> new AnalysisTaskNotFoundException(taskId));
 
-        updateStatus(phase2Task, TaskStatus.RUNNING, "phase2.queue", "二次分析已开始，准备抓取国内货源。");
+        updateStatus(phase2Task, TaskStatus.RUNNING, "phase2.queue", "二次分析已开始，准备匹配国内货源。");
         pause();
         updateStatus(phase2Task, TaskStatus.ANALYZING_SOURCE, "phase2.domestic-match", "开始执行国内货源匹配与 ROI 试算。");
         pause();

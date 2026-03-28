@@ -59,6 +59,9 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
             );
             logs.add(log("phase1.fallback", "Amazon 实时读取失败，已回退到最近一次搜索快照。"));
         }
+        if (sourceProducts.isEmpty()) {
+            throw new IllegalStateException("Amazon 历史搜索快照为空，无法生成候选。");
+        }
 
         int candidateLimit = Math.min(resolveCandidateLimit(analysisTask), sourceProducts.size());
         for (int index = 0; index < candidateLimit; index++) {

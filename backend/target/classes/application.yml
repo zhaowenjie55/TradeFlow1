@@ -33,24 +33,38 @@ app:
     default-mode: AUTO_FALLBACK
   integration:
     llm:
-      enabled: ${LLM_GATEWAY_ENABLED:false}
-      rewrite-endpoint: ${LLM_REWRITE_ENDPOINT:}
-      analysis-endpoint: ${LLM_ANALYSIS_ENDPOINT:}
+      enabled: ${LLM_GATEWAY_ENABLED:true}
+      force-simulated: ${LLM_FORCE_SIMULATED:false}
+      chat-endpoint: ${LLM_CHAT_ENDPOINT:https://open.bigmodel.cn/api/paas/v4/chat/completions}
+      model: ${LLM_MODEL:glm-5}
       api-key: ${LLM_API_KEY:}
+      temperature: ${LLM_TEMPERATURE:0.2}
     domestic:
       enabled: ${DOMESTIC_GATEWAY_ENABLED:false}
+      force-fallback: ${DOMESTIC_FORCE_FALLBACK:true}
       search-endpoint: ${DOMESTIC_SEARCH_ENDPOINT:}
       detail-endpoint: ${DOMESTIC_DETAIL_ENDPOINT:}
       api-key: ${DOMESTIC_API_KEY:}
     overseas:
       enabled: ${OVERSEAS_GATEWAY_ENABLED:false}
+      force-fallback: ${OVERSEAS_FORCE_FALLBACK:true}
       search-endpoint: ${OVERSEAS_SEARCH_ENDPOINT:}
       api-key: ${OVERSEAS_API_KEY:}
+  pricing:
+    usd-to-cny-rate: ${USD_TO_CNY_RATE:7.20}
+    cross-border-logistics-rate: ${CROSS_BORDER_LOGISTICS_RATE:0.12}
+    platform-fee-rate: ${PLATFORM_FEE_RATE:0.15}
+    exchange-loss-rate: ${EXCHANGE_LOSS_RATE:0.03}
+    fallback-sourcing-rate: ${FALLBACK_SOURCING_RATE:0.45}
   vector:
     enabled: ${VECTOR_ENABLED:true}
+    provider: ${VECTOR_PROVIDER:local-bge-m3}
+    model-path: ${VECTOR_MODEL_PATH:}
+    tokenizer-path: ${VECTOR_TOKENIZER_PATH:}
+    pooling-mode: ${VECTOR_POOLING_MODE:CLS}
     bootstrap-on-startup: ${VECTOR_BOOTSTRAP_ON_STARTUP:true}
     domestic-platform: ${VECTOR_DOMESTIC_PLATFORM:TAOBAO}
     fixed-keyword: ${VECTOR_FIXED_KEYWORD:亚克力透明收纳架}
     max-results: ${VECTOR_MAX_RESULTS:12}
     min-score: ${VECTOR_MIN_SCORE:0.55}
-    dimension: ${VECTOR_DIMENSION:512}
+    dimension: ${VECTOR_DIMENSION:1024}

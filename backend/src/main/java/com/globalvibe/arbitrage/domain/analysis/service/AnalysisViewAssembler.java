@@ -11,7 +11,7 @@ public class AnalysisViewAssembler {
 
     public AnalysisResultVO toView(ReportAggregate reportAggregate) {
         ArbitrageReport report = reportAggregate.report();
-        DomesticProductMatch benchmark = report.domesticMatches().isEmpty() ? null : report.domesticMatches().getFirst();
+        DomesticProductMatch benchmark = report.domesticMatches().isEmpty() ? null : report.domesticMatches().get(0);
         return new AnalysisResultVO(
                 reportAggregate.taskId(),
                 reportAggregate.reportId(),

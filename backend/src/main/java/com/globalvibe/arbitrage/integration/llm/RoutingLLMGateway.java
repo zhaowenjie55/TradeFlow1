@@ -30,6 +30,12 @@ public class RoutingLLMGateway implements LLMGateway {
                     "LLM 改写接口未启用，已回退到内置改写策略。"
             );
         }
+        if (integrationGatewayProperties.getLlm().isForceSimulated()) {
+            return simulatedLLMGateway.rewriteTitle(
+                    sourceTitle,
+                    "LLM 改写接口已配置为强制模拟，已回退到内置改写策略。"
+            );
+        }
         try {
             return httpLLMGateway.rewriteTitle(sourceTitle);
         } catch (RuntimeException ex) {
@@ -48,11 +54,17 @@ public class RoutingLLMGateway implements LLMGateway {
                     "LLM 报告接口未启用，已回退到内置 agent 叙事模板。"
             );
         }
+        if (integrationGatewayProperties.getLlm().isForceSimulated()) {
+            return simulatedLLMGateway.generateReportNarrative(
+                    request,
+                    "LLM 报告接口已配置为强制模拟，已回退到内置 agent 叙事模板。"
+            );
+        }
         try {
             return httpLLMGateway.generateReportNarrative(request);
         } catch (RuntimeException ex) {
             return simulatedLLMGateway.generateReportNarrative(
-                    request,
+                request,
                     "LLM 报告接口调用失败，已回退到内置 agent 叙事模板: " + ex.getMessage()
             );
         }

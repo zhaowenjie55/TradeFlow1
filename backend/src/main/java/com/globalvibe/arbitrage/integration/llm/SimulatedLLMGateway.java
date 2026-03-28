@@ -83,7 +83,7 @@ public class SimulatedLLMGateway {
     }
 
     private List<String> buildRecommendations(LLMGateway.ReportNarrativeRequest request, String benchmark) {
-        String profit = formatCurrency(request.estimatedProfit(), "$0.00");
+        String profit = formatCurrency(request.estimatedProfit(), "¥0.00");
         return List.of(
                 "优先围绕 “" + request.rewrittenQuery() + "” 继续核对国内主卖点，确保展示中的标题改写和寻源逻辑一致。",
                 "以 " + benchmark + " 作为当前对标货源，补充 MOQ、发货时效和可定制能力，增强报告说服力。",
@@ -111,7 +111,7 @@ public class SimulatedLLMGateway {
         if (value == null) {
             return fallback;
         }
-        return "$" + value.stripTrailingZeros().toPlainString();
+        return "¥" + value.stripTrailingZeros().toPlainString();
     }
 
     private String formatNumber(BigDecimal value, String fallback) {
