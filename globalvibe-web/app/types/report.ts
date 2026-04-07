@@ -19,6 +19,8 @@ export interface DomesticProductMatch {
   searchUrl: string | null
   reason: string | null
   matchSource: string | null
+  detailReady: boolean
+  detailSource: string | null
   retrievalTerms: string[]
   scoreBreakdown: Record<string, number>
   evidence: string[]

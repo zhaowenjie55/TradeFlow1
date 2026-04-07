@@ -3,6 +3,11 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE:local}
   application:
     name: tradeflow-arbitrage-backend
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DATABASE:0}
   threads:
     virtual:
       enabled: true
@@ -30,6 +35,10 @@ springdoc:
     path: /swagger-ui.html
 
 app:
+  web:
+    cors:
+      # Accept local Nuxt/Vite dev servers on any common localhost port.
+      allowed-origin-patterns: ${APP_WEB_CORS_ALLOWED_ORIGIN_PATTERNS:http://localhost:*,http://127.0.0.1:*}
   task:
     phase1-candidate-limit: 20
     processing-delay-millis: 250
@@ -42,11 +51,16 @@ app:
       model: ${LLM_MODEL:glm-5}
       api-key: ${LLM_API_KEY:}
       temperature: ${LLM_TEMPERATURE:0.2}
+    crawler:
+      # Override this when the local FastAPI crawler runs on a different host or port.
+      enabled: ${CRAWLER_SERVICE_ENABLED:true}
+      search-endpoint: ${CRAWLER_SEARCH_ENDPOINT:http://127.0.0.1:8001/api/search}
+      detail-endpoint: ${CRAWLER_DETAIL_ENDPOINT:http://127.0.0.1:8001/api/detail}
     domestic:
       enabled: ${DOMESTIC_GATEWAY_ENABLED:false}
       force-fallback: ${DOMESTIC_FORCE_FALLBACK:true}
-      search-endpoint: ${DOMESTIC_SEARCH_ENDPOINT:}
-      detail-endpoint: ${DOMESTIC_DETAIL_ENDPOINT:}
+      search-endpoint: ${DOMESTIC_SEARCH_ENDPOINT:http://127.0.0.1:8001/api/domestic/search}
+      detail-endpoint: ${DOMESTIC_DETAIL_ENDPOINT:http://127.0.0.1:8001/api/domestic/detail}
       api-key: ${DOMESTIC_API_KEY:}
     overseas:
       enabled: ${OVERSEAS_GATEWAY_ENABLED:false}

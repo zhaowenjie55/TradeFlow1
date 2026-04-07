@@ -16,6 +16,8 @@ public record DomesticProductMatchVO(
         String searchUrl,
         String reason,
         String matchSource,
+        boolean detailReady,
+        String detailSource,
         List<String> retrievalTerms,
         Map<String, BigDecimal> scoreBreakdown,
         List<String> evidence

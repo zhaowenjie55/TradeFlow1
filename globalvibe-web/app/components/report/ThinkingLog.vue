@@ -8,8 +8,8 @@ const { t } = useAppI18n()
 const logContainer = ref<HTMLElement | null>(null)
 const liveTimestamp = ref('')
 const displayedLengths = reactive<Record<string, number>>({})
+const typingStates = reactive<Record<string, boolean>>({})
 const animationTimers = new Map<string, ReturnType<typeof setInterval>>()
-const initialized = ref(false)
 const autoFollow = ref(true)
 const filterMode = ref<LogFilterMode>('all')
 
@@ -34,15 +34,17 @@ const animateMessage = (key: string, content: string) => {
   if (existingTimer) clearInterval(existingTimer)
 
   displayedLengths[key] = 0
+  typingStates[key] = true
   const timer = setInterval(() => {
-    displayedLengths[key] = Math.min(content.length, displayedLengths[key] + Math.max(1, Math.ceil(content.length / 28)))
+    displayedLengths[key] = Math.min(content.length, displayedLengths[key] + 1)
     scrollToBottom('smooth')
 
     if (displayedLengths[key] >= content.length) {
       clearInterval(timer)
       animationTimers.delete(key)
+      typingStates[key] = false
     }
-  }, 24)
+  }, 18)
 
   animationTimers.set(key, timer)
 }
@@ -69,7 +71,7 @@ const visibleLogs = computed(() => {
 const getDisplayedMessage = (entry: (typeof agentStore.taskLogs)[number], index: number) => {
   const key = entryKey(entry, index)
   const content = getEntryView(entry).message
-  const length = displayedLengths[key] ?? content.length
+  const length = displayedLengths[key] ?? 0
   return content.slice(0, length)
 }
 
@@ -89,16 +91,6 @@ watch(
   })),
   (entries) => {
     if (!entries.length) {
-      initialized.value = false
-      return
-    }
-
-    if (!initialized.value) {
-      entries.forEach(entry => {
-        displayedLengths[entry.key] = entry.message.length
-      })
-      initialized.value = true
-      nextTick(() => scrollToBottom('auto'))
       return
     }
 
@@ -188,6 +180,12 @@ watch(
           </p>
           <span :class="['leading-6', levelColors[entry.level] ?? 'text-slate-600 dark:text-slate-300']">
             {{ getDisplayedMessage(entry, index) }}
+            <span
+              v-if="typingStates[entryKey(entry, index)]"
+              class="ml-0.5 inline-block animate-pulse text-blue-500 dark:text-blue-300"
+            >
+              |
+            </span>
           </span>
         </div>
       </div>

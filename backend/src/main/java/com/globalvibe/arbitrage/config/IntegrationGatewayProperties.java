@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class IntegrationGatewayProperties {
 
     private LlmProperties llm = new LlmProperties();
+    private CrawlerProperties crawler = new CrawlerProperties();
     private DomesticProperties domestic = new DomesticProperties();
     private OverseasProperties overseas = new OverseasProperties();
 
@@ -19,6 +20,13 @@ public class IntegrationGatewayProperties {
         private String model = "glm-5";
         private String apiKey;
         private double temperature = 0.2D;
+    }
+
+    @Data
+    public static class CrawlerProperties {
+        private boolean enabled = true;
+        private String searchEndpoint;
+        private String detailEndpoint;
     }
 
     @Data

@@ -44,6 +44,11 @@ public class StructuredReportMarkdownRenderer implements ReportMarkdownRenderer 
                         .append(" / ")
                         .append(match.price())
                         .append("\n");
+                builder.append("  - 详情状态: ")
+                        .append(match.detailReady() ? "READY" : "SEARCH_ONLY")
+                        .append(" / ")
+                        .append(match.detailSource() == null ? "UNKNOWN" : match.detailSource())
+                        .append("\n");
                 if (match.reason() != null && !match.reason().isBlank()) {
                     builder.append("  - 说明: ").append(match.reason()).append("\n");
                 }

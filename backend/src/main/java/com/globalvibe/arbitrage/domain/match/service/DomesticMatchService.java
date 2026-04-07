@@ -10,7 +10,9 @@ import com.globalvibe.arbitrage.domain.product.model.ProductDetailSnapshot;
 import com.globalvibe.arbitrage.domain.product.repository.ProductRepository;
 import com.globalvibe.arbitrage.domain.product.service.DomesticVectorSearchService;
 import com.globalvibe.arbitrage.domain.product.service.DomesticVectorSearchService.VectorSearchResult;
+import com.globalvibe.arbitrage.domain.product.service.ProductCatalogSyncService;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
+import com.globalvibe.arbitrage.integration.GatewayFallbackException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
@@ -33,17 +35,20 @@ public class DomesticMatchService {
     private final CandidateMatchRepository candidateMatchRepository;
     private final DomesticVectorSearchService domesticVectorSearchService;
     private final ProductRepository productRepository;
+    private final ProductCatalogSyncService productCatalogSyncService;
     private final VectorSearchProperties vectorSearchProperties;
 
     public DomesticMatchService(
             CandidateMatchRepository candidateMatchRepository,
             ObjectProvider<DomesticVectorSearchService> domesticVectorSearchServiceProvider,
             ProductRepository productRepository,
+            ProductCatalogSyncService productCatalogSyncService,
             VectorSearchProperties vectorSearchProperties
     ) {
         this.candidateMatchRepository = candidateMatchRepository;
         this.domesticVectorSearchService = domesticVectorSearchServiceProvider.getIfAvailable();
         this.productRepository = productRepository;
+        this.productCatalogSyncService = productCatalogSyncService;
         this.vectorSearchProperties = vectorSearchProperties;
     }
 
@@ -60,7 +65,7 @@ public class DomesticMatchService {
                         .comparing(ScoredCandidate::finalScore, Comparator.reverseOrder())
                         .thenComparing(item -> item.product().price(), Comparator.nullsLast(Comparator.naturalOrder())))
                 .limit(limit)
-                .map(item -> toMatch(taskId, candidateId, sourceCandidate, queryRewrite, item, searchExecution.retrievalTerms()))
+                .map(item -> toMatch(taskId, candidateId, sourceCandidate, queryRewrite, item, searchExecution))
                 .toList();
 
         if (matches.isEmpty()) {
@@ -68,18 +73,45 @@ public class DomesticMatchService {
         }
 
         candidateMatchRepository.replaceForCandidate(candidateId, matches);
-        return new MatchExecutionResult(matches, false);
+        return new MatchExecutionResult(matches, !searchExecution.liveSearchUsed());
     }
 
     private DomesticSearchExecution searchDomesticProducts(CandidateProduct sourceCandidate, QueryRewrite queryRewrite, int limit) {
         int searchLimit = Math.max(limit * 4, 12);
         Map<String, MatchCandidateAccumulator> merged = new LinkedHashMap<>();
         List<String> retrievalTerms = buildSearchTerms(sourceCandidate, queryRewrite);
+        boolean liveSearchUsed = false;
+        String liveSearchFallbackReason = null;
+        int liveAttempts = 0;
+        boolean stopLiveSync = false;
 
         for (String term : retrievalTerms) {
+            if (!stopLiveSync && liveAttempts < 2) {
+                liveAttempts++;
+                try {
+                    List<Product> liveProducts = productCatalogSyncService.syncDomesticKeywordProducts(term).stream()
+                            .limit(searchLimit)
+                            .toList();
+                    if (!liveProducts.isEmpty()) {
+                        liveSearchUsed = true;
+                        liveProducts.forEach(product -> mergeCandidate(merged, product, term, null, false, false, true));
+                    }
+                } catch (GatewayFallbackException ex) {
+                    if (liveSearchFallbackReason == null) {
+                        liveSearchFallbackReason = ex.getMessage();
+                    }
+                    stopLiveSync = true;
+                } catch (RuntimeException ex) {
+                    if (liveSearchFallbackReason == null) {
+                        liveSearchFallbackReason = "国内实时货源搜索失败，已切换到本地商品库。";
+                    }
+                    stopLiveSync = true;
+                }
+            }
+
             if (domesticVectorSearchService != null) {
                 List<VectorSearchResult> vectorProducts = domesticVectorSearchService.searchWithScores(term, searchLimit);
-                vectorProducts.forEach(hit -> mergeCandidate(merged, hit.product(), term, hit.score(), true, false));
+                vectorProducts.forEach(hit -> mergeCandidate(merged, hit.product(), term, hit.score(), true, false, false));
             }
 
             List<Product> catalogProducts = productRepository.searchByPlatformAndKeywordIncludingDetails(
@@ -87,12 +119,14 @@ public class DomesticMatchService {
                     term,
                     searchLimit
             );
-            catalogProducts.forEach(product -> mergeCandidate(merged, product, term, null, false, true));
+            catalogProducts.forEach(product -> mergeCandidate(merged, product, term, null, false, true, false));
         }
 
         return new DomesticSearchExecution(
                 scoreCandidates(sourceCandidate, queryRewrite, merged.values()),
-                retrievalTerms
+                retrievalTerms,
+                liveSearchUsed,
+                liveSearchFallbackReason
         );
     }
 
@@ -102,7 +136,8 @@ public class DomesticMatchService {
             String term,
             Double vectorScore,
             boolean vectorHit,
-            boolean catalogHit
+            boolean catalogHit,
+            boolean realtimeHit
     ) {
         MatchCandidateAccumulator accumulator = merged.computeIfAbsent(
                 product.id(),
@@ -120,6 +155,7 @@ public class DomesticMatchService {
                     : Math.max(accumulator.vectorScore, vectorScore == null ? 0D : vectorScore);
         }
         accumulator.catalogHit = accumulator.catalogHit || catalogHit;
+        accumulator.realtimeHit = accumulator.realtimeHit || realtimeHit;
     }
 
     private List<String> buildSearchTerms(CandidateProduct sourceCandidate, QueryRewrite queryRewrite) {
@@ -195,6 +231,7 @@ public class DomesticMatchService {
                             candidate.retrievalTerms.stream().toList(),
                             candidate.vectorHit,
                             candidate.catalogHit,
+                            candidate.realtimeHit,
                             titleOverlap,
                             rewriteCoverage,
                             priceReasonability,
@@ -332,7 +369,7 @@ public class DomesticMatchService {
             CandidateProduct sourceCandidate,
             QueryRewrite queryRewrite,
             ScoredCandidate scoredCandidate,
-            List<String> retrievalTerms
+            DomesticSearchExecution searchExecution
     ) {
         return CandidateMatchRecord.builder()
                 .matchId("match-" + UUID.randomUUID())
@@ -348,10 +385,10 @@ public class DomesticMatchService {
                 .similarityScore(scoredCandidate.finalScore())
                 .matchSource(resolveMatchSource(scoredCandidate))
                 .searchKeyword(scoredCandidate.searchKeyword())
-                .fallbackUsed(false)
-                .fallbackReason(null)
+                .fallbackUsed(!searchExecution.liveSearchUsed())
+                .fallbackReason(searchExecution.liveSearchFallbackReason())
                 .reason(buildReason(queryRewrite, scoredCandidate))
-                .retrievalTerms(retrievalTerms)
+                .retrievalTerms(searchExecution.retrievalTerms())
                 .scoreBreakdown(scoredCandidate.scoreBreakdown())
                 .evidence(scoredCandidate.evidence())
                 .createdAt(OffsetDateTime.now())
@@ -359,6 +396,12 @@ public class DomesticMatchService {
     }
 
     private String resolveMatchSource(ScoredCandidate scoredCandidate) {
+        if (scoredCandidate.realtimeHit() && (scoredCandidate.vectorHit() || scoredCandidate.catalogHit())) {
+            return "DOMESTIC_REALTIME_HYBRID";
+        }
+        if (scoredCandidate.realtimeHit()) {
+            return "DOMESTIC_REALTIME";
+        }
         if (scoredCandidate.vectorHit() && scoredCandidate.catalogHit()) {
             return "CATALOG_HYBRID";
         }
@@ -371,7 +414,7 @@ public class DomesticMatchService {
     private String buildReason(QueryRewrite queryRewrite, ScoredCandidate scoredCandidate) {
         return String.format(
                 Locale.ROOT,
-                "围绕“%s”完成商品库混合检索，标题重合 %.2f，改写覆盖 %.2f，价格合理性 %.2f，向量加权 %.2f，属性对齐 %.2f。",
+                "围绕“%s”完成国内货源混合检索，标题重合 %.2f，改写覆盖 %.2f，价格合理性 %.2f，向量加权 %.2f，属性对齐 %.2f。",
                 queryRewrite.rewrittenText(),
                 scoredCandidate.titleOverlap().doubleValue(),
                 scoredCandidate.rewriteCoverage().doubleValue(),
@@ -393,6 +436,7 @@ public class DomesticMatchService {
         private String primarySearchTerm;
         private boolean vectorHit;
         private boolean catalogHit;
+        private boolean realtimeHit;
         private Double vectorScore;
 
         private MatchCandidateAccumulator(Product product) {
@@ -406,6 +450,7 @@ public class DomesticMatchService {
             List<String> retrievalTerms,
             boolean vectorHit,
             boolean catalogHit,
+            boolean realtimeHit,
             BigDecimal titleOverlap,
             BigDecimal rewriteCoverage,
             BigDecimal priceReasonability,
@@ -419,7 +464,9 @@ public class DomesticMatchService {
 
     private record DomesticSearchExecution(
             List<ScoredCandidate> scoredCandidates,
-            List<String> retrievalTerms
+            List<String> retrievalTerms,
+            boolean liveSearchUsed,
+            String liveSearchFallbackReason
     ) {
     }
 }

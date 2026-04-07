@@ -6,6 +6,8 @@ public interface LLMGateway {
 
     ReportNarrativeResult generateReportNarrative(ReportNarrativeRequest request);
 
+    ReasoningResult generateReasoning(ReasoningRequest request);
+
     record RewriteResult(
             String rewrittenText,
             java.util.List<String> keywords,
@@ -43,6 +45,25 @@ public interface LLMGateway {
             String summaryText,
             java.util.List<String> recommendations,
             java.util.List<String> riskNotes,
+            boolean fallbackUsed,
+            String provider,
+            String model,
+            String fallbackReason,
+            java.time.OffsetDateTime generatedAt
+    ) {
+    }
+
+    record ReasoningRequest(
+            String stepName,
+            String prompt,
+            java.util.Map<String, Object> context
+    ) {
+    }
+
+    record ReasoningResult(
+            String decision,
+            String explanation,
+            double confidenceScore,
             boolean fallbackUsed,
             String provider,
             String model,

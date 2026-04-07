@@ -145,6 +145,8 @@ public class ReportViewAssembler {
                 match.searchUrl(),
                 match.reason(),
                 match.matchSource(),
+                match.detailReady(),
+                match.detailSource(),
                 match.retrievalTerms(),
                 match.scoreBreakdown(),
                 match.evidence()

@@ -51,4 +51,19 @@ public class RoutingLLMGateway implements LLMGateway {
             return simulatedLLMGateway.generateReportNarrative(request, ex.getMessage());
         }
     }
+
+    @Override
+    public ReasoningResult generateReasoning(ReasoningRequest request) {
+        if (!integrationGatewayProperties.getLlm().isEnabled()) {
+            return simulatedLLMGateway.generateReasoning(request, "LLM 推理接口未启用，已切换到模拟模式。");
+        }
+        if (integrationGatewayProperties.getLlm().isForceSimulated()) {
+            return simulatedLLMGateway.generateReasoning(request, "LLM 推理接口被配置为模拟模式。");
+        }
+        try {
+            return httpLLMGateway.generateReasoning(request);
+        } catch (RuntimeException ex) {
+            return simulatedLLMGateway.generateReasoning(request, ex.getMessage());
+        }
+    }
 }

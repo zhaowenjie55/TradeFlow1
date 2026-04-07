@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "data": {
+    "taskId": "task-1c8f4f0f-6d27-4db7-bc9a-7d6ab8b2f4f7",
+    "status": "DONE",
+    "report": {
+      "taskId": "task-1c8f4f0f-6d27-4db7-bc9a-7d6ab8b2f4f7",
+      "summary": "Estimated margin 31.20% with MEDIUM risk.",
+      "profitEstimate": 7.8,
+      "riskLevel": "MEDIUM",
+      "confidenceScore": 0.74,
+      "reportMarkdown": "# Product Analysis Report\n...",
+      "riskExplanations": [
+        "Competitive domestic supply is high."
+      ]
+    },
+    "trace": {
+      "steps": [
+        {
+          "stepName": "matching",
+          "inputSummary": "Evaluate domestic matches for overseas product and choose the best candidate.",
+          "decision": "Selected best domestic match.",
+          "explanation": "Rule-based scorer compared keyword overlap and price relationship."
+        },
+        {
+          "stepName": "profit_analysis",
+          "inputSummary": "Interpret deterministic profit calculation.",
+          "decision": "Profit computed with deterministic formula.",
+          "explanation": "System used overseas price, domestic cost, fixed shipping, and platform fee ratio."
+        },
+        {
+          "stepName": "risk_analysis",
+          "inputSummary": "Explain rule-based risk classification.",
+          "decision": "Risk level derived from rule thresholds.",
+          "explanation": "System weighted match confidence, margin floor, competition count, and rating."
+        },
+        {
+          "stepName": "final_report",
+          "inputSummary": "Produce concise natural-language final assessment.",
+          "decision": "Generated narrative summary from computed facts.",
+          "explanation": "Final explanation keeps deterministic outputs unchanged and only rewrites them for readability."
+        }
+      ]
+    }
+  },
+  "errorCode": null,
+  "message": null
+}

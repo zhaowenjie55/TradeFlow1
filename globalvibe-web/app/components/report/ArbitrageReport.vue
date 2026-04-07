@@ -115,6 +115,8 @@ const originalTitle = computed(() => {
 
 const displayMatchTitle = (match: DomesticProductMatch) => getReadableMatchTitle(match)
 const originalMatchTitle = (match: DomesticProductMatch) => getReadableOriginalTitle(match.title, displayMatchTitle(match))
+const detailReadyLabel = (match: DomesticProductMatch) => t(match.detailReady ? 'report.detailReady' : 'report.detailPending')
+const detailSourceLabel = (match: DomesticProductMatch) => match.detailSource ?? '--'
 
 const headlineMetrics = computed(() => {
   if (!report.value) return []
@@ -186,6 +188,8 @@ const buildMarkdownDocument = () => {
       `- ${t('report.matchPrice')}: ${formatCurrency(match.price)}`,
       `- ${t('report.matchSimilarity')}: ${match.similarityScore}%`,
       `- ${t('report.matchSource')}: ${match.matchSource ?? '--'}`,
+      `- ${t('report.detailStatus')}: ${detailReadyLabel(match)}`,
+      `- ${t('report.detailSource')}: ${detailSourceLabel(match)}`,
       `- ${t('report.retrievalTerms')}: ${formatList(match.retrievalTerms)}`,
       ...(match.reason ? [`- ${t('report.matchReason')}: ${match.reason}`] : []),
       ...scoreEntries(match.scoreBreakdown).map(([key, value]) => `- ${t('report.scoreBreakdown')} ${key}: ${Number(value).toFixed(2)}`),
@@ -558,6 +562,22 @@ const downloadDocument = () => {
                       <span class="rounded-full bg-[var(--tf-success-soft)] px-3 py-1 text-xs font-semibold text-slate-700 dark:text-slate-200">
                         {{ t('report.matchSimilarity') }} {{ previewTopMatch.similarityScore }}%
                       </span>
+                      <span
+                        :class="[
+                          'rounded-full px-3 py-1 text-xs font-semibold',
+                          previewTopMatch.detailReady
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
+                            : 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300',
+                        ]"
+                      >
+                        {{ t('report.detailStatus') }} {{ detailReadyLabel(previewTopMatch) }}
+                      </span>
+                      <span class="rounded-full border border-[var(--tf-border)] px-3 py-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                        {{ t('report.matchSource') }} {{ previewTopMatch.matchSource ?? '--' }}
+                      </span>
+                      <span class="rounded-full border border-[var(--tf-border)] px-3 py-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                        {{ t('report.detailSource') }} {{ detailSourceLabel(previewTopMatch) }}
+                      </span>
                       <a
                         :href="resolveMatchUrl(previewTopMatch)"
                         target="_blank"
@@ -597,8 +617,21 @@ const downloadDocument = () => {
                       <span class="rounded-full bg-[var(--tf-success-soft)] px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-200">
                         {{ t('report.matchSimilarity') }} {{ match.similarityScore }}%
                       </span>
+                      <span
+                        :class="[
+                          'rounded-full px-2.5 py-1 text-[11px] font-semibold',
+                          match.detailReady
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
+                            : 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300',
+                        ]"
+                      >
+                        {{ detailReadyLabel(match) }}
+                      </span>
                       <span class="rounded-full border border-[var(--tf-border)] px-2.5 py-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
                         {{ match.matchSource ?? '--' }}
+                      </span>
+                      <span class="rounded-full border border-[var(--tf-border)] px-2.5 py-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                        {{ detailSourceLabel(match) }}
                       </span>
                     </div>
                     <p class="mt-3 text-base font-semibold text-slate-900 dark:text-slate-100">{{ displayMatchTitle(match) }}</p>

@@ -5,6 +5,7 @@ import com.globalvibe.arbitrage.domain.candidate.model.CandidateProduct;
 import com.globalvibe.arbitrage.domain.marketplace.model.MarketplaceType;
 import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.domain.product.repository.ProductRepository;
+import com.globalvibe.arbitrage.domain.search.service.AmazonCrawlerProductSearchService;
 import com.globalvibe.arbitrage.domain.search.service.SearchHistoryFallbackService;
 import com.globalvibe.arbitrage.domain.task.model.AnalysisTask;
 import com.globalvibe.arbitrage.domain.task.model.TaskLogEntry;
@@ -24,15 +25,18 @@ import java.util.Locale;
 public class DiscoveryPhase1Workflow implements Phase1Workflow {
 
     private final TaskExecutionProperties taskExecutionProperties;
+    private final AmazonCrawlerProductSearchService amazonCrawlerProductSearchService;
     private final ProductRepository productRepository;
     private final SearchHistoryFallbackService searchHistoryFallbackService;
 
     public DiscoveryPhase1Workflow(
             TaskExecutionProperties taskExecutionProperties,
+            AmazonCrawlerProductSearchService amazonCrawlerProductSearchService,
             ProductRepository productRepository,
             SearchHistoryFallbackService searchHistoryFallbackService
     ) {
         this.taskExecutionProperties = taskExecutionProperties;
+        this.amazonCrawlerProductSearchService = amazonCrawlerProductSearchService;
         this.productRepository = productRepository;
         this.searchHistoryFallbackService = searchHistoryFallbackService;
     }
@@ -40,26 +44,56 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
     @Override
     public Phase1WorkflowResult run(AnalysisTask analysisTask) {
         List<TaskLogEntry> logs = new ArrayList<>();
-        logs.add(log("phase1.market-scan", "开始执行商品库驱动的 Amazon 候选检索。"));
+        logs.add(log("phase1.market-scan", "开始执行 Amazon 候选检索，优先尝试实时抓取。"));
 
         int candidateLimit = resolveCandidateLimit(analysisTask);
-        List<Product> sourceProducts = productRepository.searchByPlatformAndKeyword(
-                MarketplaceType.AMAZON,
-                analysisTask.getKeyword(),
-                Math.max(candidateLimit * 3, candidateLimit)
-        );
-        boolean fallbackUsed = false;
-        if (sourceProducts.isEmpty() && analysisTask.getMode() == TaskMode.AUTO_FALLBACK) {
-            logs.add(log("phase1.fallback", "Amazon 商品库未命中，改用历史搜索快照补齐候选。"));
+        int sourceFetchLimit = Math.max(candidateLimit * 3, candidateLimit);
+        boolean attemptedLiveSearch = shouldAttemptLiveSearch(analysisTask);
+        boolean liveSearchUsed = false;
+
+        List<Product> sourceProducts = List.of();
+        if (attemptedLiveSearch) {
+            logs.add(log("phase1.live-search", "开始调用 Python crawler 执行 Amazon 实时检索。"));
+            try {
+                sourceProducts = amazonCrawlerProductSearchService.search(analysisTask.getKeyword(), 1);
+                if (sourceProducts.isEmpty()) {
+                    logs.add(warnLog("phase1.live-search.empty", "实时检索未返回商品，切换至本地商品库/历史快照兜底。"));
+                } else {
+                    liveSearchUsed = true;
+                    logs.add(log("phase1.live-search.hit", "实时检索成功，已获取 Amazon 候选商品。"));
+                }
+            } catch (RuntimeException ex) {
+                logs.add(warnLog("phase1.live-search.failed", "实时检索失败，切换至本地商品库/历史快照兜底: " + ex.getMessage()));
+            }
+        }
+
+        if (sourceProducts.isEmpty()) {
+            logs.add(log("phase1.catalog-search", "开始执行商品库关键词检索。"));
+            sourceProducts = productRepository.searchByPlatformAndKeyword(
+                    MarketplaceType.AMAZON,
+                    analysisTask.getKeyword(),
+                    sourceFetchLimit
+            );
+            if (!sourceProducts.isEmpty()) {
+                logs.add(log("phase1.catalog-search.hit", "商品库检索成功，已补齐 Amazon 候选。"));
+            }
+        }
+
+        if (sourceProducts.isEmpty() && shouldAttemptHistoryFallback(analysisTask)) {
+            logs.add(log("phase1.fallback", "商品库未命中，改用历史搜索快照补齐候选。"));
             sourceProducts = searchHistoryFallbackService.findLatestAmazonProducts(
                     analysisTask.getKeyword(),
-                    Math.max(candidateLimit * 3, candidateLimit)
+                    sourceFetchLimit
             );
-            fallbackUsed = !sourceProducts.isEmpty();
+            if (!sourceProducts.isEmpty()) {
+                logs.add(log("phase1.fallback.hit", "历史搜索快照命中，已恢复 Amazon 候选。"));
+            }
         }
         if (sourceProducts.isEmpty()) {
-            throw new IllegalStateException("商品库未命中，请调整关键词后重试。");
+            throw new IllegalStateException("未命中可用的 Amazon 候选，请调整关键词后重试。");
         }
+
+        boolean fallbackUsed = attemptedLiveSearch && !liveSearchUsed;
 
         logs.add(log("phase1.filter", "已按关键词相似度、原始排序、口碑强度和价格合理性完成候选排序。"));
 
@@ -251,11 +285,27 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
         return taskExecutionProperties.getPhase1CandidateLimit();
     }
 
+    private boolean shouldAttemptLiveSearch(AnalysisTask analysisTask) {
+        return analysisTask.getMode() != TaskMode.MOCK;
+    }
+
+    private boolean shouldAttemptHistoryFallback(AnalysisTask analysisTask) {
+        return analysisTask.getMode() != TaskMode.MOCK;
+    }
+
     private TaskLogEntry log(String stage, String message) {
+        return log(stage, TaskLogLevel.INFO, message);
+    }
+
+    private TaskLogEntry warnLog(String stage, String message) {
+        return log(stage, TaskLogLevel.WARN, message);
+    }
+
+    private TaskLogEntry log(String stage, TaskLogLevel level, String message) {
         return new TaskLogEntry(
                 OffsetDateTime.now(),
                 stage,
-                TaskLogLevel.INFO,
+                level,
                 message,
                 "phase1-discovery-workflow"
         );

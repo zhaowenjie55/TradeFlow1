@@ -43,6 +43,19 @@ public class HttpLLMGateway {
             所有金额都按人民币理解。
             """;
 
+    private static final String REASONING_SYSTEM_PROMPT = """
+            You are an e-commerce arbitrage expert.
+            You must reason clearly and return strict JSON only.
+            Do not output Markdown.
+            Return exactly:
+            {
+              "decision": "short decision for this step",
+              "explanation": "clear explanation based on provided facts",
+              "confidence_score": 0.0
+            }
+            confidence_score must be between 0 and 1.
+            """;
+
     private final RestClient restClient;
     private final IntegrationGatewayProperties integrationGatewayProperties;
     private final ObjectMapper objectMapper;
@@ -88,6 +101,28 @@ public class HttpLLMGateway {
                 summaryText,
                 recommendations,
                 riskNotes,
+                false,
+                "GLM_CHAT",
+                integrationGatewayProperties.getLlm().getModel(),
+                null,
+                OffsetDateTime.now()
+        );
+    }
+
+    public LLMGateway.ReasoningResult generateReasoning(LLMGateway.ReasoningRequest request) {
+        JsonNode content = invokeChat(List.of(
+                message("system", REASONING_SYSTEM_PROMPT),
+                message("user", buildReasoningUserPrompt(request))
+        ));
+
+        String decision = requiredText(content, "decision");
+        String explanation = requiredText(content, "explanation");
+        double confidenceScore = requiredConfidence(content.path("confidence_score"));
+
+        return new LLMGateway.ReasoningResult(
+                decision,
+                explanation,
+                confidenceScore,
                 false,
                 "GLM_CHAT",
                 integrationGatewayProperties.getLlm().getModel(),
@@ -158,6 +193,14 @@ public class HttpLLMGateway {
         return context;
     }
 
+    private String buildReasoningUserPrompt(LLMGateway.ReasoningRequest request) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("step_name", request.stepName());
+        payload.put("task_prompt", request.prompt());
+        payload.put("context", request.context() == null ? Map.of() : request.context());
+        return toJson(payload);
+    }
+
     private String requiredText(JsonNode node, String fieldName) {
         String value = node.path(fieldName).asText("").trim();
         if (value.isBlank()) {
@@ -182,6 +225,25 @@ public class HttpLLMGateway {
             throw new IllegalStateException("LLM chat gateway returned empty array field: " + fieldName);
         }
         return items;
+    }
+
+    private double requiredConfidence(JsonNode node) {
+        if (node == null || node.isMissingNode() || node.isNull()) {
+            throw new IllegalStateException("LLM chat gateway returned missing confidence_score");
+        }
+        double value = node.isNumber() ? node.asDouble() : parseDouble(node.asText());
+        if (Double.isNaN(value) || value < 0D || value > 1D) {
+            throw new IllegalStateException("LLM chat gateway returned invalid confidence_score");
+        }
+        return value;
+    }
+
+    private double parseDouble(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException ex) {
+            return Double.NaN;
+        }
     }
 
     private Map<String, String> message(String role, String content) {

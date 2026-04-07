@@ -24,13 +24,18 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ProductAnalysisService {
+
+    private static final Pattern SHIPPING_AMOUNT_PATTERN = Pattern.compile("(?:运费\\s*[¥￥]?|[¥￥])\\s*(\\d+(?:\\.\\d+)?)");
 
     private final LLMGateway llmGateway;
     private final PricingProperties pricingProperties;
@@ -59,6 +64,7 @@ public class ProductAnalysisService {
                         .thenComparing(CandidateMatchRecord::price, java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder())))
                 .limit(3)
                 .toList();
+        Map<String, ProductDetailSnapshot> detailSnapshots = loadDetailSnapshots(topDomesticMatches);
 
         CandidateMatchRecord benchmark = topDomesticMatches.isEmpty() ? null : topDomesticMatches.get(0);
         Product sourceProduct = productRepository.findById(candidate.productId()).orElse(null);
@@ -70,9 +76,10 @@ public class ProductAnalysisService {
         BigDecimal sourcingCost = benchmark != null && benchmark.price() != null
                 ? scale(benchmark.price())
                 : scale(amazonPriceRmb.multiply(pricingProperties.getFallbackSourcingRate()));
-        String shippingText = resolveShippingText(domesticDetail);
-        boolean usedDefaultShipping = shippingText == null || shippingText.isBlank();
-        BigDecimal domesticShippingCost = parseShippingCost(shippingText);
+        ShippingResolution shippingResolution = resolveShipping(domesticDetail);
+        String shippingText = shippingResolution.text();
+        boolean usedDefaultShipping = shippingResolution.usedDefault();
+        BigDecimal domesticShippingCost = shippingResolution.cost();
         BigDecimal logisticsCost = scale(amazonPriceRmb.multiply(pricingProperties.getCrossBorderLogisticsRate()));
         BigDecimal platformFee = scale(amazonPriceRmb.multiply(pricingProperties.getPlatformFeeRate()));
         BigDecimal exchangeRateCost = scale(amazonPriceRmb.multiply(pricingProperties.getExchangeLossRate()));
@@ -163,25 +170,46 @@ public class ProductAnalysisService {
                         buildRiskNotes(domesticDetail, benchmark, shippingText, usedDefaultShipping)
                 ),
                 buildRecommendations(narrative),
-                topDomesticMatches.stream().map(item -> new DomesticProductMatch(
-                        item.matchId(),
-                        item.platform(),
-                        item.externalItemId(),
-                        item.title(),
-                        item.price(),
-                        item.image(),
-                        item.similarityScore().setScale(0, RoundingMode.HALF_UP).intValue(),
-                        item.link(),
-                        buildSearchUrl(queryRewrite.rewrittenText()),
-                        item.reason(),
-                        item.matchSource(),
-                        item.retrievalTerms(),
-                        item.scoreBreakdown(),
-                        item.evidence()
-                )).toList(),
+                topDomesticMatches.stream().map(item -> {
+                    ProductDetailSnapshot detailSnapshot = detailSnapshots.get(item.externalItemId());
+                    boolean detailReady = detailSnapshot != null;
+                    String detailSource = detailReady
+                            ? (item.matchSource() != null && item.matchSource().contains("REALTIME") ? "DOMESTIC_REALTIME_DETAIL" : "DETAIL_SNAPSHOT")
+                            : "SEARCH_RESULT_ONLY";
+                    return new DomesticProductMatch(
+                            item.matchId(),
+                            item.platform(),
+                            item.externalItemId(),
+                            item.title(),
+                            item.price(),
+                            item.image(),
+                            item.similarityScore().setScale(0, RoundingMode.HALF_UP).intValue(),
+                            item.link(),
+                            buildSearchUrl(queryRewrite.rewrittenText()),
+                            item.reason(),
+                            item.matchSource(),
+                            detailReady,
+                            detailSource,
+                            item.retrievalTerms(),
+                            item.scoreBreakdown(),
+                            item.evidence()
+                    );
+                }).toList(),
                 analysisTrace,
                 buildAuditData(sourceProduct, queryRewrite, amazonPriceUsd, amazonPriceRmb, shippingText, narrative, analysisTrace)
         );
+    }
+
+    private Map<String, ProductDetailSnapshot> loadDetailSnapshots(List<CandidateMatchRecord> matches) {
+        Map<String, ProductDetailSnapshot> snapshots = new HashMap<>();
+        for (CandidateMatchRecord match : matches) {
+            if (match.externalItemId() == null || match.externalItemId().isBlank()) {
+                continue;
+            }
+            productRepository.findDetailByProductId(match.externalItemId())
+                    .ifPresent(snapshot -> snapshots.put(match.externalItemId(), snapshot));
+        }
+        return snapshots;
     }
 
     private AnalysisTrace buildAnalysisTrace(
@@ -376,15 +404,36 @@ public class ProductAnalysisService {
         return value == null ? null : value.toString();
     }
 
-    private BigDecimal parseShippingCost(String shippingText) {
+    private ShippingResolution resolveShipping(ProductDetailSnapshot domesticDetail) {
+        String shippingText = resolveShippingText(domesticDetail);
         if (shippingText == null || shippingText.isBlank()) {
-            return scale(pricingProperties.getDefaultDomesticShippingCost());
+            return new ShippingResolution(
+                    null,
+                    scale(pricingProperties.getDefaultDomesticShippingCost()),
+                    true
+            );
         }
-        String normalized = shippingText.replaceAll("[^0-9.]", "");
-        if (normalized.isBlank()) {
-            return scale(pricingProperties.getDefaultDomesticShippingCost());
+        String normalizedText = shippingText.trim();
+        if (normalizedText.contains("包邮")) {
+            return new ShippingResolution(normalizedText, BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), false);
         }
-        return scale(new BigDecimal(normalized));
+
+        Matcher matcher = SHIPPING_AMOUNT_PATTERN.matcher(normalizedText);
+        if (matcher.find()) {
+            BigDecimal cost = scale(new BigDecimal(matcher.group(1)));
+            boolean suspiciousZero = BigDecimal.ZERO.compareTo(cost) == 0
+                    && !normalizedText.contains("包邮")
+                    && !normalizedText.contains("免运费");
+            if (!suspiciousZero) {
+                return new ShippingResolution(normalizedText, cost, false);
+            }
+        }
+
+        return new ShippingResolution(
+                normalizedText,
+                scale(pricingProperties.getDefaultDomesticShippingCost()),
+                true
+        );
     }
 
     private BigDecimal scale(BigDecimal value) {
@@ -396,5 +445,8 @@ public class ProductAnalysisService {
             return "--";
         }
         return value.setScale(2, RoundingMode.HALF_UP).toPlainString();
+    }
+
+    private record ShippingResolution(String text, BigDecimal cost, boolean usedDefault) {
     }
 }

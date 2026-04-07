@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ProductCard from '~/components/product/ProductCard.vue'
-import { getReadableOriginalTitle, getReadableProductName } from '~/utils/presentation'
+import { getLiveStageMessage, getReadableOriginalTitle, getReadableProductName } from '~/utils/presentation'
 
 const props = withDefaults(defineProps<{
   compact?: boolean
@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<{
 
 const productsStore = useProductsStore()
 const taskStore = useTaskStore()
+const agentStore = useAgentStore()
 const { analyzeProduct } = useTaskRunner()
 const { t } = useAppI18n()
 const containerRef = ref<HTMLElement | null>(null)
@@ -17,8 +18,45 @@ const topHeight = ref(22)
 
 const gridCols = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3'
 
+const displayedCandidates = computed(() => {
+  const isLogPlaybackActive = agentStore.isLogPlaybackRunning || agentStore.pendingTaskLogs.length > 0
+  const shouldDelayReveal = taskStore.currentTaskPhase === 'PHASE1'
+    && taskStore.status === 'WAITING_USER_SELECTION'
+    && isLogPlaybackActive
+
+  return shouldDelayReveal ? [] : productsStore.filteredCandidates
+})
+
+const isThinkingStage = computed(() => {
+  const isLogPlaybackActive = agentStore.isLogPlaybackRunning || agentStore.pendingTaskLogs.length > 0
+  const waitingForReveal = taskStore.currentTaskPhase === 'PHASE1'
+    && taskStore.status === 'WAITING_USER_SELECTION'
+    && productsStore.filteredCandidates.length > 0
+    && isLogPlaybackActive
+
+  return (productsStore.isLoading || waitingForReveal) && displayedCandidates.value.length === 0
+})
+
+const thinkingTitle = computed(() => {
+  const isLogPlaybackActive = agentStore.isLogPlaybackRunning || agentStore.pendingTaskLogs.length > 0
+  if (taskStore.status === 'WAITING_USER_SELECTION' && isLogPlaybackActive) {
+    return t('products.thinkingRevealTitle')
+  }
+
+  return t('products.thinkingTitle')
+})
+
+const thinkingDescription = computed(() => {
+  const isLogPlaybackActive = agentStore.isLogPlaybackRunning || agentStore.pendingTaskLogs.length > 0
+  if (taskStore.status === 'WAITING_USER_SELECTION' && isLogPlaybackActive) {
+    return t('products.thinkingRevealDescription')
+  }
+
+  return getLiveStageMessage(taskStore.stage)
+})
+
 const workflowSteps = computed(() => {
-  const hasCandidates = productsStore.filteredCandidates.length > 0
+  const hasCandidates = displayedCandidates.value.length > 0
   const hasSelection = Boolean(productsStore.selectedProductId)
   const hasReport = Boolean(productsStore.currentReport) && !productsStore.isAnalyzingReport
 
@@ -112,8 +150,8 @@ const canResize = computed(() => !props.compact)
             <div class="flex items-center gap-2">
               <UIcon name="i-heroicons-shopping-bag" class="h-5 w-5 text-slate-400 dark:text-slate-500" />
               <span class="text-lg font-semibold text-slate-800 dark:text-slate-100">{{ t('products.title') }}</span>
-              <span v-if="productsStore.filteredCandidates.length > 0" class="ml-1 text-sm text-slate-400 dark:text-slate-500">
-                {{ t('products.count', { count: productsStore.filteredCandidates.length }) }}
+              <span v-if="displayedCandidates.length > 0" class="ml-1 text-sm text-slate-400 dark:text-slate-500">
+                {{ t('products.count', { count: displayedCandidates.length }) }}
               </span>
             </div>
             <p class="mt-1 max-w-2xl text-[13px] leading-5 text-slate-500 dark:text-slate-400">
@@ -151,7 +189,7 @@ const canResize = computed(() => !props.compact)
         </div>
 
         <div
-          v-if="productsStore.filteredCandidates.length > 0"
+          v-if="displayedCandidates.length > 0"
           class="mt-3 rounded-2xl border border-[var(--tf-border)] bg-[var(--tf-bg-soft)] px-4 py-2.5 text-[13px] text-slate-600 dark:text-slate-300"
         >
           {{ productsStore.isAnalyzingReport ? t('products.selectionHint') : t('products.selectionReady') }}
@@ -230,20 +268,25 @@ const canResize = computed(() => !props.compact)
     </button>
 
     <div :class="['tradeflow-scrollbar overflow-auto', canResize ? 'min-h-0 flex-1 p-4 xl:p-5' : 'p-4 pt-0 md:p-5 md:pt-0']">
-      <div v-if="productsStore.isLoading && productsStore.filteredCandidates.length === 0" :class="['grid gap-6', gridCols]">
-        <div
-          v-for="i in 8"
-          :key="i"
-          class="animate-pulse rounded-xl bg-slate-100 p-4 dark:bg-slate-900"
-        >
-          <div class="aspect-square rounded-lg bg-slate-200 dark:bg-slate-800" />
-          <div class="mt-3 h-4 rounded bg-slate-200 dark:bg-slate-800" />
-          <div class="mt-2 h-4 w-2/3 rounded bg-slate-200 dark:bg-slate-800" />
+      <div
+        v-if="isThinkingStage"
+        class="flex h-full flex-col items-center justify-center text-center"
+      >
+        <div class="flex h-20 w-20 items-center justify-center rounded-full border border-blue-200/60 bg-blue-50/80 dark:border-blue-900/40 dark:bg-blue-950/20">
+          <UIcon name="i-heroicons-sparkles" class="h-10 w-10 animate-pulse text-blue-500 dark:text-blue-300" />
+        </div>
+        <h3 class="mt-5 text-lg font-semibold text-slate-700 dark:text-slate-200">{{ thinkingTitle }}</h3>
+        <p class="mt-2 max-w-md text-sm leading-7 text-slate-500 dark:text-slate-400">
+          {{ thinkingDescription }}
+        </p>
+        <div class="mt-5 flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500">
+          <span class="h-2.5 w-2.5 rounded-full bg-blue-500 animate-pulse" />
+          <span>{{ t('logs.running') }}</span>
         </div>
       </div>
 
       <div
-        v-else-if="productsStore.filteredCandidates.length === 0"
+        v-else-if="displayedCandidates.length === 0"
         class="flex h-full flex-col items-center justify-center text-center"
       >
         <UIcon name="i-heroicons-cube" class="h-16 w-16 text-slate-300 dark:text-slate-700" />
@@ -255,7 +298,7 @@ const canResize = computed(() => !props.compact)
 
       <div v-else :class="['grid gap-3.5 xl:gap-4', gridCols]">
         <ProductCard
-          v-for="product in productsStore.filteredCandidates"
+          v-for="product in displayedCandidates"
           :key="product.productId"
           :product="product"
           :is-selected="productsStore.selectedProductId === product.productId"

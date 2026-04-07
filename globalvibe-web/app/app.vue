@@ -1,6 +1,12 @@
+<script setup lang="ts">
+import DefaultLayout from '~/layouts/default.vue'
+</script>
+
 <template>
-  <div>
+  <UApp>
     <NuxtRouteAnnouncer />
-    <NuxtPage />
-  </div>
+    <DefaultLayout>
+      <NuxtPage />
+    </DefaultLayout>
+  </UApp>
 </template>
