@@ -1,0 +1,45 @@
+{
+  "zhCorrections": {
+    "手支架": "手机支架",
+    "手机架": "手机支架",
+    "平板架": "平板支架",
+    "电脑架": "电脑支架",
+    "书宝": "书包",
+    "双肩书包": "双肩包",
+    "猫饮水机": "猫咪饮水机",
+    "宠物饮水器": "宠物饮水机",
+    "蓝牙耳麦": "蓝牙耳机",
+    "耳麦": "耳机",
+    "收纳盒架": "收纳架"
+  },
+  "zhToEnTerms": {
+    "手机支架": "phone stand",
+    "平板支架": "tablet stand",
+    "电脑支架": "laptop stand",
+    "书包": "school backpack",
+    "双肩包": "backpack",
+    "背包": "backpack",
+    "猫咪饮水机": "cat water fountain",
+    "宠物饮水机": "pet water fountain",
+    "蓝牙耳机": "bluetooth earbuds",
+    "耳机": "earbuds",
+    "收纳架": "storage rack",
+    "置物架": "storage shelf",
+    "厨房收纳": "kitchen storage organizer"
+  },
+  "enCorrections": {
+    "schoolbag": "school backpack",
+    "school bag": "school backpack",
+    "phone holder": "phone stand",
+    "cell phone holder": "phone stand",
+    "cellphone holder": "phone stand",
+    "cell phone stand": "phone stand",
+    "cellphone stand": "phone stand",
+    "blue tooth": "bluetooth",
+    "ear buds": "earbuds",
+    "ear bud": "earbuds",
+    "catch water": "cat water",
+    "cat water machine": "cat water fountain",
+    "pet drinking machine": "pet water fountain"
+  }
+}

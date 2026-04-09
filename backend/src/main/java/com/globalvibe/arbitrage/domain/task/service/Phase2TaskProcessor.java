@@ -9,6 +9,7 @@ import com.globalvibe.arbitrage.domain.task.model.TaskLogEntry;
 import com.globalvibe.arbitrage.domain.task.model.TaskLogLevel;
 import com.globalvibe.arbitrage.domain.task.model.TaskStatus;
 import com.globalvibe.arbitrage.domain.task.repository.AnalysisTaskRepository;
+import com.globalvibe.arbitrage.integration.VerificationRequiredException;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,8 @@ public class Phase2TaskProcessor {
             phase2Task.setUpdatedAt(OffsetDateTime.now());
             analysisTaskRepository.save(phase2Task);
             reportAggregateService.save(phase2Task.getTaskId(), workflowResult.report());
+        } catch (VerificationRequiredException ex) {
+            markWaitingVerification(phase2Task, ex.getMessage());
         } catch (RuntimeException ex) {
             markFailed(phase2Task, "phase2.failed", "二次分析执行失败: " + ex.getMessage());
         }
@@ -93,6 +96,21 @@ public class Phase2TaskProcessor {
                 stage,
                 TaskLogLevel.ERROR,
                 message,
+                "phase2-processor"
+        ));
+        analysisTaskRepository.save(analysisTask);
+    }
+
+    private void markWaitingVerification(AnalysisTask analysisTask, String message) {
+        analysisTask.setStatus(TaskStatus.WAITING_1688_VERIFICATION);
+        analysisTask.setUpdatedAt(OffsetDateTime.now());
+        analysisTask.getLogs().add(new TaskLogEntry(
+                OffsetDateTime.now(),
+                "phase2.verification",
+                TaskLogLevel.WARN,
+                message == null || message.isBlank()
+                        ? "检测到 1688 验证，请在浏览器窗口完成登录或滑块验证后点击继续。"
+                        : message,
                 "phase2-processor"
         ));
         analysisTaskRepository.save(analysisTask);

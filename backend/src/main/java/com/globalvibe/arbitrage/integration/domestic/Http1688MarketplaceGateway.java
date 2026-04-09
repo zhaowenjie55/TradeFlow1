@@ -6,9 +6,13 @@ import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
 import com.globalvibe.arbitrage.domain.marketplace.model.MarketplaceType;
 import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.domain.product.model.ProductDetailSnapshot;
+import com.globalvibe.arbitrage.integration.VerificationRequiredException;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +35,13 @@ public class Http1688MarketplaceGateway {
             IntegrationGatewayProperties integrationGatewayProperties,
             ObjectMapper objectMapper
     ) {
-        this.restClient = RestClient.builder().build();
+        IntegrationGatewayProperties.DomesticProperties domesticProperties = integrationGatewayProperties.getDomestic();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(domesticProperties.getConnectTimeoutMillis());
+        requestFactory.setReadTimeout(domesticProperties.getReadTimeoutMillis());
+        this.restClient = RestClient.builder()
+                .requestFactory(requestFactory)
+                .build();
         this.integrationGatewayProperties = integrationGatewayProperties;
         this.objectMapper = objectMapper;
     }
@@ -42,7 +52,7 @@ public class Http1688MarketplaceGateway {
             throw new IllegalStateException("Domestic search endpoint is not configured.");
         }
 
-        JsonNode root = restClient.post()
+        JsonNode root = executeWithRetry(() -> restClient.post()
                 .uri(endpoint)
                 .headers(headers -> applyApiKey(headers, integrationGatewayProperties.getDomestic().getApiKey()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -52,7 +62,7 @@ public class Http1688MarketplaceGateway {
                         "page", 1
                 ))
                 .retrieve()
-                .body(JsonNode.class);
+                .body(JsonNode.class));
 
         return parseKeywordProducts(root);
     }
@@ -63,7 +73,7 @@ public class Http1688MarketplaceGateway {
             throw new IllegalStateException("Domestic detail endpoint is not configured.");
         }
 
-        JsonNode root = restClient.post()
+        JsonNode root = executeWithRetry(() -> restClient.post()
                 .uri(endpoint)
                 .headers(headers -> applyApiKey(headers, integrationGatewayProperties.getDomestic().getApiKey()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +82,7 @@ public class Http1688MarketplaceGateway {
                         "externalItemId", productId
                 ))
                 .retrieve()
-                .body(JsonNode.class);
+                .body(JsonNode.class));
 
         return parseDetail(root, productId);
     }
@@ -249,6 +259,75 @@ public class Http1688MarketplaceGateway {
         }
         String value = node.asText();
         return value == null || value.isBlank() ? null : value;
+    }
+
+    private JsonNode executeWithRetry(ExchangeAction action) {
+        RestClientException lastError = null;
+        for (int attempt = 1; attempt <= 2; attempt++) {
+            try {
+                return action.execute();
+            } catch (RestClientResponseException ex) {
+                VerificationRequiredException verificationRequiredException = resolveVerificationRequired(ex);
+                if (verificationRequiredException != null) {
+                    throw verificationRequiredException;
+                }
+                lastError = ex;
+                if (attempt == 2) {
+                    throw ex;
+                }
+                try {
+                    Thread.sleep(1500L);
+                } catch (InterruptedException interruptedException) {
+                    Thread.currentThread().interrupt();
+                    throw ex;
+                }
+            } catch (RestClientException ex) {
+                lastError = ex;
+                if (attempt == 2) {
+                    throw ex;
+                }
+                try {
+                    Thread.sleep(1500L);
+                } catch (InterruptedException interruptedException) {
+                    Thread.currentThread().interrupt();
+                    throw ex;
+                }
+            }
+        }
+        throw lastError == null ? new IllegalStateException("Domestic gateway request failed.") : lastError;
+    }
+
+    private VerificationRequiredException resolveVerificationRequired(RestClientResponseException ex) {
+        int statusCode = ex.getStatusCode().value();
+        if (statusCode != 409 && statusCode != 423) {
+            return null;
+        }
+        String responseBody = ex.getResponseBodyAsString();
+        if (responseBody == null || responseBody.isBlank()) {
+            return new VerificationRequiredException("1688 需要完成人工验证，请在浏览器窗口完成登录或滑块验证后继续。", ex);
+        }
+        try {
+            JsonNode root = objectMapper.readTree(responseBody);
+            JsonNode detail = root.path("detail");
+            if (detail.isObject() && "VERIFICATION_REQUIRED".equalsIgnoreCase(detail.path("code").asText())) {
+                String message = textOrNull(detail.path("message"));
+                return new VerificationRequiredException(
+                        message != null ? message : "1688 需要完成人工验证，请在浏览器窗口完成登录或滑块验证后继续。",
+                        ex
+                );
+            }
+        } catch (Exception ignored) {
+            // Fall through to plain-text matching below.
+        }
+        if (responseBody.contains("VERIFICATION_REQUIRED")) {
+            return new VerificationRequiredException("1688 需要完成人工验证，请在浏览器窗口完成登录或滑块验证后继续。", ex);
+        }
+        return null;
+    }
+
+    @FunctionalInterface
+    private interface ExchangeAction {
+        JsonNode execute();
     }
 
     private String syntheticProductId(String productUrl, String title) {

@@ -88,4 +88,9 @@ public class AnalysisTaskController {
                 new Phase2CreateTaskRequest(taskId, request.productId())
         ));
     }
+
+    @PostMapping("/{taskId}/resume")
+    public ApiResponse<Phase2CreateTaskResponse> resumePhase2Task(@PathVariable String taskId) {
+        return ApiResponse.success(phase2TaskApplicationService.resumeTask(taskId));
+    }
 }

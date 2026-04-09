@@ -13,6 +13,7 @@ import com.globalvibe.arbitrage.domain.product.service.DomesticVectorSearchServi
 import com.globalvibe.arbitrage.domain.product.service.ProductCatalogSyncService;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
 import com.globalvibe.arbitrage.integration.GatewayFallbackException;
+import com.globalvibe.arbitrage.integration.VerificationRequiredException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +28,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.UUID;
 
 @Service
 public class DomesticMatchService {
+
+    private static final Pattern DOMESTIC_MODIFIER_PATTERN = Pattern.compile(
+            "^(简约|新款|便携|折叠|可折叠|多功能|家用|办公|学生|儿童|成人|时尚|创意|通用|加厚|升级款|轻便|大容量|防水|旅行|校园)+"
+    );
 
     private final CandidateMatchRepository candidateMatchRepository;
     private final DomesticVectorSearchService domesticVectorSearchService;
@@ -69,6 +75,10 @@ public class DomesticMatchService {
                 .toList();
 
         if (matches.isEmpty()) {
+            String fallbackReason = searchExecution.liveSearchFallbackReason();
+            if (fallbackReason != null && !fallbackReason.isBlank()) {
+                throw new IllegalStateException("1688 实时检索失败: " + fallbackReason + "；且本地商品库中未找到可用的 1688 匹配结果。");
+            }
             throw new IllegalStateException("商品库中未找到可用的 1688 匹配结果。");
         }
 
@@ -80,35 +90,52 @@ public class DomesticMatchService {
         int searchLimit = Math.max(limit * 4, 12);
         Map<String, MatchCandidateAccumulator> merged = new LinkedHashMap<>();
         List<String> retrievalTerms = buildSearchTerms(sourceCandidate, queryRewrite);
+        List<String> liveSearchTerms = buildLiveSearchTerms(queryRewrite, retrievalTerms);
         boolean liveSearchUsed = false;
         String liveSearchFallbackReason = null;
         int liveAttempts = 0;
-        boolean stopLiveSync = false;
-
-        for (String term : retrievalTerms) {
-            if (!stopLiveSync && liveAttempts < 2) {
-                liveAttempts++;
-                try {
-                    List<Product> liveProducts = productCatalogSyncService.syncDomesticKeywordProducts(term).stream()
-                            .limit(searchLimit)
-                            .toList();
-                    if (!liveProducts.isEmpty()) {
-                        liveSearchUsed = true;
-                        liveProducts.forEach(product -> mergeCandidate(merged, product, term, null, false, false, true));
-                    }
-                } catch (GatewayFallbackException ex) {
+        for (String term : liveSearchTerms) {
+            if (liveAttempts >= 4) {
+                break;
+            }
+            if (liveSearchUsed && merged.size() >= Math.max(limit, 5)) {
+                break;
+            }
+            liveAttempts++;
+            try {
+                List<Product> liveProducts = productCatalogSyncService.syncDomesticKeywordProducts(term).stream()
+                        .limit(searchLimit)
+                        .toList();
+                if (!liveProducts.isEmpty()) {
+                    liveSearchUsed = true;
+                    liveProducts.forEach(product -> mergeCandidate(merged, product, term, null, false, false, true));
+                }
+            } catch (VerificationRequiredException ex) {
+                if (!merged.isEmpty()) {
                     if (liveSearchFallbackReason == null) {
                         liveSearchFallbackReason = ex.getMessage();
                     }
-                    stopLiveSync = true;
-                } catch (RuntimeException ex) {
-                    if (liveSearchFallbackReason == null) {
-                        liveSearchFallbackReason = "国内实时货源搜索失败，已切换到本地商品库。";
-                    }
-                    stopLiveSync = true;
+                    break;
+                }
+                throw ex;
+            } catch (GatewayFallbackException ex) {
+                if (liveSearchFallbackReason == null) {
+                    liveSearchFallbackReason = ex.getMessage();
+                }
+                if (!merged.isEmpty()) {
+                    break;
+                }
+            } catch (RuntimeException ex) {
+                if (liveSearchFallbackReason == null) {
+                    liveSearchFallbackReason = "国内实时货源搜索失败，已切换到本地商品库。";
+                }
+                if (!merged.isEmpty()) {
+                    break;
                 }
             }
+        }
 
+        for (String term : retrievalTerms) {
             if (domesticVectorSearchService != null) {
                 List<VectorSearchResult> vectorProducts = domesticVectorSearchService.searchWithScores(term, searchLimit);
                 vectorProducts.forEach(hit -> mergeCandidate(merged, hit.product(), term, hit.score(), true, false, false));
@@ -164,18 +191,74 @@ public class DomesticMatchService {
         if (queryRewrite.keywords() != null) {
             queryRewrite.keywords().forEach(keyword -> addIfPresent(searchTerms, keyword));
         }
-        addIfPresent(searchTerms, vectorSearchProperties.getFixedKeyword());
-
-        extractAttributeTerms(sourceCandidate.title()).stream()
-                .limit(4)
-                .forEach(term -> addIfPresent(searchTerms, term));
+        boolean hasDomesticRewrite = searchTerms.stream().anyMatch(this::containsHan);
+        if (!hasDomesticRewrite || containsHan(sourceCandidate.title())) {
+            extractAttributeTerms(sourceCandidate.title()).stream()
+                    .limit(4)
+                    .forEach(term -> addIfPresent(searchTerms, term));
+        }
         return new ArrayList<>(searchTerms);
+    }
+
+    private List<String> buildLiveSearchTerms(QueryRewrite queryRewrite, List<String> retrievalTerms) {
+        LinkedHashSet<String> liveTerms = new LinkedHashSet<>();
+        addDomesticSearchTerm(liveTerms, queryRewrite.rewrittenText());
+        if (queryRewrite.keywords() != null) {
+            queryRewrite.keywords().forEach(keyword -> addDomesticSearchTerm(liveTerms, keyword));
+        }
+        List<String> expandedTerms = new ArrayList<>();
+        liveTerms.forEach(term -> expandedTerms.addAll(expandDomesticSearchTerm(term)));
+        expandedTerms.forEach(liveTerms::add);
+        if (!liveTerms.isEmpty()) {
+            return liveTerms.stream().limit(6).toList();
+        }
+        return retrievalTerms.stream()
+                .limit(2)
+                .toList();
     }
 
     private void addIfPresent(LinkedHashSet<String> terms, String value) {
         if (value != null && !value.isBlank()) {
             terms.add(value.trim());
         }
+    }
+
+    private void addDomesticSearchTerm(LinkedHashSet<String> terms, String value) {
+        if (value == null || value.isBlank()) {
+            return;
+        }
+        String normalized = value.trim();
+        if (containsHan(normalized)) {
+            terms.add(normalized);
+        }
+    }
+
+    private List<String> expandDomesticSearchTerm(String term) {
+        if (term == null || term.isBlank() || !containsHan(term)) {
+            return List.of();
+        }
+        LinkedHashSet<String> expanded = new LinkedHashSet<>();
+        String normalized = term.trim();
+        String compact = normalized.replaceAll("\\s+", "");
+        String simplified = DOMESTIC_MODIFIER_PATTERN.matcher(compact).replaceFirst("");
+        if (!simplified.equals(compact) && simplified.length() >= 2) {
+            expanded.add(simplified);
+        }
+        if (simplified.length() > 4) {
+            expanded.add(simplified.substring(Math.max(0, simplified.length() - 4)));
+        }
+        if (simplified.endsWith("双肩包") && simplified.length() > 3) {
+            expanded.add("双肩包");
+        }
+        if (simplified.endsWith("书包") && simplified.length() > 2) {
+            expanded.add("书包");
+        }
+        if (simplified.endsWith("背包") && simplified.length() > 2) {
+            expanded.add("背包");
+        }
+        return expanded.stream()
+                .filter(value -> value != null && !value.isBlank())
+                .toList();
     }
 
     private List<String> extractAttributeTerms(String title) {
@@ -215,12 +298,14 @@ public class DomesticMatchService {
                     BigDecimal priceReasonability = scorePriceReasonability(candidate.product.price(), minPrice, maxPrice);
                     BigDecimal vectorBoost = scoreVectorBoost(candidate.vectorScore);
                     BigDecimal attributeAlignment = scoreAttributeAlignment(sourceCandidate.title(), candidate.product, detailSnapshot);
+                    BigDecimal accessoryPenalty = scoreAccessoryPenalty(queryRewrite, candidate.product, detailSnapshot);
                     Map<String, BigDecimal> scoreBreakdown = buildScoreBreakdown(
                             titleOverlap,
                             rewriteCoverage,
                             priceReasonability,
                             vectorBoost,
-                            attributeAlignment
+                            attributeAlignment,
+                            accessoryPenalty
                     );
                     BigDecimal finalScore = scoreBreakdown.values().stream()
                             .reduce(BigDecimal.ZERO, BigDecimal::add)
@@ -305,7 +390,8 @@ public class DomesticMatchService {
             BigDecimal rewriteCoverage,
             BigDecimal priceReasonability,
             BigDecimal vectorBoost,
-            BigDecimal attributeAlignment
+            BigDecimal attributeAlignment,
+            BigDecimal accessoryPenalty
     ) {
         Map<String, BigDecimal> breakdown = new LinkedHashMap<>();
         breakdown.put("titleOverlap", titleOverlap);
@@ -313,6 +399,7 @@ public class DomesticMatchService {
         breakdown.put("priceReasonability", priceReasonability);
         breakdown.put("vectorBoost", vectorBoost);
         breakdown.put("attributeAlignment", attributeAlignment);
+        breakdown.put("accessoryPenalty", accessoryPenalty);
         return breakdown;
     }
 
@@ -350,6 +437,25 @@ public class DomesticMatchService {
         return ratio.multiply(BigDecimal.valueOf(maxScore)).setScale(2, RoundingMode.HALF_UP);
     }
 
+    private BigDecimal scoreAccessoryPenalty(QueryRewrite queryRewrite, Product product, ProductDetailSnapshot detailSnapshot) {
+        String sourceText = String.join(" ",
+                queryRewrite.rewrittenText() == null ? "" : queryRewrite.rewrittenText(),
+                queryRewrite.keywords() == null ? "" : String.join(" ", queryRewrite.keywords())
+        ).toLowerCase(Locale.ROOT);
+        if (containsAccessoryToken(sourceText)) {
+            return BigDecimal.ZERO;
+        }
+        String targetText = String.join(" ",
+                product.title() == null ? "" : product.title(),
+                detailSnapshot == null || detailSnapshot.title() == null ? "" : detailSnapshot.title(),
+                detailSnapshot == null || detailSnapshot.description() == null ? "" : detailSnapshot.description()
+        ).toLowerCase(Locale.ROOT);
+        if (containsAccessoryToken(targetText)) {
+            return new BigDecimal("-8.00");
+        }
+        return BigDecimal.ZERO;
+    }
+
     private List<String> tokens(String value) {
         if (value == null || value.isBlank()) {
             return List.of();
@@ -360,7 +466,46 @@ public class DomesticMatchService {
         if (normalized.isBlank()) {
             return List.of();
         }
-        return List.of(normalized.split("\\s+"));
+        LinkedHashSet<String> tokens = new LinkedHashSet<>();
+        for (String part : normalized.split("\\s+")) {
+            if (part.isBlank()) {
+                continue;
+            }
+            tokens.add(part);
+            if (containsHan(part)) {
+                tokens.addAll(chineseNgrams(part, 2));
+                tokens.addAll(chineseNgrams(part, 3));
+            }
+        }
+        return new ArrayList<>(tokens);
+    }
+
+    private boolean containsHan(String value) {
+        return value != null && value.codePoints().anyMatch(codePoint -> Character.UnicodeScript.of(codePoint) == Character.UnicodeScript.HAN);
+    }
+
+    private boolean containsAccessoryToken(String value) {
+        if (value == null || value.isBlank()) {
+            return false;
+        }
+        return value.contains("滤芯")
+                || value.contains("过滤棉")
+                || value.contains("替换")
+                || value.contains("配件")
+                || value.contains("replacement filter")
+                || value.contains("filter")
+                || value.contains("accessory");
+    }
+
+    private List<String> chineseNgrams(String value, int size) {
+        if (value == null || value.isBlank() || value.length() < size) {
+            return List.of();
+        }
+        List<String> grams = new ArrayList<>();
+        for (int index = 0; index <= value.length() - size; index++) {
+            grams.add(value.substring(index, index + size));
+        }
+        return grams;
     }
 
     private CandidateMatchRecord toMatch(

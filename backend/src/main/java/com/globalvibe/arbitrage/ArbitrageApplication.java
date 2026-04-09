@@ -2,6 +2,7 @@ package com.globalvibe.arbitrage;
 
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
 import com.globalvibe.arbitrage.config.PricingProperties;
+import com.globalvibe.arbitrage.config.AsrProperties;
 import com.globalvibe.arbitrage.config.TaskExecutionProperties;
 import com.globalvibe.arbitrage.config.VectorSearchProperties;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties({
         TaskExecutionProperties.class,
         IntegrationGatewayProperties.class,
+        AsrProperties.class,
         PricingProperties.class,
         VectorSearchProperties.class
 })

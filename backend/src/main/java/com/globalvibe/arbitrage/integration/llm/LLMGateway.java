@@ -8,6 +8,8 @@ public interface LLMGateway {
 
     ReasoningResult generateReasoning(ReasoningRequest request);
 
+    TranscriptIntentResult analyzeTranscript(TranscriptIntentRequest request);
+
     record RewriteResult(
             String rewrittenText,
             java.util.List<String> keywords,
@@ -64,6 +66,31 @@ public interface LLMGateway {
             String decision,
             String explanation,
             double confidenceScore,
+            boolean fallbackUsed,
+            String provider,
+            String model,
+            String fallbackReason,
+            java.time.OffsetDateTime generatedAt
+    ) {
+    }
+
+    record TranscriptIntentRequest(
+            String transcript,
+            String sourceType
+    ) {
+    }
+
+    record TranscriptIntentResult(
+            String intent,
+            String category,
+            String market,
+            String priceLevel,
+            String sourcing,
+            java.util.List<String> keywords,
+            java.util.List<String> sellingPoints,
+            java.util.List<String> painPoints,
+            java.util.List<String> useCases,
+            java.util.List<String> targetAudience,
             boolean fallbackUsed,
             String provider,
             String model,

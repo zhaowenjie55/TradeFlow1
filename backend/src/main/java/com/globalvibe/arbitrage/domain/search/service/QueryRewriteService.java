@@ -41,13 +41,14 @@ public class QueryRewriteService {
     public RewriteExecutionResult rewrite(String taskId, String candidateId, String sourceProductId, String sourceText, TaskMode mode) {
         try {
             LLMGateway.RewriteResult result = llmGateway.rewriteTitle(sourceText);
-            List<String> normalizedKeywords = normalizeKeywords(result.keywords(), result.rewrittenText());
+            String normalizedRewrittenText = normalizeRewrittenText(result.rewrittenText(), sourceText);
+            List<String> normalizedKeywords = normalizeKeywords(result.keywords(), normalizedRewrittenText, sourceText);
             QueryRewrite rewrite = queryRewriteRepository.save(QueryRewrite.builder()
                     .taskId(taskId)
                     .candidateId(candidateId)
                     .sourceProductId(sourceProductId)
                     .sourceText(sourceText)
-                    .rewrittenText(normalizeRewrittenText(result.rewrittenText()))
+                    .rewrittenText(normalizedRewrittenText)
                     .keywords(normalizedKeywords)
                     .gatewaySource(result.provider())
                     .gatewayModel(result.model())
@@ -78,8 +79,8 @@ public class QueryRewriteService {
                 .candidateId(rewrite.candidateId())
                 .sourceProductId(rewrite.sourceProductId())
                 .sourceText(rewrite.sourceText())
-                .rewrittenText(normalizeRewrittenText(rewrite.rewrittenText()))
-                .keywords(normalizeKeywords(rewrite.keywords(), rewrite.rewrittenText()))
+                .rewrittenText(normalizeRewrittenText(rewrite.rewrittenText(), rewrite.sourceText()))
+                .keywords(normalizeKeywords(rewrite.keywords(), rewrite.rewrittenText(), rewrite.sourceText()))
                 .gatewaySource(rewrite.gatewaySource())
                 .gatewayModel(rewrite.gatewayModel())
                 .fallbackUsed(rewrite.fallbackUsed())
@@ -88,14 +89,14 @@ public class QueryRewriteService {
                 .build();
     }
 
-    private String normalizeRewrittenText(String rewrittenText) {
+    private String normalizeRewrittenText(String rewrittenText, String sourceText) {
         if (rewrittenText == null || rewrittenText.isBlank()) {
-            return vectorSearchProperties.getFixedKeyword();
+            return deriveFallbackDomesticQuery(sourceText);
         }
         return rewrittenText.trim();
     }
 
-    private List<String> normalizeKeywords(List<String> keywords, String rewrittenText) {
+    private List<String> normalizeKeywords(List<String> keywords, String rewrittenText, String sourceText) {
         LinkedHashSet<String> deduplicated = new LinkedHashSet<>();
         if (rewrittenText != null && !rewrittenText.isBlank()) {
             deduplicated.add(rewrittenText.trim());
@@ -106,8 +107,31 @@ public class QueryRewriteService {
                     .map(String::trim)
                     .forEach(deduplicated::add);
         }
-        deduplicated.add(vectorSearchProperties.getFixedKeyword());
+        if (deduplicated.isEmpty()) {
+            deduplicated.add(deriveFallbackDomesticQuery(sourceText));
+        }
         return new ArrayList<>(deduplicated);
+    }
+
+    private String deriveFallbackDomesticQuery(String sourceText) {
+        if (sourceText == null || sourceText.isBlank()) {
+            return vectorSearchProperties.getFixedKeyword();
+        }
+        String normalized = sourceText.trim();
+        if (containsHan(normalized)) {
+            return normalized;
+        }
+        String compact = normalized
+                .replaceAll("(?i)\\b(innovation award winner|award winner|replacement filters?|multiple pets?|grey|gray|plastic|stainless steel|wireless|portable|automatic)\\b", " ")
+                .replaceAll("(?i)\\b\\d+(?:\\.\\d+)?(?:oz|l|ml|cm|mm|inch|inches)?\\b", " ")
+                .replaceAll("[^a-zA-Z0-9\\s]+", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
+        return compact.isBlank() ? vectorSearchProperties.getFixedKeyword() : compact;
+    }
+
+    private boolean containsHan(String value) {
+        return value != null && value.codePoints().anyMatch(codePoint -> Character.UnicodeScript.of(codePoint) == Character.UnicodeScript.HAN);
     }
 
     public record RewriteExecutionResult(

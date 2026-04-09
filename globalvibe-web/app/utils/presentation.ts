@@ -44,6 +44,7 @@ const LOG_STAGE_LABELS: Record<string, string> = {
   'phase2.domestic-match': '国内货源比对',
   'phase2.rewrite': '检索词整理',
   'phase2.domestic-search': '同款搜索',
+  'phase2.verification': '等待 1688 验证',
   'phase2.product-detail': '详情补齐',
   'phase2.pricing': '利润测算',
   'phase2.report': '结论整理',
@@ -61,6 +62,7 @@ const LIVE_STAGE_MESSAGES: Record<string, string> = {
   'phase2.domestic-match': '正在同步国内货源、价格和利润空间',
   'phase2.rewrite': '正在压缩标题重点并生成更像买家会搜的检索词',
   'phase2.domestic-search': '正在跑关键词检索和语义召回，筛掉偏题货源',
+  'phase2.verification': '检测到 1688 风控，请先在浏览器窗口完成登录或滑块验证',
   'phase2.product-detail': '正在补齐品牌、规格和属性细节',
   'phase2.pricing': '正在重算成本、平台抽佣、物流和利润率',
   'phase2.report': '正在把零散证据整理成最终结论',
@@ -209,6 +211,8 @@ export const humanizeTaskLog = (entry: TaskLogEntry) => {
     message = '先压缩出标题里的核心卖点，再生成一组更贴近国内搜索习惯的检索词。'
   } else if (/已完成商品库混合检索与语义匹配/.test(raw)) {
     message = '关键词检索和语义召回已经一起跑完，正在保留更像同款的候选。'
+  } else if (/1688/.test(raw) && /验证/.test(raw)) {
+    message = '检测到 1688 风控，请先在浏览器窗口完成登录或滑块验证，再点击继续抓取。'
   } else if (/已加载商品详情快照/.test(raw)) {
     message = '详情快照已经补齐，品牌、规格和属性可以一起纳入判断。'
   } else if (/未命中商品详情快照/.test(raw)) {

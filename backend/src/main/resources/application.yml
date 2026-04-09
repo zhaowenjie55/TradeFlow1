@@ -47,6 +47,9 @@ app:
     llm:
       enabled: ${LLM_GATEWAY_ENABLED:true}
       force-simulated: ${LLM_FORCE_SIMULATED:false}
+      endpoint-base: ${LLM_ENDPOINT_BASE:http://127.0.0.1:8001/api/llm}
+      connect-timeout-millis: ${LLM_CONNECT_TIMEOUT_MILLIS:5000}
+      read-timeout-millis: ${LLM_READ_TIMEOUT_MILLIS:60000}
       chat-endpoint: ${LLM_CHAT_ENDPOINT:https://open.bigmodel.cn/api/paas/v4/chat/completions}
       model: ${LLM_MODEL:glm-5}
       api-key: ${LLM_API_KEY:}
@@ -56,12 +59,20 @@ app:
       enabled: ${CRAWLER_SERVICE_ENABLED:true}
       search-endpoint: ${CRAWLER_SEARCH_ENDPOINT:http://127.0.0.1:8001/api/search}
       detail-endpoint: ${CRAWLER_DETAIL_ENDPOINT:http://127.0.0.1:8001/api/detail}
+    asr:
+      enabled: ${ASR_ENABLED:true}
+      endpoint: ${ASR_ENDPOINT:http://127.0.0.1:8001/api/asr/transcribe}
+      connect-timeout-millis: ${ASR_CONNECT_TIMEOUT_MILLIS:5000}
+      read-timeout-millis: ${ASR_READ_TIMEOUT_MILLIS:600000}
+      max-file-size-mb: ${ASR_MAX_FILE_SIZE_MB:100}
     domestic:
       enabled: ${DOMESTIC_GATEWAY_ENABLED:false}
       force-fallback: ${DOMESTIC_FORCE_FALLBACK:true}
       search-endpoint: ${DOMESTIC_SEARCH_ENDPOINT:http://127.0.0.1:8001/api/domestic/search}
       detail-endpoint: ${DOMESTIC_DETAIL_ENDPOINT:http://127.0.0.1:8001/api/domestic/detail}
       api-key: ${DOMESTIC_API_KEY:}
+      connect-timeout-millis: ${DOMESTIC_CONNECT_TIMEOUT_MILLIS:5000}
+      read-timeout-millis: ${DOMESTIC_READ_TIMEOUT_MILLIS:300000}
     overseas:
       enabled: ${OVERSEAS_GATEWAY_ENABLED:false}
       force-fallback: ${OVERSEAS_FORCE_FALLBACK:true}

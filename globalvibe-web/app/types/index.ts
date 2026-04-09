@@ -1,5 +1,6 @@
 export * from './api'
 export * from './analysis'
+export * from './asr'
 export * from './product'
 export * from './report'
 export * from './task'

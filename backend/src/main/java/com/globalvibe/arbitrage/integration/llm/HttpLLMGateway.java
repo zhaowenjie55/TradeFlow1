@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -16,17 +17,29 @@ import java.time.OffsetDateTime;
 @Component
 public class HttpLLMGateway {
 
+    private static final int CONNECT_TIMEOUT_MILLIS = 5_000;
+    private static final int READ_TIMEOUT_MILLIS = 20_000;
+
     private static final String REWRITE_SYSTEM_PROMPT = """
             你是一个跨境电商寻源助手。
-            你的任务是把 Amazon 英文标题改写为适合 1688 搜索的中文标题与扩展词。
+            你的任务是把 Amazon 英文标题改写为适合 1688 搜索的中文关键词。
+            你必须先去掉品牌名、营销词、奖项、容量、颜色、材质、包装数量等噪音，只保留商品品类词和核心功能词。
+            结果必须适合中文电商平台检索，不要照搬英文长标题。
+            例如：
+            输入: "Veken Innovation Award Winner 95oz 2.8L Pet Fountain Automatic Cat Water Fountain Dog Water Dispenser..."
+            输出:
+            {
+              "rewritten_text": "宠物自动饮水机",
+              "keywords": ["宠物饮水机", "猫饮水机", "自动饮水器", "循环饮水器"]
+            }
             输出必须是严格 JSON，不要输出 Markdown，不要输出解释。
             JSON 结构固定为：
             {
               "rewritten_text": "适合 1688 搜索的中文主标题",
               "keywords": ["扩展词1", "扩展词2", "扩展词3"]
             }
-            rewritten_text 必须是简洁中文。
-            keywords 必须是非空字符串数组。
+            rewritten_text 必须是简洁中文短语。
+            keywords 必须是非空字符串数组，且每一项都必须是简洁中文搜索词。
             """;
 
     private static final String REPORT_SYSTEM_PROMPT = """
@@ -56,6 +69,28 @@ public class HttpLLMGateway {
             confidence_score must be between 0 and 1.
             """;
 
+    private static final String TRANSCRIPT_INTENT_SYSTEM_PROMPT = """
+            You are an e-commerce sourcing analyst.
+            Convert the transcript into structured sourcing intent for downstream search and analysis.
+            Do not echo the full transcript.
+            Return strict JSON only.
+            JSON schema:
+            {
+              "intent": "product_sourcing | media_analysis | unknown",
+              "category": "short category phrase",
+              "market": "US | CN | EU | GLOBAL | unknown",
+              "price_level": "low | mid | premium | unknown",
+              "sourcing": "1688 | taobao | amazon | unknown",
+              "keywords": ["keyword 1", "keyword 2"],
+              "selling_points": ["point 1", "point 2"],
+              "pain_points": ["pain 1", "pain 2"],
+              "use_cases": ["case 1", "case 2"],
+              "target_audience": ["audience 1", "audience 2"]
+            }
+            keywords must be concise search-friendly phrases.
+            All list fields must always be arrays, even if empty.
+            """;
+
     private final RestClient restClient;
     private final IntegrationGatewayProperties integrationGatewayProperties;
     private final ObjectMapper objectMapper;
@@ -64,7 +99,12 @@ public class HttpLLMGateway {
             IntegrationGatewayProperties integrationGatewayProperties,
             ObjectMapper objectMapper
     ) {
-        this.restClient = RestClient.builder().build();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(CONNECT_TIMEOUT_MILLIS);
+        requestFactory.setReadTimeout(READ_TIMEOUT_MILLIS);
+        this.restClient = RestClient.builder()
+                .requestFactory(requestFactory)
+                .build();
         this.integrationGatewayProperties = integrationGatewayProperties;
         this.objectMapper = objectMapper;
     }
@@ -123,6 +163,31 @@ public class HttpLLMGateway {
                 decision,
                 explanation,
                 confidenceScore,
+                false,
+                "GLM_CHAT",
+                integrationGatewayProperties.getLlm().getModel(),
+                null,
+                OffsetDateTime.now()
+        );
+    }
+
+    public LLMGateway.TranscriptIntentResult analyzeTranscript(LLMGateway.TranscriptIntentRequest request) {
+        JsonNode content = invokeChat(List.of(
+                message("system", TRANSCRIPT_INTENT_SYSTEM_PROMPT),
+                message("user", buildTranscriptIntentUserPrompt(request))
+        ));
+
+        return new LLMGateway.TranscriptIntentResult(
+                requiredText(content, "intent"),
+                optionalText(content, "category"),
+                optionalText(content, "market"),
+                optionalText(content, "price_level"),
+                optionalText(content, "sourcing"),
+                optionalStringList(content, "keywords"),
+                optionalStringList(content, "selling_points"),
+                optionalStringList(content, "pain_points"),
+                optionalStringList(content, "use_cases"),
+                optionalStringList(content, "target_audience"),
                 false,
                 "GLM_CHAT",
                 integrationGatewayProperties.getLlm().getModel(),
@@ -201,6 +266,13 @@ public class HttpLLMGateway {
         return toJson(payload);
     }
 
+    private String buildTranscriptIntentUserPrompt(LLMGateway.TranscriptIntentRequest request) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("source_type", request.sourceType());
+        payload.put("transcript", request.transcript());
+        return toJson(payload);
+    }
+
     private String requiredText(JsonNode node, String fieldName) {
         String value = node.path(fieldName).asText("").trim();
         if (value.isBlank()) {
@@ -224,6 +296,26 @@ public class HttpLLMGateway {
         if (items.isEmpty()) {
             throw new IllegalStateException("LLM chat gateway returned empty array field: " + fieldName);
         }
+        return items;
+    }
+
+    private String optionalText(JsonNode node, String fieldName) {
+        String value = node.path(fieldName).asText("").trim();
+        return value.isBlank() ? null : value;
+    }
+
+    private List<String> optionalStringList(JsonNode node, String fieldName) {
+        JsonNode valueNode = node.path(fieldName);
+        if (!valueNode.isArray()) {
+            return List.of();
+        }
+        List<String> items = new ArrayList<>();
+        valueNode.forEach(item -> {
+            String value = item == null ? "" : item.asText("").trim();
+            if (!value.isBlank()) {
+                items.add(value);
+            }
+        });
         return items;
     }
 

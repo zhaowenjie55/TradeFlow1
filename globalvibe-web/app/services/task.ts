@@ -33,3 +33,9 @@ export const selectTaskCandidate = (taskId: string, productId: string) => {
     body: { productId },
   })
 }
+
+export const resumeTask = (taskId: string) => {
+  return apiRequest<Phase2CreateTaskResponse>(`/api/analysis/tasks/${taskId}/resume`, {
+    method: 'POST',
+  })
+}

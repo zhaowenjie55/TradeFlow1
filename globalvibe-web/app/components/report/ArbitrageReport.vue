@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getReportByTaskId } from '~/services/report'
 import type { DomesticProductMatch, ReportDetail } from '~/types'
 import { compactNarrativeSummary, getReadableMatchTitle, getReadableOriginalTitle, getReadableProductName, getReportFileName } from '~/utils/presentation'
 
@@ -15,10 +16,13 @@ const props = withDefaults(defineProps<{
 })
 
 const productsStore = useProductsStore()
+const taskStore = useTaskStore()
 const storeReport = computed(() => productsStore.currentReport)
 const storeCandidate = computed(() => productsStore.currentCandidate)
-const report = computed(() => props.report ?? storeReport.value)
-const isLoading = computed(() => props.isLoading ?? productsStore.isAnalyzingReport)
+const hydratedReport = ref<ReportDetail | null>(null)
+const isHydratingReport = ref(false)
+const report = computed(() => props.report ?? storeReport.value ?? hydratedReport.value)
+const isLoading = computed(() => (props.isLoading ?? productsStore.isAnalyzingReport) || isHydratingReport.value)
 const activeTitle = computed(() => getReadableProductName(props.candidateTitle ?? storeCandidate.value?.title ?? '--'))
 const { t } = useAppI18n()
 const isPreviewOpen = ref(false)
@@ -116,7 +120,21 @@ const originalTitle = computed(() => {
 const displayMatchTitle = (match: DomesticProductMatch) => getReadableMatchTitle(match)
 const originalMatchTitle = (match: DomesticProductMatch) => getReadableOriginalTitle(match.title, displayMatchTitle(match))
 const detailReadyLabel = (match: DomesticProductMatch) => t(match.detailReady ? 'report.detailReady' : 'report.detailPending')
-const detailSourceLabel = (match: DomesticProductMatch) => match.detailSource ?? '--'
+const humanizeSourceLabel = (value?: string | null) => {
+  if (!value) return '--'
+
+  const labels: Record<string, string> = {
+    DOMESTIC_REALTIME: t('report.sourceRealtime'),
+    DOMESTIC_REALTIME_HYBRID: t('report.sourceRealtimeHybrid'),
+    CATALOG_TEXT: t('report.sourceCatalog'),
+    DETAIL_SNAPSHOT: t('report.sourceDetailSnapshot'),
+    DOMESTIC_REALTIME_DETAIL: t('report.sourceRealtimeDetail'),
+  }
+
+  return labels[value] ?? value
+}
+const detailSourceLabel = (match: DomesticProductMatch) => humanizeSourceLabel(match.detailSource)
+const matchSourceLabel = (match: DomesticProductMatch) => humanizeSourceLabel(match.matchSource)
 
 const headlineMetrics = computed(() => {
   if (!report.value) return []
@@ -267,6 +285,22 @@ const previewKeyFacts = computed(() => {
 })
 
 const previewTopMatch = computed(() => report.value?.domesticMatches?.[0] ?? null)
+const compactTopMatch = computed(() => report.value?.domesticMatches?.[0] ?? null)
+
+const ensureReportLoaded = async () => {
+  if (props.report || storeReport.value || hydratedReport.value) return
+  if (taskStore.currentTaskPhase !== 'PHASE2' || taskStore.status !== 'REPORT_READY' || !taskStore.currentTaskId) return
+
+  isHydratingReport.value = true
+  try {
+    const fetched = await getReportByTaskId(taskStore.currentTaskId)
+    hydratedReport.value = fetched
+    productsStore.selectProduct(fetched.productId)
+    productsStore.setReport(fetched)
+  } finally {
+    isHydratingReport.value = false
+  }
+}
 
 const openProductOnMarket = () => {
   if (!report.value || !import.meta.client) return
@@ -309,11 +343,19 @@ const handlePreviewKeydown = (event: KeyboardEvent) => {
 
 onMounted(() => {
   window.addEventListener('keydown', handlePreviewKeydown)
+  void ensureReportLoaded()
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handlePreviewKeydown)
 })
+
+watch(
+  () => [taskStore.currentTaskId, taskStore.currentTaskPhase, taskStore.status, storeReport.value?.reportId, props.report?.reportId],
+  () => {
+    void ensureReportLoaded()
+  },
+)
 
 const downloadDocument = () => {
   if (!report.value) return
@@ -433,6 +475,40 @@ const downloadDocument = () => {
         <p class="rounded-2xl border border-slate-200/70 bg-white p-5 text-[15px] leading-8 text-slate-700 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
           {{ resolveSummary() }}
         </p>
+      </div>
+
+      <div v-if="compactTopMatch" class="rounded-3xl border border-[var(--tf-border)] bg-[var(--tf-bg-panel)] p-5">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h5 class="text-sm font-semibold text-slate-900 dark:text-slate-100">{{ t('report.topDomesticMatch') }}</h5>
+            <p class="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{{ displayMatchTitle(compactTopMatch) }}</p>
+          </div>
+          <span class="rounded-full bg-[var(--tf-success-soft)] px-3 py-1 text-xs font-semibold text-slate-700 dark:text-slate-200">
+            {{ t('report.matchSimilarity') }} {{ compactTopMatch.similarityScore }}%
+          </span>
+        </div>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-950 dark:text-slate-300">
+            {{ t('report.matchPrice') }} {{ formatCurrency(compactTopMatch.price) }}
+          </span>
+          <span class="rounded-full border border-[var(--tf-border)] px-3 py-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+            {{ t('report.matchSource') }} {{ matchSourceLabel(compactTopMatch) }}
+          </span>
+          <span class="rounded-full border border-[var(--tf-border)] px-3 py-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+            {{ t('report.detailSource') }} {{ detailSourceLabel(compactTopMatch) }}
+          </span>
+          <span
+            :class="[
+              'rounded-full px-3 py-1 text-xs font-semibold',
+              compactTopMatch.detailReady
+                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
+                : 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300',
+            ]"
+          >
+            {{ t('report.detailStatus') }} {{ detailReadyLabel(compactTopMatch) }}
+          </span>
+        </div>
       </div>
 
       <div class="rounded-3xl border border-[var(--tf-border)] bg-[var(--tf-bg-panel)] p-5">
@@ -573,7 +649,7 @@ const downloadDocument = () => {
                         {{ t('report.detailStatus') }} {{ detailReadyLabel(previewTopMatch) }}
                       </span>
                       <span class="rounded-full border border-[var(--tf-border)] px-3 py-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
-                        {{ t('report.matchSource') }} {{ previewTopMatch.matchSource ?? '--' }}
+                        {{ t('report.matchSource') }} {{ matchSourceLabel(previewTopMatch) }}
                       </span>
                       <span class="rounded-full border border-[var(--tf-border)] px-3 py-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
                         {{ t('report.detailSource') }} {{ detailSourceLabel(previewTopMatch) }}
@@ -628,7 +704,7 @@ const downloadDocument = () => {
                         {{ detailReadyLabel(match) }}
                       </span>
                       <span class="rounded-full border border-[var(--tf-border)] px-2.5 py-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-                        {{ match.matchSource ?? '--' }}
+                        {{ matchSourceLabel(match) }}
                       </span>
                       <span class="rounded-full border border-[var(--tf-border)] px-2.5 py-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
                         {{ detailSourceLabel(match) }}

@@ -112,11 +112,11 @@ public class AnalysisTaskStatusViewAssembler {
     private List<PipelineStepVO> buildPhase2Pipeline(AnalysisTask analysisTask) {
         return List.of(
                 pipelineStep("phase2-create", "任务创建", pipelineStatus(analysisTask,
-                        List.of(TaskStatus.QUEUED, TaskStatus.RUNNING, TaskStatus.ANALYZING_SOURCE, TaskStatus.REPORT_READY, TaskStatus.FAILED),
+                        List.of(TaskStatus.QUEUED, TaskStatus.RUNNING, TaskStatus.WAITING_1688_VERIFICATION, TaskStatus.ANALYZING_SOURCE, TaskStatus.REPORT_READY, TaskStatus.FAILED),
                         List.of(TaskStatus.CREATED))),
                 pipelineStep("phase2-match", "货源匹配", pipelineStatus(analysisTask,
                         List.of(TaskStatus.ANALYZING_SOURCE, TaskStatus.REPORT_READY, TaskStatus.FAILED),
-                        List.of(TaskStatus.RUNNING, TaskStatus.FALLBACK_MOCK))),
+                        List.of(TaskStatus.RUNNING, TaskStatus.FALLBACK_MOCK, TaskStatus.WAITING_1688_VERIFICATION))),
                 pipelineStep("phase2-pricing", "利润测算", pipelineStatus(analysisTask,
                         List.of(TaskStatus.REPORT_READY, TaskStatus.FAILED),
                         List.of(TaskStatus.ANALYZING_SOURCE))),
@@ -168,6 +168,7 @@ public class AnalysisTaskStatusViewAssembler {
                     ? "phase1.market-scan"
                     : "phase2.domestic-match";
             case WAITING_USER_SELECTION -> "phase1.output";
+            case WAITING_1688_VERIFICATION -> "phase2.verification";
             case ANALYZING_SOURCE -> "phase2.pricing";
             case REPORT_READY -> "phase2.report";
             case FAILED -> analysisTask.getPhase().name().toLowerCase() + ".failed";
@@ -180,6 +181,7 @@ public class AnalysisTaskStatusViewAssembler {
             case RUNNING -> analysisTask.getPhase() == TaskPhase.PHASE1 ? 42 : 44;
             case FALLBACK_MOCK -> analysisTask.getPhase() == TaskPhase.PHASE1 ? 42 : 44;
             case WAITING_USER_SELECTION, REPORT_READY -> 100;
+            case WAITING_1688_VERIFICATION -> 52;
             case ANALYZING_SOURCE -> 76;
             case FAILED -> 100;
         };

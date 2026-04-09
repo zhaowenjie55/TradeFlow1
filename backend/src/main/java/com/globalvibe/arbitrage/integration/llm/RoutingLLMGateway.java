@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 public class RoutingLLMGateway implements LLMGateway {
 
     private final IntegrationGatewayProperties integrationGatewayProperties;
-    private final HttpLLMGateway httpLLMGateway;
+    private final FastApiLLMGateway fastApiLLMGateway;
     private final SimulatedLLMGateway simulatedLLMGateway;
 
     public RoutingLLMGateway(
             IntegrationGatewayProperties integrationGatewayProperties,
-            HttpLLMGateway httpLLMGateway,
+            FastApiLLMGateway fastApiLLMGateway,
             SimulatedLLMGateway simulatedLLMGateway
     ) {
         this.integrationGatewayProperties = integrationGatewayProperties;
-        this.httpLLMGateway = httpLLMGateway;
+        this.fastApiLLMGateway = fastApiLLMGateway;
         this.simulatedLLMGateway = simulatedLLMGateway;
     }
 
@@ -31,7 +31,7 @@ public class RoutingLLMGateway implements LLMGateway {
             return simulatedLLMGateway.rewriteTitle(sourceTitle, "LLM 改写接口被配置为模拟模式。");
         }
         try {
-            return httpLLMGateway.rewriteTitle(sourceTitle);
+            return fastApiLLMGateway.rewriteTitle(sourceTitle);
         } catch (RuntimeException ex) {
             return simulatedLLMGateway.rewriteTitle(sourceTitle, ex.getMessage());
         }
@@ -46,7 +46,7 @@ public class RoutingLLMGateway implements LLMGateway {
             return simulatedLLMGateway.generateReportNarrative(request, "LLM 报告接口被配置为模拟模式。");
         }
         try {
-            return httpLLMGateway.generateReportNarrative(request);
+            return fastApiLLMGateway.generateReportNarrative(request);
         } catch (RuntimeException ex) {
             return simulatedLLMGateway.generateReportNarrative(request, ex.getMessage());
         }
@@ -61,9 +61,24 @@ public class RoutingLLMGateway implements LLMGateway {
             return simulatedLLMGateway.generateReasoning(request, "LLM 推理接口被配置为模拟模式。");
         }
         try {
-            return httpLLMGateway.generateReasoning(request);
+            return fastApiLLMGateway.generateReasoning(request);
         } catch (RuntimeException ex) {
             return simulatedLLMGateway.generateReasoning(request, ex.getMessage());
+        }
+    }
+
+    @Override
+    public TranscriptIntentResult analyzeTranscript(TranscriptIntentRequest request) {
+        if (!integrationGatewayProperties.getLlm().isEnabled()) {
+            return simulatedLLMGateway.analyzeTranscript(request, "LLM transcript 分析接口未启用，已切换到模拟模式。");
+        }
+        if (integrationGatewayProperties.getLlm().isForceSimulated()) {
+            return simulatedLLMGateway.analyzeTranscript(request, "LLM transcript 分析接口被配置为模拟模式。");
+        }
+        try {
+            return fastApiLLMGateway.analyzeTranscript(request);
+        } catch (RuntimeException ex) {
+            return simulatedLLMGateway.analyzeTranscript(request, ex.getMessage());
         }
     }
 }

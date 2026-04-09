@@ -4,15 +4,58 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class SimulatedLLMGateway {
 
+    private static final Set<String> ENGLISH_STOP_WORDS = Set.of(
+            "the", "and", "with", "for", "from", "into", "award", "winner", "innovation", "multiple",
+            "pets", "pet", "cat", "dog", "dogs", "cats", "automatic", "portable", "replacement", "filters",
+            "filter", "grey", "gray", "plastic", "stainless", "steel", "oz", "l", "ml", "pack", "new",
+            "version", "upgrade", "premium", "large", "small"
+    );
+
+    private static final Map<String, List<String>> CATEGORY_KEYWORDS = Map.of(
+            "kitchen storage", List.of("kitchen storage", "kitchen organizer", "cabinet organizer"),
+            "pet fountain", List.of("pet fountain", "cat water fountain", "dog water dispenser"),
+            "wireless earbuds", List.of("wireless earbuds", "bluetooth earbuds", "true wireless earbuds"),
+            "desk organizer", List.of("desk organizer", "desktop organizer", "acrylic organizer")
+    );
+    private static final Set<String> TRANSCRIPT_STOP_WORDS = Set.of(
+            "i", "want", "need", "find", "show", "me", "some", "a", "an", "the", "to", "for", "from",
+            "that", "can", "be", "is", "are", "with", "and", "or", "of", "in", "on", "my", "please",
+            "cheap", "budget", "trending", "products", "product", "sourcing", "source"
+    );
+    private static final Pattern HAN_SEGMENT_PATTERN = Pattern.compile("[\\p{IsHan}]{2,}");
+
     public LLMGateway.RewriteResult rewriteTitle(String sourceTitle, String fallbackReason) {
         String normalized = sourceTitle == null ? "" : sourceTitle.toLowerCase(Locale.ROOT);
+        if (normalized.contains("cat water fountain")
+                || normalized.contains("pet fountain")
+                || normalized.contains("dog water dispenser")
+                || normalized.contains("water fountain")) {
+            LinkedHashSet<String> keywords = new LinkedHashSet<>(List.of(
+                    "宠物饮水机",
+                    "猫饮水机",
+                    "自动饮水器",
+                    "循环饮水器",
+                    "宠物饮水器"
+            ));
+            if (normalized.contains("filter")
+                    && !normalized.contains("fountain")
+                    && !normalized.contains("dispenser")) {
+                keywords.add("宠物饮水机滤芯");
+            }
+            return simulatedRewrite("宠物自动饮水机", new ArrayList<>(keywords), fallbackReason);
+        }
         if (normalized.contains("mouse")) {
             return simulatedRewrite("充电无线鼠标", List.of("无线鼠标", "静音鼠标", "办公鼠标"), fallbackReason);
         }
@@ -33,9 +76,8 @@ public class SimulatedLLMGateway {
             );
         }
 
-        String sanitized = sourceTitle == null ? "" : sourceTitle.replaceAll("[^\\p{IsHan}a-zA-Z0-9\\s-]", "").trim();
-        String rewritten = sanitized.isBlank() ? "跨境选品候选商品" : sanitized + " 国内货源";
-        return simulatedRewrite(rewritten, List.of(rewritten), fallbackReason);
+        RewriteHeuristic heuristic = buildHeuristicRewrite(sourceTitle);
+        return simulatedRewrite(heuristic.rewrittenText(), heuristic.keywords(), fallbackReason);
     }
 
     public LLMGateway.ReportNarrativeResult generateReportNarrative(
@@ -105,6 +147,41 @@ public class SimulatedLLMGateway {
         );
     }
 
+    public LLMGateway.TranscriptIntentResult analyzeTranscript(
+            LLMGateway.TranscriptIntentRequest request,
+            String fallbackReason
+    ) {
+        String transcript = request.transcript() == null ? "" : request.transcript().trim();
+        String normalized = normalizeTranscriptForIntent(transcript.toLowerCase(Locale.ROOT));
+
+        String category = detectCategory(normalized);
+        List<String> keywords = deriveTranscriptKeywords(category, normalized);
+        List<String> sellingPoints = deriveSellingPoints(normalized, category);
+        List<String> painPoints = derivePainPoints(normalized);
+        List<String> useCases = deriveUseCases(normalized, category);
+        List<String> targetAudience = deriveTargetAudience(normalized, category);
+
+        return new LLMGateway.TranscriptIntentResult(
+                normalized.contains("source") || normalized.contains("1688") || normalized.contains("find")
+                        ? "product_sourcing"
+                        : "media_analysis",
+                category,
+                detectMarket(normalized),
+                detectPriceLevel(normalized),
+                detectSourcing(normalized),
+                keywords,
+                sellingPoints,
+                painPoints,
+                useCases,
+                targetAudience,
+                true,
+                "SIMULATED_LLM",
+                "simulated-llm",
+                normalizeFallbackReason(fallbackReason),
+                OffsetDateTime.now()
+        );
+    }
+
     private LLMGateway.RewriteResult simulatedRewrite(String rewrittenText, List<String> keywords, String fallbackReason) {
         return new LLMGateway.RewriteResult(
                 rewrittenText,
@@ -115,6 +192,298 @@ public class SimulatedLLMGateway {
                 normalizeFallbackReason(fallbackReason),
                 OffsetDateTime.now()
         );
+    }
+
+    private RewriteHeuristic buildHeuristicRewrite(String sourceTitle) {
+        if (sourceTitle == null || sourceTitle.isBlank()) {
+            return new RewriteHeuristic("跨境选品候选商品", List.of("跨境选品", "国内货源"));
+        }
+        if (containsHan(sourceTitle)) {
+            String normalized = sourceTitle.replaceAll("\\s+", " ").trim();
+            return new RewriteHeuristic(
+                    normalized,
+                    List.of(normalized)
+            );
+        }
+
+        String normalized = sourceTitle.toLowerCase(Locale.ROOT)
+                .replaceAll("[^a-z0-9\\s]+", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
+
+        LinkedHashSet<String> chineseKeywords = new LinkedHashSet<>();
+        addPhraseIfMatched(chineseKeywords, normalized, "water fountain", "饮水机");
+        addPhraseIfMatched(chineseKeywords, normalized, "water dispenser", "饮水器");
+        addPhraseIfMatched(chineseKeywords, normalized, "fountain", "饮水机");
+        addPhraseIfMatched(chineseKeywords, normalized, "organizer", "收纳架");
+        addPhraseIfMatched(chineseKeywords, normalized, "storage", "收纳");
+        addPhraseIfMatched(chineseKeywords, normalized, "display", "展示架");
+        addPhraseIfMatched(chineseKeywords, normalized, "blender", "榨汁机");
+        addPhraseIfMatched(chineseKeywords, normalized, "mouse", "无线鼠标");
+        addPhraseIfMatched(chineseKeywords, normalized, "lamp", "台灯");
+        addPhraseIfMatched(chineseKeywords, normalized, "earbud", "蓝牙耳机");
+        addPhraseIfMatched(chineseKeywords, normalized, "headphone", "蓝牙耳机");
+        addPhraseIfMatched(chineseKeywords, normalized, "pet", "宠物");
+        addPhraseIfMatched(chineseKeywords, normalized, "cat", "猫");
+        addPhraseIfMatched(chineseKeywords, normalized, "dog", "狗");
+        addPhraseIfMatched(chineseKeywords, normalized, "filter", "滤芯");
+        addPhraseIfMatched(chineseKeywords, normalized, "automatic", "自动");
+        addPhraseIfMatched(chineseKeywords, normalized, "acrylic", "亚克力");
+
+        if (chineseKeywords.contains("宠物") && chineseKeywords.contains("饮水机")) {
+            chineseKeywords.remove("猫");
+            chineseKeywords.remove("狗");
+            chineseKeywords.add("猫饮水机");
+            chineseKeywords.add("自动饮水器");
+        }
+
+        if (!chineseKeywords.isEmpty()) {
+            String rewritten = String.join("", chineseKeywords.stream().limit(3).toList());
+            return new RewriteHeuristic(rewritten, new ArrayList<>(chineseKeywords));
+        }
+
+        LinkedHashSet<String> fallbackKeywords = new LinkedHashSet<>();
+        for (String token : normalized.split("\\s+")) {
+            if (token.isBlank() || token.length() < 3 || ENGLISH_STOP_WORDS.contains(token) || token.matches("\\d+")) {
+                continue;
+            }
+            fallbackKeywords.add(token);
+            if (fallbackKeywords.size() >= 4) {
+                break;
+            }
+        }
+        if (fallbackKeywords.isEmpty()) {
+            return new RewriteHeuristic("跨境选品候选商品", List.of("跨境选品", "国内货源"));
+        }
+        String rewritten = String.join(" ", fallbackKeywords);
+        return new RewriteHeuristic(rewritten, new ArrayList<>(fallbackKeywords));
+    }
+
+    private void addPhraseIfMatched(LinkedHashSet<String> keywords, String normalizedSource, String englishPhrase, String chinesePhrase) {
+        if (normalizedSource.contains(englishPhrase)) {
+            keywords.add(chinesePhrase);
+        }
+    }
+
+    private boolean containsHan(String value) {
+        return value != null && value.codePoints().anyMatch(codePoint -> Character.UnicodeScript.of(codePoint) == Character.UnicodeScript.HAN);
+    }
+
+    private record RewriteHeuristic(String rewrittenText, List<String> keywords) {
+    }
+
+    private String detectCategory(String normalized) {
+        if (normalized.contains("kitchen")) {
+            return "kitchen storage";
+        }
+        if (normalized.contains("earbud") || normalized.contains("headphone")) {
+            return "wireless earbuds";
+        }
+        if (normalized.contains("pet fountain")
+                || normalized.contains("cat water fountain")
+                || normalized.contains("dog water dispenser")
+                || normalized.contains("cat water")
+                || (normalized.contains("water") && normalized.contains("dispenser"))) {
+            return "pet fountain";
+        }
+        if (normalized.contains("organizer") || normalized.contains("storage")) {
+            return "desk organizer";
+        }
+        return null;
+    }
+
+    private String detectMarket(String normalized) {
+        if (normalized.contains("united states") || normalized.contains(" us ") || normalized.contains("u.s.") || normalized.contains("america")) {
+            return "US";
+        }
+        if (normalized.contains("china") || normalized.contains("cn")) {
+            return "CN";
+        }
+        if (normalized.contains("europe") || normalized.contains("eu")) {
+            return "EU";
+        }
+        return "unknown";
+    }
+
+    private String detectPriceLevel(String normalized) {
+        if (normalized.contains("cheap") || normalized.contains("budget") || normalized.contains("low cost")) {
+            return "low";
+        }
+        if (normalized.contains("premium") || normalized.contains("luxury")) {
+            return "premium";
+        }
+        if (normalized.isBlank()) {
+            return "unknown";
+        }
+        return "mid";
+    }
+
+    private String detectSourcing(String normalized) {
+        if (normalized.contains("1688")) {
+            return "1688";
+        }
+        if (normalized.contains("taobao")) {
+            return "taobao";
+        }
+        if (normalized.contains("amazon")) {
+            return "amazon";
+        }
+        return "unknown";
+    }
+
+    private List<String> deriveTranscriptKeywords(String category, String normalized) {
+        LinkedHashSet<String> keywords = new LinkedHashSet<>();
+        if (category != null && !category.isBlank()) {
+            keywords.addAll(CATEGORY_KEYWORDS.getOrDefault(category, List.of(category)));
+        }
+        keywords.addAll(extractTranscriptKeywords(normalized));
+        if (normalized.contains("cheap")) {
+            keywords.add("budget");
+        }
+        if (normalized.contains("trending")) {
+            keywords.add("trending");
+        }
+        return keywords.stream().filter(value -> value != null && !value.isBlank()).limit(6).toList();
+    }
+
+    private List<String> deriveSellingPoints(String normalized, String category) {
+        List<String> points = new ArrayList<>();
+        if (normalized.contains("trending")) {
+            points.add("具备趋势热度信号");
+        }
+        if ("wireless earbuds".equals(category)) {
+            points.add("无线便携，适合高频消费电子场景");
+        }
+        if ("pet fountain".equals(category)) {
+            points.add("自动循环饮水提升宠物喂养便利性");
+        }
+        if (points.isEmpty()) {
+            points.add("转写内容强调了明确的产品需求与采购目的");
+        }
+        return points;
+    }
+
+    private List<String> derivePainPoints(String normalized) {
+        List<String> pains = new ArrayList<>();
+        if (normalized.contains("cheap") || normalized.contains("budget")) {
+            pains.add("用户对采购成本敏感");
+        }
+        if (normalized.contains("source") || normalized.contains("sourced")) {
+            pains.add("需要稳定的国内供货渠道");
+        }
+        if (pains.isEmpty()) {
+            pains.add("需要把口语化需求压缩成可检索的结构化关键词");
+        }
+        return pains;
+    }
+
+    private List<String> deriveUseCases(String normalized, String category) {
+        List<String> cases = new ArrayList<>();
+        if ("kitchen storage".equals(category)) {
+            cases.add("厨房收纳与整理");
+        }
+        if ("wireless earbuds".equals(category)) {
+            cases.add("通勤与运动佩戴");
+        }
+        if ("pet fountain".equals(category)) {
+            cases.add("家庭宠物日常喂养");
+        }
+        if (cases.isEmpty()) {
+            cases.add("跨境选品与国内寻源");
+        }
+        return cases;
+    }
+
+    private List<String> deriveTargetAudience(String normalized, String category) {
+        List<String> audience = new ArrayList<>();
+        if ("pet fountain".equals(category)) {
+            audience.add("猫狗等宠物家庭");
+        }
+        if ("wireless earbuds".equals(category)) {
+            audience.add("消费电子用户");
+        }
+        if (normalized.contains("us")) {
+            audience.add("美国市场用户");
+        }
+        if (audience.isEmpty()) {
+            audience.add("跨境电商卖家");
+        }
+        return audience;
+    }
+
+    private List<String> extractTranscriptKeywords(String normalized) {
+        if (normalized == null || normalized.isBlank()) {
+            return List.of();
+        }
+
+        if (containsHan(normalized)) {
+            LinkedHashSet<String> hanKeywords = new LinkedHashSet<>();
+            Matcher matcher = HAN_SEGMENT_PATTERN.matcher(normalized);
+            while (matcher.find()) {
+                String candidate = matcher.group().trim();
+                if (!candidate.isBlank()) {
+                    hanKeywords.add(candidate);
+                }
+                if (hanKeywords.size() >= 4) {
+                    break;
+                }
+            }
+            return new ArrayList<>(hanKeywords);
+        }
+
+        LinkedHashSet<String> phraseKeywords = new LinkedHashSet<>();
+        String cleaned = normalized
+                .replaceAll("[^a-z0-9\\s]+", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
+        String[] tokens = cleaned.split("\\s+");
+
+        List<String> meaningfulTokens = new ArrayList<>();
+        for (String token : tokens) {
+            if (token.isBlank() || token.length() < 3 || token.matches("\\d+") || TRANSCRIPT_STOP_WORDS.contains(token)) {
+                continue;
+            }
+            meaningfulTokens.add(token);
+        }
+
+        for (int i = 0; i < meaningfulTokens.size(); i++) {
+            phraseKeywords.add(meaningfulTokens.get(i));
+            if (i + 1 < meaningfulTokens.size()) {
+                phraseKeywords.add(meaningfulTokens.get(i) + " " + meaningfulTokens.get(i + 1));
+            }
+            if (phraseKeywords.size() >= 6) {
+                break;
+            }
+        }
+        return new ArrayList<>(phraseKeywords);
+    }
+
+    private String normalizeTranscriptForIntent(String normalized) {
+        if (normalized == null || normalized.isBlank()) {
+            return "";
+        }
+
+        String corrected = normalized
+                .replaceAll("[^\\p{IsHan}a-z0-9\\s]+", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
+        corrected = corrected.replaceAll("\\bcatch water fountain\\b", "cat water fountain");
+        corrected = corrected.replaceAll("\\bcatch water dispenser\\b", "cat water dispenser");
+        corrected = corrected.replaceAll("\\bcatch water\\b", "cat water");
+        corrected = corrected.replaceAll("\\bcatch fountain\\b", "cat fountain");
+        corrected = corrected.replaceAll("\\bear buds\\b", "earbuds");
+        corrected = corrected.replaceAll("\\bair buds\\b", "earbuds");
+        corrected = corrected.replaceAll("\\bblue tooth\\b", "bluetooth");
+        corrected = corrected.replaceAll("\\s+", " ").trim();
+
+        if (corrected.contains("cat water") && corrected.contains("dispenser") && !corrected.contains("cat water fountain")) {
+            corrected = corrected + " cat water fountain";
+        }
+        if (corrected.contains("cat water") && !corrected.contains("pet fountain")) {
+            corrected = corrected + " pet fountain";
+        }
+
+        return corrected;
     }
 
     private String buildSummary(LLMGateway.ReportNarrativeRequest request, String benchmark) {

@@ -7,6 +7,7 @@ export type TaskStatus =
   | 'QUEUED'
   | 'RUNNING'
   | 'WAITING_USER_SELECTION'
+  | 'WAITING_1688_VERIFICATION'
   | 'ANALYZING_SOURCE'
   | 'REPORT_READY'
   | 'FAILED'

@@ -2,6 +2,7 @@ import os
 import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from threading import RLock
 from typing import Any, Optional
 from urllib.parse import quote
 
@@ -89,6 +90,12 @@ EMPTY_RESULT_MARKERS = (
 PRICE_PATTERN = re.compile(r"(\d+(?:\.\d+)?)")
 ITEM_ID_PATTERN = re.compile(r"/offer/(\d+)\.html")
 ITEM_ID_QUERY_PATTERN = re.compile(r"[?&]offerId=(\d+)")
+PROFILE_LOCK_ERROR_MARKERS = (
+    "ProcessSingleton",
+    "SingletonLock",
+    "profile is already in use",
+)
+DOMESTIC_BROWSER_LOCK = RLock()
 
 
 class DomesticSearchError(RuntimeError):
@@ -97,6 +104,20 @@ class DomesticSearchError(RuntimeError):
 
 class DomesticDetailError(RuntimeError):
     pass
+
+
+class DomesticVerificationRequiredError(RuntimeError):
+    pass
+
+
+def resolve_user_data_dir() -> str:
+    configured = os.getenv("PLAYWRIGHT_USER_DATA_DIR", "").strip()
+    if configured:
+        Path(configured).mkdir(parents=True, exist_ok=True)
+        return configured
+    default_dir = Path.home() / ".tradeflow" / "playwright-1688-profile"
+    default_dir.mkdir(parents=True, exist_ok=True)
+    return str(default_dir)
 
 
 @dataclass
@@ -127,93 +148,90 @@ def _fetch_1688_search_results(keyword: str, page: int) -> list[DomesticSearchIt
     url = build_1688_search_url(keyword, page)
     headless = env_flag("PLAYWRIGHT_HEADLESS", False)
     slow_mo = int(os.getenv("PLAYWRIGHT_SLOW_MO_MS", "0") or "0")
+    navigation_timeout_ms = int(os.getenv("PLAYWRIGHT_NAVIGATION_TIMEOUT_MS", "120000") or "120000")
     debug_dir = os.getenv("PLAYWRIGHT_DEBUG_DIR", "").strip()
     storage_state_path = os.getenv("PLAYWRIGHT_STORAGE_STATE_PATH", "").strip()
     browser_channel = os.getenv("PLAYWRIGHT_BROWSER_CHANNEL", "chrome").strip()
-    user_data_dir = os.getenv("PLAYWRIGHT_USER_DATA_DIR", "").strip()
-    manual_solve_timeout_ms = int(os.getenv("PLAYWRIGHT_MANUAL_SOLVE_TIMEOUT_MS", "0") or "0")
-    allow_manual_solve = env_flag("PLAYWRIGHT_ALLOW_MANUAL_SOLVE", False)
+    user_data_dir = resolve_user_data_dir()
+    manual_solve_timeout_ms = int(os.getenv("PLAYWRIGHT_MANUAL_SOLVE_TIMEOUT_MS", "180000") or "180000")
+    allow_manual_solve = env_flag("PLAYWRIGHT_ALLOW_MANUAL_SOLVE", True)
     cdp_url = os.getenv("PLAYWRIGHT_CDP_URL", "").strip()
 
     try:
-        with sync_playwright() as playwright:
-            launch_kwargs: dict[str, Any] = {
-                "headless": headless,
-                "slow_mo": slow_mo,
-                "args": [
-                    "--disable-blink-features=AutomationControlled",
-                    "--lang=zh-CN",
-                ],
-            }
-            if browser_channel:
-                launch_kwargs["channel"] = browser_channel
-            context_kwargs: dict[str, Any] = {
-                "locale": "zh-CN",
-                "timezone_id": "Asia/Shanghai",
-                "viewport": {"width": 1600, "height": 1200},
-                "user_agent": (
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-                ),
-            }
-            if storage_state_path and Path(storage_state_path).exists():
-                context_kwargs["storage_state"] = storage_state_path
-            if cdp_url:
-                browser = playwright.chromium.connect_over_cdp(cdp_url)
-                context = browser.contexts[0] if browser.contexts else browser.new_context(**context_kwargs)
-                page_ref = context.new_page()
-            elif user_data_dir:
-                persistent_kwargs = dict(context_kwargs)
-                persistent_kwargs.pop("storage_state", None)
-                context = playwright.chromium.launch_persistent_context(
-                    user_data_dir,
-                    **launch_kwargs,
-                    **persistent_kwargs,
+        with DOMESTIC_BROWSER_LOCK:
+            with sync_playwright() as playwright:
+                launch_kwargs: dict[str, Any] = {
+                    "headless": headless,
+                    "slow_mo": slow_mo,
+                    "args": [
+                        "--disable-blink-features=AutomationControlled",
+                        "--lang=zh-CN",
+                    ],
+                }
+                if browser_channel:
+                    launch_kwargs["channel"] = browser_channel
+                context_kwargs: dict[str, Any] = {
+                    "locale": "zh-CN",
+                    "timezone_id": "Asia/Shanghai",
+                    "viewport": {"width": 1600, "height": 1200},
+                    "user_agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+                    ),
+                }
+                if storage_state_path and Path(storage_state_path).exists():
+                    context_kwargs["storage_state"] = storage_state_path
+                context, page_ref = open_browser_context(
+                    playwright,
+                    cdp_url=cdp_url,
+                    user_data_dir=user_data_dir,
+                    launch_kwargs=launch_kwargs,
+                    context_kwargs=context_kwargs,
                 )
-                page_ref = context.pages[0] if context.pages else context.new_page()
-            else:
-                browser = playwright.chromium.launch(**launch_kwargs)
-                context = browser.new_context(**context_kwargs)
-                page_ref = context.new_page()
-            context.add_init_script(
-                """
-                Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-                window.chrome = window.chrome || { runtime: {} };
-                Object.defineProperty(navigator, 'languages', { get: () => ['zh-CN', 'zh', 'en'] });
-                Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
-                """
-            )
-
-            try:
-                page_ref.goto(url, wait_until="domcontentloaded", timeout=45000)
-                page_ref.wait_for_load_state("networkidle", timeout=15000)
-            except PlaywrightTimeoutError as exc:
-                raise DomesticSearchError("1688 页面打开超时，请稍后重试。") from exc
-
-            if looks_like_antibot(page_ref):
-                if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
-                    page_ref.bring_to_front()
-                    page_ref.wait_for_timeout(manual_solve_timeout_ms)
-                    if not looks_like_antibot(page_ref):
-                        wait_for_results(page_ref)
-                        items = extract_items(page_ref)
-                        if items:
-                            return items
-                dump_debug_artifacts(page_ref, debug_dir, "anti_bot")
-                raise DomesticSearchError(
-                    "1688 返回了风控/验证码页面，当前需要你本地手动确认登录态、验证码或 selector。"
+                context.add_init_script(
+                    """
+                    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+                    window.chrome = window.chrome || { runtime: {} };
+                    Object.defineProperty(navigator, 'languages', { get: () => ['zh-CN', 'zh', 'en'] });
+                    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
+                    """
                 )
 
-            wait_for_results(page_ref)
-            items = extract_items(page_ref)
-            if not items:
-                if looks_like_empty_result(page_ref):
-                    return []
-                dump_debug_artifacts(page_ref, debug_dir, "no_results")
-                raise DomesticSearchError(
-                    "1688 页面已打开，但未解析到商品卡片。需要我本地在浏览器中确认 selector。"
-                )
-            return items
+                try:
+                    page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
+                except PlaywrightTimeoutError as exc:
+                    if not page_ref.url or page_ref.url == "about:blank":
+                        raise DomesticSearchError("1688 页面打开超时，请稍后重试。") from exc
+                try:
+                    page_ref.wait_for_load_state("networkidle", timeout=15000)
+                except PlaywrightTimeoutError:
+                    # 1688 长轮询较多，networkidle 不稳定，不作为硬失败条件。
+                    pass
+
+                if looks_like_antibot(page_ref):
+                    if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
+                        page_ref.bring_to_front()
+                        page_ref.wait_for_timeout(manual_solve_timeout_ms)
+                        if not looks_like_antibot(page_ref):
+                            wait_for_results(page_ref)
+                            items = extract_items(page_ref)
+                            if items:
+                                return items
+                    dump_debug_artifacts(page_ref, debug_dir, "anti_bot")
+                    raise DomesticVerificationRequiredError(
+                        f"1688 返回了风控/验证码页面，已预留约 {manual_solve_timeout_ms // 1000} 秒人工登录/验证时间，请完成后重试。"
+                    )
+
+                wait_for_results(page_ref)
+                items = extract_items(page_ref)
+                if not items:
+                    if looks_like_empty_result(page_ref):
+                        return []
+                    dump_debug_artifacts(page_ref, debug_dir, "no_results")
+                    raise DomesticSearchError(
+                        "1688 页面已打开，但未解析到商品卡片。需要我本地在浏览器中确认 selector。"
+                    )
+                return items
             
     except DomesticSearchError:
         raise
@@ -225,86 +243,81 @@ def _fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
     url = f"https://detail.1688.com/offer/{external_item_id}.html?offerId={external_item_id}"
     headless = env_flag("PLAYWRIGHT_HEADLESS", False)
     slow_mo = int(os.getenv("PLAYWRIGHT_SLOW_MO_MS", "0") or "0")
+    navigation_timeout_ms = int(os.getenv("PLAYWRIGHT_NAVIGATION_TIMEOUT_MS", "120000") or "120000")
     debug_dir = os.getenv("PLAYWRIGHT_DEBUG_DIR", "").strip()
     storage_state_path = os.getenv("PLAYWRIGHT_STORAGE_STATE_PATH", "").strip()
     browser_channel = os.getenv("PLAYWRIGHT_BROWSER_CHANNEL", "chrome").strip()
-    user_data_dir = os.getenv("PLAYWRIGHT_USER_DATA_DIR", "").strip()
-    manual_solve_timeout_ms = int(os.getenv("PLAYWRIGHT_MANUAL_SOLVE_TIMEOUT_MS", "0") or "0")
-    allow_manual_solve = env_flag("PLAYWRIGHT_ALLOW_MANUAL_SOLVE", False)
+    user_data_dir = resolve_user_data_dir()
+    manual_solve_timeout_ms = int(os.getenv("PLAYWRIGHT_MANUAL_SOLVE_TIMEOUT_MS", "180000") or "180000")
+    allow_manual_solve = env_flag("PLAYWRIGHT_ALLOW_MANUAL_SOLVE", True)
     cdp_url = os.getenv("PLAYWRIGHT_CDP_URL", "").strip()
 
     try:
-        with sync_playwright() as playwright:
-            launch_kwargs: dict[str, Any] = {
-                "headless": headless,
-                "slow_mo": slow_mo,
-                "args": [
-                    "--disable-blink-features=AutomationControlled",
-                    "--lang=zh-CN",
-                ],
-            }
-            if browser_channel:
-                launch_kwargs["channel"] = browser_channel
-            context_kwargs: dict[str, Any] = {
-                "locale": "zh-CN",
-                "timezone_id": "Asia/Shanghai",
-                "viewport": {"width": 1600, "height": 1200},
-                "user_agent": (
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-                ),
-            }
-            if storage_state_path and Path(storage_state_path).exists():
-                context_kwargs["storage_state"] = storage_state_path
-            if cdp_url:
-                browser = playwright.chromium.connect_over_cdp(cdp_url)
-                context = browser.contexts[0] if browser.contexts else browser.new_context(**context_kwargs)
-                page_ref = context.new_page()
-            elif user_data_dir:
-                persistent_kwargs = dict(context_kwargs)
-                persistent_kwargs.pop("storage_state", None)
-                context = playwright.chromium.launch_persistent_context(
-                    user_data_dir,
-                    **launch_kwargs,
-                    **persistent_kwargs,
+        with DOMESTIC_BROWSER_LOCK:
+            with sync_playwright() as playwright:
+                launch_kwargs: dict[str, Any] = {
+                    "headless": headless,
+                    "slow_mo": slow_mo,
+                    "args": [
+                        "--disable-blink-features=AutomationControlled",
+                        "--lang=zh-CN",
+                    ],
+                }
+                if browser_channel:
+                    launch_kwargs["channel"] = browser_channel
+                context_kwargs: dict[str, Any] = {
+                    "locale": "zh-CN",
+                    "timezone_id": "Asia/Shanghai",
+                    "viewport": {"width": 1600, "height": 1200},
+                    "user_agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+                    ),
+                }
+                if storage_state_path and Path(storage_state_path).exists():
+                    context_kwargs["storage_state"] = storage_state_path
+                context, page_ref = open_browser_context(
+                    playwright,
+                    cdp_url=cdp_url,
+                    user_data_dir=user_data_dir,
+                    launch_kwargs=launch_kwargs,
+                    context_kwargs=context_kwargs,
                 )
-                page_ref = context.pages[0] if context.pages else context.new_page()
-            else:
-                browser = playwright.chromium.launch(**launch_kwargs)
-                context = browser.new_context(**context_kwargs)
-                page_ref = context.new_page()
-            context.add_init_script(
-                """
-                Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-                window.chrome = window.chrome || { runtime: {} };
-                Object.defineProperty(navigator, 'languages', { get: () => ['zh-CN', 'zh', 'en'] });
-                Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
-                """
-            )
+                context.add_init_script(
+                    """
+                    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+                    window.chrome = window.chrome || { runtime: {} };
+                    Object.defineProperty(navigator, 'languages', { get: () => ['zh-CN', 'zh', 'en'] });
+                    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
+                    """
+                )
 
-            try:
-                page_ref.goto(url, wait_until="domcontentloaded", timeout=45000)
-            except PlaywrightTimeoutError as exc:
-                raise DomesticDetailError("1688 详情页打开超时，请稍后重试。") from exc
+                try:
+                    page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
+                except PlaywrightTimeoutError as exc:
+                    if not page_ref.url or page_ref.url == "about:blank":
+                        raise DomesticDetailError("1688 详情页打开超时，请稍后重试。") from exc
 
-            if looks_like_antibot(page_ref):
-                if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
-                    page_ref.bring_to_front()
-                    page_ref.wait_for_timeout(manual_solve_timeout_ms)
-                    if not looks_like_antibot(page_ref):
-                        wait_for_detail(page_ref)
-                        detail = extract_detail_payload(page_ref, external_item_id)
-                        if detail:
-                            return detail
-                dump_debug_artifacts(page_ref, debug_dir, "detail_anti_bot")
-                raise DomesticDetailError("1688 详情页返回了风控/验证码页面，请先完成本地登录态或验证码。")
+                if looks_like_antibot(page_ref):
+                    if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
+                        page_ref.bring_to_front()
+                        page_ref.wait_for_timeout(manual_solve_timeout_ms)
+                        if not looks_like_antibot(page_ref):
+                            wait_for_detail(page_ref)
+                            detail = extract_detail_payload(page_ref, external_item_id)
+                            if detail:
+                                return detail
+                    dump_debug_artifacts(page_ref, debug_dir, "detail_anti_bot")
+                    raise DomesticVerificationRequiredError(
+                        f"1688 详情页返回了风控/验证码页面，已预留约 {manual_solve_timeout_ms // 1000} 秒人工登录/验证时间，请完成后重试。"
+                    )
 
-            wait_for_detail(page_ref)
-            detail = extract_detail_payload(page_ref, external_item_id)
-            if not detail:
-                dump_debug_artifacts(page_ref, debug_dir, "detail_no_data")
-                raise DomesticDetailError("1688 详情页已打开，但未提取到结构化详情数据。")
-            return detail
+                wait_for_detail(page_ref)
+                detail = extract_detail_payload(page_ref, external_item_id)
+                if not detail:
+                    dump_debug_artifacts(page_ref, debug_dir, "detail_no_data")
+                    raise DomesticDetailError("1688 详情页已打开，但未提取到结构化详情数据。")
+                return detail
     except DomesticDetailError:
         raise
     except PlaywrightError as exc:
@@ -319,6 +332,39 @@ def build_1688_search_url(keyword: str, page: int) -> str:
     if page <= 1:
         return f"https://s.1688.com/selloffer/offer_search.htm?keywords={encoded}"
     return f"https://s.1688.com/selloffer/offer_search.htm?keywords={encoded}&beginPage={page}"
+
+
+def open_browser_context(playwright, *, cdp_url: str, user_data_dir: str, launch_kwargs: dict[str, Any], context_kwargs: dict[str, Any]):
+    if cdp_url:
+        browser = playwright.chromium.connect_over_cdp(cdp_url)
+        context = browser.contexts[0] if browser.contexts else browser.new_context(**context_kwargs)
+        page_ref = context.new_page()
+        return context, page_ref
+
+    if user_data_dir:
+        persistent_kwargs = dict(context_kwargs)
+        persistent_kwargs.pop("storage_state", None)
+        try:
+            context = playwright.chromium.launch_persistent_context(
+                user_data_dir,
+                **launch_kwargs,
+                **persistent_kwargs,
+            )
+            page_ref = context.pages[0] if context.pages else context.new_page()
+            return context, page_ref
+        except PlaywrightError as exc:
+            if not is_profile_lock_error(exc):
+                raise
+
+    browser = playwright.chromium.launch(**launch_kwargs)
+    context = browser.new_context(**context_kwargs)
+    page_ref = context.new_page()
+    return context, page_ref
+
+
+def is_profile_lock_error(exc: Exception) -> bool:
+    message = str(exc)
+    return any(marker in message for marker in PROFILE_LOCK_ERROR_MARKERS)
 
 
 def wait_for_results(page_ref) -> None:

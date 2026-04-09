@@ -16,6 +16,9 @@ public class IntegrationGatewayProperties {
     public static class LlmProperties {
         private boolean enabled = true;
         private boolean forceSimulated = false;
+        private String endpointBase;
+        private int connectTimeoutMillis = 5000;
+        private int readTimeoutMillis = 20000;
         private String chatEndpoint;
         private String model = "glm-5";
         private String apiKey;
@@ -36,6 +39,8 @@ public class IntegrationGatewayProperties {
         private String searchEndpoint;
         private String detailEndpoint;
         private String apiKey;
+        private int connectTimeoutMillis = 5000;
+        private int readTimeoutMillis = 300000;
     }
 
     @Data

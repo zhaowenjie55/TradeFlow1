@@ -82,7 +82,7 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
         return new Phase2WorkflowResult(
                 report,
                 List.of(
-                        log("phase2.rewrite", "已完成真实 GLM 改写，并生成国内检索词。"),
+                        log("phase2.rewrite", "已完成商品标题关键词改写，并生成国内检索词。"),
                         log("phase2.domestic-search", matchExecutionResult.fallbackUsed()
                                 ? "国内实时货源检索未命中，已切换到本地商品库兜底匹配。"
                                 : "已完成 1688 实时货源检索，并结合本地商品库完成混合匹配。"),
@@ -112,7 +112,13 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
         if (matches.isEmpty()) {
             return new DetailHydrationResult(null, 0);
         }
-        List<CandidateMatchRecord> topMatches = matches.stream().limit(3).toList();
+        List<CandidateMatchRecord> topMatches = matches.stream()
+                .filter(this::shouldHydrateDetail)
+                .limit(3)
+                .toList();
+        if (topMatches.isEmpty()) {
+            return new DetailHydrationResult(null, 0);
+        }
         List<ProductDetailSnapshot> snapshots = new ArrayList<>();
         for (CandidateMatchRecord match : topMatches) {
             String externalItemId = match.externalItemId();
@@ -131,6 +137,14 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
             }
         }
         return new DetailHydrationResult(snapshots.isEmpty() ? null : snapshots.get(0), snapshots.size());
+    }
+
+    private boolean shouldHydrateDetail(CandidateMatchRecord match) {
+        String matchSource = match.matchSource();
+        if (matchSource == null || matchSource.isBlank()) {
+            return false;
+        }
+        return matchSource.contains("REALTIME");
     }
 
     private record DetailHydrationResult(ProductDetailSnapshot primaryDetail, int loadedCount) {
