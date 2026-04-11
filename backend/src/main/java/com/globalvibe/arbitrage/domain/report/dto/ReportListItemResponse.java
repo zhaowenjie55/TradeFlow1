@@ -11,6 +11,10 @@ public record ReportListItemResponse(
         String decision,
         BigDecimal margin,
         String riskLevel,
+        String qualityTier,
+        boolean fallbackUsed,
+        String retrievalSource,
+        String detailSource,
         OffsetDateTime generatedAt
 ) {
 }

@@ -21,6 +21,7 @@ public record ReportDetailVO(
         List<String> recommendations,
         List<DomesticProductMatchVO> domesticMatches,
         AnalysisTraceVO analysisTrace,
+        ReportProvenanceVO provenance,
         ReportDownloadDocumentVO downloadDocument
 ) {
 }

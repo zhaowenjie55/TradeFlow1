@@ -10,6 +10,7 @@ import com.globalvibe.arbitrage.domain.report.dto.ReportCostBreakdownVO;
 import com.globalvibe.arbitrage.domain.report.dto.ReportDetailVO;
 import com.globalvibe.arbitrage.domain.report.dto.ReportDownloadDocumentVO;
 import com.globalvibe.arbitrage.domain.report.dto.ReportListItemResponse;
+import com.globalvibe.arbitrage.domain.report.dto.ReportProvenanceVO;
 import com.globalvibe.arbitrage.domain.report.dto.ReportRiskAssessmentVO;
 import com.globalvibe.arbitrage.domain.report.dto.ReportSummaryVO;
 import com.globalvibe.arbitrage.domain.report.model.ArbitrageReport;
@@ -27,6 +28,12 @@ import java.util.Map;
 @Component
 public class ReportViewAssembler {
 
+    private final ReportPdfRenderer reportPdfRenderer;
+
+    public ReportViewAssembler(ReportPdfRenderer reportPdfRenderer) {
+        this.reportPdfRenderer = reportPdfRenderer;
+    }
+
     public ReportListItemResponse toListItem(String taskId, ArbitrageReport report) {
         return new ReportListItemResponse(
                 taskId,
@@ -36,12 +43,30 @@ public class ReportViewAssembler {
                 report.decision(),
                 report.expectedMargin(),
                 report.riskLevel(),
+                null,
+                false,
+                null,
+                null,
                 report.generatedAt()
         );
     }
 
     public ReportListItemResponse toListItem(ReportAggregate aggregate) {
-        return toListItem(aggregate.taskId(), aggregate.report());
+        ArbitrageReport report = aggregate.report();
+        return new ReportListItemResponse(
+                aggregate.taskId(),
+                report.reportId(),
+                report.productId(),
+                report.title(),
+                report.decision(),
+                report.expectedMargin(),
+                report.riskLevel(),
+                aggregate.provenance() != null ? aggregate.provenance().qualityTier() : null,
+                aggregate.provenance() != null && aggregate.provenance().fallbackUsed(),
+                aggregate.provenance() != null ? aggregate.provenance().retrievalSource() : null,
+                aggregate.provenance() != null ? aggregate.provenance().detailSource() : null,
+                report.generatedAt()
+        );
     }
 
     public ReportDetailVO toDetail(String taskId, ArbitrageReport report) {
@@ -62,6 +87,7 @@ public class ReportViewAssembler {
                 report.recommendations() == null ? List.of() : report.recommendations(),
                 report.domesticMatches() == null ? List.of() : report.domesticMatches().stream().map(this::toDomesticMatch).toList(),
                 toAnalysisTrace(report.analysisTrace()),
+                null,
                 null
         );
     }
@@ -85,17 +111,13 @@ public class ReportViewAssembler {
                 report.recommendations() == null ? List.of() : report.recommendations(),
                 report.domesticMatches() == null ? List.of() : report.domesticMatches().stream().map(this::toDomesticMatch).toList(),
                 toAnalysisTrace(report.analysisTrace()),
+                toProvenance(aggregate.provenance()),
                 buildDownloadDocument(report, aggregate.reportMarkdown())
         );
     }
 
     private ReportDownloadDocumentVO buildDownloadDocument(ArbitrageReport report, String reportMarkdown) {
-        String fileName = sanitizeFileName(report.title()) + "-agent-report.md";
-        return new ReportDownloadDocumentVO(
-                fileName,
-                "text/markdown;charset=utf-8",
-                reportMarkdown == null ? "" : reportMarkdown
-        );
+        return reportPdfRenderer.render(report, reportMarkdown);
     }
 
     private ReportSummaryVO toSummary(ReportSummary summary) {
@@ -184,12 +206,21 @@ public class ReportViewAssembler {
         );
     }
 
-    private String sanitizeFileName(String value) {
-        return value == null
-                ? "globalvibe-report"
-                : value.trim()
-                .replaceAll("[<>:\"/\\\\|?*\\x00-\\x1F]+", "-")
-                .replaceAll("\\s+", "-")
-                .toLowerCase();
+    private ReportProvenanceVO toProvenance(com.globalvibe.arbitrage.domain.report.model.ReportProvenance provenance) {
+        if (provenance == null) {
+            return null;
+        }
+        return new ReportProvenanceVO(
+                provenance.rewriteProvider(),
+                provenance.rewriteModel(),
+                provenance.retrievalSource(),
+                provenance.detailSource(),
+                provenance.fallbackUsed(),
+                provenance.fallbackReason(),
+                provenance.llmProvider(),
+                provenance.llmModel(),
+                provenance.qualityTier(),
+                provenance.pricingConfigVersion()
+        );
     }
 }

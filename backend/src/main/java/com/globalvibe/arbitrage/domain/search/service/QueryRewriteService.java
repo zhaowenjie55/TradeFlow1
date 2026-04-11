@@ -110,6 +110,10 @@ public class QueryRewriteService {
         if (deduplicated.isEmpty()) {
             deduplicated.add(deriveFallbackDomesticQuery(sourceText));
         }
+        String fixedKeyword = vectorSearchProperties.getFixedKeyword();
+        if (fixedKeyword != null && !fixedKeyword.isBlank()) {
+            deduplicated.add(fixedKeyword.trim());
+        }
         return new ArrayList<>(deduplicated);
     }
 

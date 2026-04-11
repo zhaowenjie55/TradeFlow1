@@ -7,6 +7,7 @@ import com.globalvibe.arbitrage.domain.match.model.CandidateMatchRecord;
 import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.domain.product.model.ProductDetailSnapshot;
 import com.globalvibe.arbitrage.domain.product.repository.ProductRepository;
+import com.globalvibe.arbitrage.domain.report.service.ReportAssembler;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
 import com.globalvibe.arbitrage.integration.llm.LLMGateway;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,18 @@ class ProductAnalysisServiceTest {
         LLMGateway llmGateway = mock(LLMGateway.class);
         ProductRepository productRepository = mock(ProductRepository.class);
         PricingProperties pricingProperties = new PricingProperties();
-        ProductAnalysisService service = new ProductAnalysisService(llmGateway, pricingProperties, productRepository);
+        PricingEngine pricingEngine = new PricingEngine(pricingProperties);
+        MatchSelectionPolicy matchSelectionPolicy = new MatchSelectionPolicy();
+        ReportNarrativeService reportNarrativeService = new ReportNarrativeService(llmGateway);
+        ReportAssembler reportAssembler = new ReportAssembler();
+        ProductAnalysisService service = new ProductAnalysisService(
+                pricingProperties,
+                productRepository,
+                pricingEngine,
+                matchSelectionPolicy,
+                reportNarrativeService,
+                reportAssembler
+        );
 
         when(llmGateway.generateReportNarrative(any())).thenReturn(new LLMGateway.ReportNarrativeResult(
                 "摘要",

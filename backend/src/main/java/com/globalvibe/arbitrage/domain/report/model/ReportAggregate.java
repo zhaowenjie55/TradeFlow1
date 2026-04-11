@@ -11,6 +11,7 @@ public record ReportAggregate(
         String reportId,
         BigDecimal estimatedProfit,
         BigDecimal estimatedMargin,
+        ReportProvenance provenance,
         String reportMarkdown,
         ArbitrageReport report,
         OffsetDateTime createdAt

@@ -30,19 +30,22 @@ public class Phase1TaskProcessor {
     private final TaskExecutionProperties taskExecutionProperties;
     private final CandidateSnapshotService candidateSnapshotService;
     private final SearchRunRepository searchRunRepository;
+    private final TaskStatusTransitionPolicy taskStatusTransitionPolicy;
 
     public Phase1TaskProcessor(
             AnalysisTaskRepository analysisTaskRepository,
             Phase1Workflow phase1Workflow,
             TaskExecutionProperties taskExecutionProperties,
             CandidateSnapshotService candidateSnapshotService,
-            SearchRunRepository searchRunRepository
+            SearchRunRepository searchRunRepository,
+            TaskStatusTransitionPolicy taskStatusTransitionPolicy
     ) {
         this.analysisTaskRepository = analysisTaskRepository;
         this.phase1Workflow = phase1Workflow;
         this.taskExecutionProperties = taskExecutionProperties;
         this.candidateSnapshotService = candidateSnapshotService;
         this.searchRunRepository = searchRunRepository;
+        this.taskStatusTransitionPolicy = taskStatusTransitionPolicy;
     }
 
     @Async(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME)
@@ -58,6 +61,7 @@ public class Phase1TaskProcessor {
             Phase1WorkflowResult workflowResult = phase1Workflow.run(analysisTask);
             analysisTask.getLogs().addAll(workflowResult.logs());
             analysisTask.setCandidates(workflowResult.candidates());
+            taskStatusTransitionPolicy.assertAllowed(analysisTask.getStatus(), TaskStatus.WAITING_USER_SELECTION);
             analysisTask.setStatus(TaskStatus.WAITING_USER_SELECTION);
             analysisTask.setUpdatedAt(OffsetDateTime.now());
             candidateSnapshotService.replaceForTask(analysisTask);
@@ -70,6 +74,7 @@ public class Phase1TaskProcessor {
     }
 
     private void updateStatus(AnalysisTask analysisTask, TaskStatus status, String stage, String message) {
+        taskStatusTransitionPolicy.assertAllowed(analysisTask.getStatus(), status);
         analysisTask.setStatus(status);
         analysisTask.setUpdatedAt(OffsetDateTime.now());
         analysisTask.getLogs().add(new TaskLogEntry(
@@ -141,6 +146,7 @@ public class Phase1TaskProcessor {
     }
 
     private void markTaskFailed(AnalysisTask analysisTask, String stage, String message) {
+        taskStatusTransitionPolicy.assertAllowed(analysisTask.getStatus(), TaskStatus.FAILED);
         analysisTask.setStatus(TaskStatus.FAILED);
         analysisTask.setUpdatedAt(OffsetDateTime.now());
         analysisTask.getLogs().add(new TaskLogEntry(

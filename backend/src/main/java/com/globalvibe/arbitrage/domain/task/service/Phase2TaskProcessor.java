@@ -23,17 +23,20 @@ public class Phase2TaskProcessor {
     private final Phase2Workflow phase2Workflow;
     private final TaskExecutionProperties taskExecutionProperties;
     private final ReportAggregateService reportAggregateService;
+    private final TaskStatusTransitionPolicy taskStatusTransitionPolicy;
 
     public Phase2TaskProcessor(
             AnalysisTaskRepository analysisTaskRepository,
             Phase2Workflow phase2Workflow,
             TaskExecutionProperties taskExecutionProperties,
-            ReportAggregateService reportAggregateService
+            ReportAggregateService reportAggregateService,
+            TaskStatusTransitionPolicy taskStatusTransitionPolicy
     ) {
         this.analysisTaskRepository = analysisTaskRepository;
         this.phase2Workflow = phase2Workflow;
         this.taskExecutionProperties = taskExecutionProperties;
         this.reportAggregateService = reportAggregateService;
+        this.taskStatusTransitionPolicy = taskStatusTransitionPolicy;
     }
 
     @Async(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME)
@@ -56,6 +59,7 @@ public class Phase2TaskProcessor {
                     .map(match -> match.externalItemId())
                     .toList());
             phase2Task.setReportId(workflowResult.report().reportId());
+            taskStatusTransitionPolicy.assertAllowed(phase2Task.getStatus(), TaskStatus.REPORT_READY);
             phase2Task.setStatus(TaskStatus.REPORT_READY);
             phase2Task.setUpdatedAt(OffsetDateTime.now());
             analysisTaskRepository.save(phase2Task);
@@ -68,6 +72,7 @@ public class Phase2TaskProcessor {
     }
 
     private void updateStatus(AnalysisTask analysisTask, TaskStatus status, String stage, String message) {
+        taskStatusTransitionPolicy.assertAllowed(analysisTask.getStatus(), status);
         analysisTask.setStatus(status);
         analysisTask.setUpdatedAt(OffsetDateTime.now());
         analysisTask.getLogs().add(new TaskLogEntry(
@@ -89,6 +94,7 @@ public class Phase2TaskProcessor {
     }
 
     private void markFailed(AnalysisTask analysisTask, String stage, String message) {
+        taskStatusTransitionPolicy.assertAllowed(analysisTask.getStatus(), TaskStatus.FAILED);
         analysisTask.setStatus(TaskStatus.FAILED);
         analysisTask.setUpdatedAt(OffsetDateTime.now());
         analysisTask.getLogs().add(new TaskLogEntry(
@@ -102,6 +108,7 @@ public class Phase2TaskProcessor {
     }
 
     private void markWaitingVerification(AnalysisTask analysisTask, String message) {
+        taskStatusTransitionPolicy.assertAllowed(analysisTask.getStatus(), TaskStatus.WAITING_1688_VERIFICATION);
         analysisTask.setStatus(TaskStatus.WAITING_1688_VERIFICATION);
         analysisTask.setUpdatedAt(OffsetDateTime.now());
         analysisTask.getLogs().add(new TaskLogEntry(

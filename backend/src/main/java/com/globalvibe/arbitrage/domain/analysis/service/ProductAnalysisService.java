@@ -12,20 +12,15 @@ import com.globalvibe.arbitrage.domain.report.model.AnalysisTracePricing;
 import com.globalvibe.arbitrage.domain.report.model.AnalysisTraceRetrieval;
 import com.globalvibe.arbitrage.domain.report.model.AnalysisTraceRewrite;
 import com.globalvibe.arbitrage.domain.report.model.ArbitrageReport;
-import com.globalvibe.arbitrage.domain.report.model.DomesticProductMatch;
-import com.globalvibe.arbitrage.domain.report.model.ReportCostBreakdown;
-import com.globalvibe.arbitrage.domain.report.model.ReportRiskAssessment;
-import com.globalvibe.arbitrage.domain.report.model.ReportSummary;
+import com.globalvibe.arbitrage.domain.report.service.ReportAssembler;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
 import com.globalvibe.arbitrage.integration.llm.LLMGateway;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,20 +30,31 @@ import java.util.regex.Pattern;
 @Service
 public class ProductAnalysisService {
 
-    private static final Pattern SHIPPING_AMOUNT_PATTERN = Pattern.compile("(?:运费\\s*[¥￥]?|[¥￥])\\s*(\\d+(?:\\.\\d+)?)");
+    private static final Pattern SHIPPING_AMOUNT_PATTERN = Pattern.compile(
+            "(?:运费\\s*[¥￥]?\\s*(\\d+(?:\\.\\d+)?)|[¥￥]\\s*(\\d+(?:\\.\\d+)?)|(\\d+(?:\\.\\d+)?)\\s*元)"
+    );
 
-    private final LLMGateway llmGateway;
     private final PricingProperties pricingProperties;
     private final ProductRepository productRepository;
+    private final PricingEngine pricingEngine;
+    private final MatchSelectionPolicy matchSelectionPolicy;
+    private final ReportNarrativeService reportNarrativeService;
+    private final ReportAssembler reportAssembler;
 
     public ProductAnalysisService(
-            LLMGateway llmGateway,
             PricingProperties pricingProperties,
-            ProductRepository productRepository
+            ProductRepository productRepository,
+            PricingEngine pricingEngine,
+            MatchSelectionPolicy matchSelectionPolicy,
+            ReportNarrativeService reportNarrativeService,
+            ReportAssembler reportAssembler
     ) {
-        this.llmGateway = llmGateway;
         this.pricingProperties = pricingProperties;
         this.productRepository = productRepository;
+        this.pricingEngine = pricingEngine;
+        this.matchSelectionPolicy = matchSelectionPolicy;
+        this.reportNarrativeService = reportNarrativeService;
+        this.reportAssembler = reportAssembler;
     }
 
     public ArbitrageReport buildReport(
@@ -58,12 +64,7 @@ public class ProductAnalysisService {
             QueryRewrite queryRewrite,
             List<CandidateMatchRecord> domesticMatches
     ) {
-        List<CandidateMatchRecord> topDomesticMatches = domesticMatches.stream()
-                .sorted(java.util.Comparator
-                        .comparing(CandidateMatchRecord::similarityScore, java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder()))
-                        .thenComparing(CandidateMatchRecord::price, java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder())))
-                .limit(3)
-                .toList();
+        List<CandidateMatchRecord> topDomesticMatches = matchSelectionPolicy.selectTopMatches(domesticMatches, 3);
         Map<String, ProductDetailSnapshot> detailSnapshots = loadDetailSnapshots(topDomesticMatches);
 
         CandidateMatchRecord benchmark = topDomesticMatches.isEmpty() ? null : topDomesticMatches.get(0);
@@ -71,50 +72,35 @@ public class ProductAnalysisService {
         BigDecimal amazonPriceUsd = candidate.overseasPrice() != null
                 ? scale(candidate.overseasPrice())
                 : extractDecimal(sourceProduct, "priceAmountUsd").orElse(BigDecimal.ZERO);
-        BigDecimal usdToCnyRate = pricingProperties.getUsdToCnyRate();
-        BigDecimal amazonPriceRmb = scale(amazonPriceUsd.multiply(usdToCnyRate));
-        BigDecimal sourcingCost = benchmark != null && benchmark.price() != null
-                ? scale(benchmark.price())
-                : scale(amazonPriceRmb.multiply(pricingProperties.getFallbackSourcingRate()));
         ShippingResolution shippingResolution = resolveShipping(domesticDetail);
         String shippingText = shippingResolution.text();
         boolean usedDefaultShipping = shippingResolution.usedDefault();
-        BigDecimal domesticShippingCost = shippingResolution.cost();
-        BigDecimal logisticsCost = scale(amazonPriceRmb.multiply(pricingProperties.getCrossBorderLogisticsRate()));
-        BigDecimal platformFee = scale(amazonPriceRmb.multiply(pricingProperties.getPlatformFeeRate()));
-        BigDecimal exchangeRateCost = scale(amazonPriceRmb.multiply(pricingProperties.getExchangeLossRate()));
-        BigDecimal totalCost = scale(sourcingCost
-                .add(domesticShippingCost)
-                .add(logisticsCost)
-                .add(platformFee)
-                .add(exchangeRateCost));
-        BigDecimal estimatedProfit = scale(amazonPriceRmb.subtract(totalCost));
-        BigDecimal expectedMargin = amazonPriceRmb.compareTo(BigDecimal.ZERO) == 0
-                ? BigDecimal.ZERO
-                : scale(estimatedProfit.divide(amazonPriceRmb, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)));
+        PricingEngine.PricingBreakdown pricing = pricingEngine.calculate(
+                amazonPriceUsd,
+                benchmark != null ? benchmark.price() : null,
+                shippingResolution.cost()
+        );
+        BigDecimal usdToCnyRate = pricing.usdToCnyRate();
+        BigDecimal amazonPriceRmb = pricing.amazonPriceRmb();
+        BigDecimal sourcingCost = pricing.sourcingCost();
+        BigDecimal domesticShippingCost = pricing.domesticShippingCost();
+        BigDecimal logisticsCost = pricing.logisticsCost();
+        BigDecimal platformFee = pricing.platformFee();
+        BigDecimal exchangeRateCost = pricing.exchangeRateCost();
+        BigDecimal totalCost = pricing.totalCost();
+        BigDecimal estimatedProfit = pricing.estimatedProfit();
+        BigDecimal expectedMargin = pricing.expectedMargin();
 
-        String benchmarkTitle = benchmark != null ? benchmark.title() : "暂无稳定 1688 对标货源";
-        LLMGateway.ReportNarrativeResult narrative = llmGateway.generateReportNarrative(
-                new LLMGateway.ReportNarrativeRequest(
-                        candidate.title(),
-                        candidate.market(),
-                        queryRewrite.rewrittenText(),
-                        queryRewrite.keywords(),
-                        resolveDecision(expectedMargin),
-                        resolveRiskLevel(expectedMargin),
-                        amazonPriceUsd,
-                        amazonPriceRmb,
-                        sourcingCost,
-                        domesticShippingCost,
-                        logisticsCost,
-                        platformFee,
-                        exchangeRateCost,
-                        totalCost,
-                        estimatedProfit,
-                        expectedMargin,
-                        benchmarkTitle,
-                        topDomesticMatches.stream().map(CandidateMatchRecord::title).toList()
-                )
+        String decision = resolveDecision(expectedMargin);
+        String riskLevel = resolveRiskLevel(expectedMargin);
+        LLMGateway.ReportNarrativeResult narrative = reportNarrativeService.generate(
+                candidate,
+                queryRewrite,
+                pricing,
+                decision,
+                riskLevel,
+                benchmark,
+                topDomesticMatches
         );
 
         AnalysisTrace analysisTrace = buildAnalysisTrace(
@@ -137,66 +123,24 @@ public class ProductAnalysisService {
                 expectedMargin
         );
 
-        String decision = resolveDecision(expectedMargin);
-        String riskLevel = resolveRiskLevel(expectedMargin);
-
-        return new ArbitrageReport(
-                reportId,
-                candidate.productId(),
-                candidate.title(),
-                candidate.market(),
-                candidate.imageUrl(),
-                decision,
-                riskLevel,
-                expectedMargin,
-                OffsetDateTime.now(),
-                new ReportSummary(
-                        "insights.agentNarrative",
-                        buildSummaryParams(narrative)
-                ),
-                new ReportCostBreakdown(
-                        sourcingCost,
-                        domesticShippingCost,
-                        logisticsCost,
-                        platformFee,
-                        exchangeRateCost,
-                        totalCost,
-                        amazonPriceRmb,
-                        estimatedProfit
-                ),
-                new ReportRiskAssessment(
+        return reportAssembler.assemble(
+                new ReportAssembler.ReportAssemblyInput(
+                        reportId,
+                        candidate,
+                        sourceProduct,
+                        queryRewrite,
+                        benchmark,
+                        topDomesticMatches,
+                        detailSnapshots,
+                        pricing,
+                        decision,
+                        riskLevel,
                         resolveRiskScore(expectedMargin),
-                        List.of("price-competitiveness", "category-demand", "market-benchmark"),
+                        shippingText,
+                        narrative,
+                        analysisTrace,
                         buildRiskNotes(domesticDetail, benchmark, shippingText, usedDefaultShipping)
-                ),
-                buildRecommendations(narrative),
-                topDomesticMatches.stream().map(item -> {
-                    ProductDetailSnapshot detailSnapshot = detailSnapshots.get(item.externalItemId());
-                    boolean detailReady = detailSnapshot != null;
-                    String detailSource = detailReady
-                            ? (item.matchSource() != null && item.matchSource().contains("REALTIME") ? "DOMESTIC_REALTIME_DETAIL" : "DETAIL_SNAPSHOT")
-                            : "SEARCH_RESULT_ONLY";
-                    return new DomesticProductMatch(
-                            item.matchId(),
-                            item.platform(),
-                            item.externalItemId(),
-                            item.title(),
-                            item.price(),
-                            item.image(),
-                            item.similarityScore().setScale(0, RoundingMode.HALF_UP).intValue(),
-                            item.link(),
-                            buildSearchUrl(queryRewrite.rewrittenText()),
-                            item.reason(),
-                            item.matchSource(),
-                            detailReady,
-                            detailSource,
-                            item.retrievalTerms(),
-                            item.scoreBreakdown(),
-                            item.evidence()
-                    );
-                }).toList(),
-                analysisTrace,
-                buildAuditData(sourceProduct, queryRewrite, amazonPriceUsd, amazonPriceRmb, shippingText, narrative, analysisTrace)
+                )
         );
     }
 
@@ -288,17 +232,6 @@ public class ProductAnalysisService {
         return notes;
     }
 
-    private List<String> buildRecommendations(LLMGateway.ReportNarrativeResult narrative) {
-        if (narrative.recommendations() != null && !narrative.recommendations().isEmpty()) {
-            return narrative.recommendations();
-        }
-        return List.of(
-                "优先核对国内 SKU 规格与 Amazon 主卖点是否一致。",
-                "补充真实头程、税费与平台佣金后再确认最终利润。",
-                "结合 Amazon 评论量与评分继续判断需求稳定性。"
-        );
-    }
-
     private String resolveDecision(BigDecimal margin) {
         if (margin.compareTo(BigDecimal.valueOf(18)) >= 0) {
             return "recommended";
@@ -327,47 +260,6 @@ public class ProductAnalysisService {
             return 63;
         }
         return 38;
-    }
-
-    private String buildSearchUrl(String rewrittenQuery) {
-        String keyword = rewrittenQuery == null || rewrittenQuery.isBlank() ? "1688 货源" : rewrittenQuery;
-        return "https://s.1688.com/selloffer/offer_search.htm?keywords=" + java.net.URLEncoder.encode(keyword, java.nio.charset.StandardCharsets.UTF_8);
-    }
-
-    private Map<String, Object> buildSummaryParams(LLMGateway.ReportNarrativeResult narrative) {
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("message", narrative.summaryText());
-        params.put("provider", narrative.provider());
-        params.put("model", narrative.model());
-        params.put("currency", "CNY");
-        return params;
-    }
-
-    private Map<String, Object> buildAuditData(
-            Product sourceProduct,
-            QueryRewrite queryRewrite,
-            BigDecimal amazonPriceUsd,
-            BigDecimal amazonPriceRmb,
-            String shippingText,
-            LLMGateway.ReportNarrativeResult narrative,
-            AnalysisTrace analysisTrace
-    ) {
-        Map<String, Object> auditData = new LinkedHashMap<>();
-        auditData.put("priceAmountUsd", amazonPriceUsd);
-        auditData.put("usdToCnyRate", pricingProperties.getUsdToCnyRate());
-        auditData.put("amazonPriceRmb", amazonPriceRmb);
-        auditData.put("shippingText", shippingText);
-        auditData.put("rewrittenText", queryRewrite.rewrittenText());
-        auditData.put("rewrittenKeywords", queryRewrite.keywords());
-        auditData.put("rewriteProvider", queryRewrite.gatewaySource());
-        auditData.put("rewriteModel", queryRewrite.gatewayModel());
-        auditData.put("narrativeProvider", narrative.provider());
-        auditData.put("narrativeModel", narrative.model());
-        auditData.put("analysisTrace", analysisTrace);
-        if (sourceProduct != null && sourceProduct.rawData() != null && !sourceProduct.rawData().isEmpty()) {
-            auditData.put("sourceRawData", sourceProduct.rawData());
-        }
-        return auditData;
     }
 
     private Optional<BigDecimal> extractDecimal(Product sourceProduct, String key) {
@@ -420,7 +312,14 @@ public class ProductAnalysisService {
 
         Matcher matcher = SHIPPING_AMOUNT_PATTERN.matcher(normalizedText);
         if (matcher.find()) {
-            BigDecimal cost = scale(new BigDecimal(matcher.group(1)));
+            String amount = matcher.group(1);
+            if (amount == null) {
+                amount = matcher.group(2);
+            }
+            if (amount == null) {
+                amount = matcher.group(3);
+            }
+            BigDecimal cost = scale(new BigDecimal(amount));
             boolean suspiciousZero = BigDecimal.ZERO.compareTo(cost) == 0
                     && !normalizedText.contains("包邮")
                     && !normalizedText.contains("免运费");

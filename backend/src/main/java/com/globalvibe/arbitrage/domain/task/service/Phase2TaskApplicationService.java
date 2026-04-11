@@ -19,15 +19,18 @@ public class Phase2TaskApplicationService {
     private final AnalysisTaskRepository analysisTaskRepository;
     private final Phase2TaskProcessor phase2TaskProcessor;
     private final AnalysisTaskFactory analysisTaskFactory;
+    private final TaskStatusTransitionPolicy taskStatusTransitionPolicy;
 
     public Phase2TaskApplicationService(
             AnalysisTaskRepository analysisTaskRepository,
             Phase2TaskProcessor phase2TaskProcessor,
-            AnalysisTaskFactory analysisTaskFactory
+            AnalysisTaskFactory analysisTaskFactory,
+            TaskStatusTransitionPolicy taskStatusTransitionPolicy
     ) {
         this.analysisTaskRepository = analysisTaskRepository;
         this.phase2TaskProcessor = phase2TaskProcessor;
         this.analysisTaskFactory = analysisTaskFactory;
+        this.taskStatusTransitionPolicy = taskStatusTransitionPolicy;
     }
 
     public Phase2CreateTaskResponse createTask(Phase2CreateTaskRequest request) {
@@ -66,6 +69,7 @@ public class Phase2TaskApplicationService {
             throw new InvalidTaskContextException("当前任务不处于等待 1688 验证状态，无法继续抓取。");
         }
 
+        taskStatusTransitionPolicy.assertAllowed(phase2Task.getStatus(), TaskStatus.QUEUED);
         phase2Task.setStatus(TaskStatus.QUEUED);
         phase2Task.setUpdatedAt(OffsetDateTime.now());
         phase2Task.getLogs().add(new TaskLogEntry(
