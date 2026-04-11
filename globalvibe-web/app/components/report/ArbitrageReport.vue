@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { getReportByTaskId } from '~/services/report'
 import type { DomesticProductMatch, ReportDetail } from '~/types'
-import { compactNarrativeSummary, getReadableMatchTitle, getReadableOriginalTitle, getReadableProductName, getReportFileName } from '~/utils/presentation'
+import {
+  compactNarrativeSummary,
+  getReadableMatchTitle,
+  getReadableOriginalTitle,
+  getReadableProductName,
+  getReportFileName,
+  humanizeQualityTier,
+  humanizeReportSource,
+} from '~/utils/presentation'
 
 const props = withDefaults(defineProps<{
   report?: ReportDetail | null
@@ -120,21 +128,50 @@ const originalTitle = computed(() => {
 const displayMatchTitle = (match: DomesticProductMatch) => getReadableMatchTitle(match)
 const originalMatchTitle = (match: DomesticProductMatch) => getReadableOriginalTitle(match.title, displayMatchTitle(match))
 const detailReadyLabel = (match: DomesticProductMatch) => t(match.detailReady ? 'report.detailReady' : 'report.detailPending')
-const humanizeSourceLabel = (value?: string | null) => {
-  if (!value) return '--'
-
-  const labels: Record<string, string> = {
-    DOMESTIC_REALTIME: t('report.sourceRealtime'),
-    DOMESTIC_REALTIME_HYBRID: t('report.sourceRealtimeHybrid'),
-    CATALOG_TEXT: t('report.sourceCatalog'),
-    DETAIL_SNAPSHOT: t('report.sourceDetailSnapshot'),
-    DOMESTIC_REALTIME_DETAIL: t('report.sourceRealtimeDetail'),
-  }
-
-  return labels[value] ?? value
-}
+const humanizeSourceLabel = (value?: string | null) => humanizeReportSource(value, t)
 const detailSourceLabel = (match: DomesticProductMatch) => humanizeSourceLabel(match.detailSource)
 const matchSourceLabel = (match: DomesticProductMatch) => humanizeSourceLabel(match.matchSource)
+const provenance = computed(() => report.value?.provenance ?? null)
+const retrievalSourceLabel = computed(() => {
+  if (provenance.value?.retrievalSource) return humanizeSourceLabel(provenance.value.retrievalSource)
+  return humanizeSourceLabel(report.value?.analysisTrace?.retrieval?.matchSource ?? report.value?.domesticMatches?.[0]?.matchSource ?? null)
+})
+const reportDetailSourceLabel = computed(() => {
+  if (provenance.value?.detailSource) return humanizeSourceLabel(provenance.value.detailSource)
+  return humanizeSourceLabel(report.value?.domesticMatches?.[0]?.detailSource ?? null)
+})
+const fallbackReasonText = computed(() => provenance.value?.fallbackReason?.trim() ?? '')
+const provenanceBadges = computed(() => {
+  if (!report.value) return []
+
+  return [
+    {
+      key: 'qualityTier',
+      label: t('report.qualityTier'),
+      value: humanizeQualityTier(provenance.value?.qualityTier),
+    },
+    {
+      key: 'fallback',
+      label: t('report.fallback'),
+      value: t(provenance.value?.fallbackUsed ? 'common.yes' : 'common.no'),
+    },
+    {
+      key: 'retrieval',
+      label: t('report.matchSource'),
+      value: retrievalSourceLabel.value,
+    },
+    {
+      key: 'detail',
+      label: t('report.detailSource'),
+      value: reportDetailSourceLabel.value,
+    },
+    {
+      key: 'pricing',
+      label: t('report.pricingConfigVersion'),
+      value: provenance.value?.pricingConfigVersion ?? '--',
+    },
+  ].filter(item => item.value && item.value !== '--')
+})
 
 const headlineMetrics = computed(() => {
   if (!report.value) return []
@@ -455,6 +492,22 @@ const downloadDocument = () => {
             <p class="mt-1 text-base font-semibold text-slate-900 dark:text-slate-100">{{ metric.value }}</p>
           </div>
         </div>
+
+        <div v-if="provenanceBadges.length" class="mt-3 flex flex-wrap gap-2">
+          <span
+            v-for="badge in provenanceBadges"
+            :key="badge.key"
+            class="rounded-full border border-[var(--tf-border)] bg-white/80 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:bg-slate-950/80 dark:text-slate-300"
+          >
+            {{ badge.label }}: {{ badge.value }}
+          </span>
+        </div>
+        <p
+          v-if="fallbackReasonText"
+          class="mt-3 rounded-2xl border border-amber-200 bg-amber-50/80 px-3.5 py-3 text-[12px] leading-6 text-amber-800 dark:border-amber-950/50 dark:bg-amber-950/20 dark:text-amber-200"
+        >
+          {{ t('report.fallbackReason') }}: {{ fallbackReasonText }}
+        </p>
       </div>
 
       <div class="space-y-4">
@@ -586,6 +639,21 @@ const downloadDocument = () => {
                     <p class="mt-1 text-base font-semibold text-slate-900 dark:text-slate-100">{{ item.value }}</p>
                   </div>
                 </div>
+                <div v-if="provenanceBadges.length" class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    v-for="badge in provenanceBadges"
+                    :key="`preview-${badge.key}`"
+                    class="rounded-full border border-[var(--tf-border)] bg-white/80 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:bg-slate-950/80 dark:text-slate-300"
+                  >
+                    {{ badge.label }}: {{ badge.value }}
+                  </span>
+                </div>
+                <p
+                  v-if="fallbackReasonText"
+                  class="mt-3 rounded-2xl border border-amber-200 bg-amber-50/80 px-3.5 py-3 text-[12px] leading-6 text-amber-800 dark:border-amber-950/50 dark:bg-amber-950/20 dark:text-amber-200"
+                >
+                  {{ t('report.fallbackReason') }}: {{ fallbackReasonText }}
+                </p>
               </section>
 
               <section class="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">

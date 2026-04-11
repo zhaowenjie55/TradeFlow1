@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getReportList } from '~/services/report'
 import type { ReportListItem } from '~/types'
-import { getReadableOriginalTitle, getReadableProductName } from '~/utils/presentation'
+import { getReadableOriginalTitle, getReadableProductName, humanizeQualityTier, humanizeReportSource } from '~/utils/presentation'
 
 const { t } = useAppI18n()
 const reports = ref<ReportListItem[]>([])
@@ -17,6 +17,15 @@ onMounted(async () => {
 
 const displayTitle = (title: string) => getReadableProductName(title)
 const originalTitle = (title: string) => getReadableOriginalTitle(title, displayTitle(title))
+const formatPercent = (value?: number | null) => {
+  if (value === null || value === undefined || Number.isNaN(value)) return '--'
+  return `${Number(value).toFixed(1)}%`
+}
+const formatSignedPercent = (value?: number | null) => {
+  if (value === null || value === undefined || Number.isNaN(value)) return '--'
+  const prefix = value > 0 ? '+' : ''
+  return `${prefix}${formatPercent(value)}`
+}
 </script>
 
 <template>
@@ -44,7 +53,19 @@ const originalTitle = (title: string) => getReadableOriginalTitle(title, display
             <span>{{ t(`decision.${report.decision}`) }}</span>
             <span>{{ t(`risk.${report.riskLevel}`) }}</span>
           </div>
-          <p class="mt-3 text-lg font-semibold text-green-600 dark:text-green-400">+{{ report.margin ?? '--' }}%</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {{ t('report.qualityTier') }} {{ humanizeQualityTier(report.qualityTier, t) }}
+            </span>
+            <span class="rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:border-slate-700 dark:text-slate-300">
+              {{ t('report.fallback') }} {{ t(report.fallbackUsed ? 'common.yes' : 'common.no') }}
+            </span>
+          </div>
+          <p class="mt-3 text-lg font-semibold text-green-600 dark:text-green-400">{{ formatSignedPercent(report.margin) }}</p>
+          <div class="mt-3 space-y-1 text-[11px] text-slate-400 dark:text-slate-500">
+            <p>{{ t('report.matchSource') }}: {{ humanizeReportSource(report.retrievalSource, t) }}</p>
+            <p v-if="report.detailSource">{{ t('report.detailSource') }}: {{ humanizeReportSource(report.detailSource, t) }}</p>
+          </div>
           <p class="mt-3 text-xs text-slate-400 dark:text-slate-500">{{ new Date(report.generatedAt).toLocaleString() }}</p>
         </NuxtLink>
       </div>

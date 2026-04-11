@@ -243,3 +243,37 @@ export const getLiveStageMessage = (stage?: string | null) => {
   if (!stage) return '正在继续补充分析过程'
   return LIVE_STAGE_MESSAGES[stage] ?? '正在继续补充分析过程'
 }
+
+export const humanizeReportSource = (
+  value?: string | null,
+  t?: (key: string) => string,
+) => {
+  if (!value) return '--'
+
+  const labels: Record<string, string> = {
+    DOMESTIC_REALTIME: t ? t('report.sourceRealtime') : 'Realtime 1688',
+    DOMESTIC_REALTIME_HYBRID: t ? t('report.sourceRealtimeHybrid') : 'Realtime 1688 + Local Fallback',
+    CATALOG_TEXT: t ? t('report.sourceCatalog') : 'Local Catalog',
+    DETAIL_SNAPSHOT: t ? t('report.sourceDetailSnapshot') : 'Historical Detail Snapshot',
+    DOMESTIC_REALTIME_DETAIL: t ? t('report.sourceRealtimeDetail') : 'Realtime 1688 Detail',
+    SEARCH_RESULT_ONLY: t ? t('report.detailPending') : 'Search Only',
+  }
+
+  return labels[value] ?? value
+}
+
+export const humanizeQualityTier = (
+  value?: string | null,
+  t?: (key: string) => string,
+) => {
+  if (!value) return '--'
+
+  const labels: Record<string, string> = {
+    REALTIME_CONFIRMED: t ? t('report.qualityRealtimeConfirmed') : 'Realtime Confirmed',
+    REALTIME_HYBRID: t ? t('report.qualityRealtimeHybrid') : 'Realtime Hybrid',
+    SNAPSHOT_FALLBACK: t ? t('report.qualitySnapshotFallback') : 'Snapshot Fallback',
+    LLM_FALLBACK_ASSISTED: t ? t('report.qualityLlmFallbackAssisted') : 'LLM Fallback Assisted',
+  }
+
+  return labels[value] ?? value
+}

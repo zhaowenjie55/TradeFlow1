@@ -82,6 +82,19 @@ export interface AnalysisTrace {
   llm: AnalysisTraceLlm | null
 }
 
+export interface ReportProvenance {
+  rewriteProvider: string | null
+  rewriteModel: string | null
+  retrievalSource: string | null
+  detailSource: string | null
+  fallbackUsed: boolean
+  fallbackReason: string | null
+  llmProvider: string | null
+  llmModel: string | null
+  qualityTier: string | null
+  pricingConfigVersion: string | null
+}
+
 export interface ReportDetail {
   taskId: string
   reportId: string
@@ -99,6 +112,7 @@ export interface ReportDetail {
   recommendations: string[]
   domesticMatches: DomesticProductMatch[]
   analysisTrace?: AnalysisTrace | null
+  provenance?: ReportProvenance | null
   downloadDocument?: ReportDownloadDocument
 }
 
@@ -111,6 +125,10 @@ export interface ReportListItem {
   margin: number | null
   riskLevel: RiskLevel
   generatedAt: string
+  qualityTier?: string | null
+  fallbackUsed?: boolean
+  retrievalSource?: string | null
+  detailSource?: string | null
 }
 
 export interface ReportListResponse {
