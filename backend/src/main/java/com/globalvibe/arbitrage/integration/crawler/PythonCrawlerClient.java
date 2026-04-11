@@ -18,8 +18,11 @@ public class PythonCrawlerClient {
     private final RestClient restClient;
     private final IntegrationGatewayProperties integrationGatewayProperties;
 
-    public PythonCrawlerClient(IntegrationGatewayProperties integrationGatewayProperties) {
-        this.restClient = RestClient.builder().build();
+    public PythonCrawlerClient(
+            RestClient.Builder restClientBuilder,
+            IntegrationGatewayProperties integrationGatewayProperties
+    ) {
+        this.restClient = restClientBuilder.build();
         this.integrationGatewayProperties = integrationGatewayProperties;
     }
 

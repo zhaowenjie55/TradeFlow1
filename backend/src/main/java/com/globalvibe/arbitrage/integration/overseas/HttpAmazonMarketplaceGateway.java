@@ -19,8 +19,11 @@ public class HttpAmazonMarketplaceGateway {
     private final RestClient restClient;
     private final IntegrationGatewayProperties integrationGatewayProperties;
 
-    public HttpAmazonMarketplaceGateway(IntegrationGatewayProperties integrationGatewayProperties) {
-        this.restClient = RestClient.builder().build();
+    public HttpAmazonMarketplaceGateway(
+            RestClient.Builder restClientBuilder,
+            IntegrationGatewayProperties integrationGatewayProperties
+    ) {
+        this.restClient = restClientBuilder.build();
         this.integrationGatewayProperties = integrationGatewayProperties;
     }
 

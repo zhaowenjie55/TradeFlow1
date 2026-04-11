@@ -1,7 +1,9 @@
 package com.globalvibe.arbitrage.integration.llm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.globalvibe.arbitrage.common.tracing.TraceIdFilter;
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -129,12 +131,16 @@ public class FastApiLLMGateway {
         byte[] responseBody;
         int statusCode;
         try {
-            HttpRequest request = HttpRequest.newBuilder()
+            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                     .uri(URI.create(endpointBase + path))
                     .timeout(Duration.ofMillis(integrationGatewayProperties.getLlm().getReadTimeoutMillis()))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(body), StandardCharsets.UTF_8))
-                    .build();
+                    .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(body), StandardCharsets.UTF_8));
+            String traceId = MDC.get(TraceIdFilter.MDC_KEY);
+            if (traceId != null && !traceId.isBlank()) {
+                requestBuilder.header(TraceIdFilter.TRACE_ID_HEADER, traceId);
+            }
+            HttpRequest request = requestBuilder.build();
             HttpResponse<byte[]> response = httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
             statusCode = response.statusCode();
             responseBody = response.body();

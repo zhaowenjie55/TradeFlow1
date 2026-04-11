@@ -32,6 +32,7 @@ public class Http1688MarketplaceGateway {
     private final ObjectMapper objectMapper;
 
     public Http1688MarketplaceGateway(
+            RestClient.Builder restClientBuilder,
             IntegrationGatewayProperties integrationGatewayProperties,
             ObjectMapper objectMapper
     ) {
@@ -39,7 +40,7 @@ public class Http1688MarketplaceGateway {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(domesticProperties.getConnectTimeoutMillis());
         requestFactory.setReadTimeout(domesticProperties.getReadTimeoutMillis());
-        this.restClient = RestClient.builder()
+        this.restClient = restClientBuilder
                 .requestFactory(requestFactory)
                 .build();
         this.integrationGatewayProperties = integrationGatewayProperties;

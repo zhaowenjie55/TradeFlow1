@@ -8,6 +8,7 @@ spring:
       host: ${REDIS_HOST:127.0.0.1}
       port: ${REDIS_PORT:6379}
       database: ${REDIS_DATABASE:0}
+      password: ${REDIS_PASSWORD:}
   threads:
     virtual:
       enabled: true
@@ -16,10 +17,9 @@ spring:
     serialization:
       write-dates-as-timestamps: false
   datasource:
-    url: jdbc:postgresql://47.103.117.192:5432/tradeflow
-    username: postgres
-    password: admin123456
-
+    url: ${SPRING_DATASOURCE_URL:?SPRING_DATASOURCE_URL must be set (see backend/.env.example)}
+    username: ${SPRING_DATASOURCE_USERNAME:?SPRING_DATASOURCE_USERNAME must be set}
+    password: ${SPRING_DATASOURCE_PASSWORD:?SPRING_DATASOURCE_PASSWORD must be set}
     driver-class-name: org.postgresql.Driver
   sql:
     init:
@@ -27,6 +27,10 @@ spring:
 
 server:
   port: ${SERVER_PORT:8080}
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-no-trace}]"
 
 springdoc:
   api-docs:

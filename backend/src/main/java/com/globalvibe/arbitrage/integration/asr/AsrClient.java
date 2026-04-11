@@ -21,12 +21,12 @@ public class AsrClient {
     private final AsrProperties asrProperties;
     private final RestClient restClient;
 
-    public AsrClient(AsrProperties asrProperties) {
+    public AsrClient(RestClient.Builder restClientBuilder, AsrProperties asrProperties) {
         this.asrProperties = asrProperties;
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(asrProperties.getConnectTimeoutMillis());
         requestFactory.setReadTimeout(asrProperties.getReadTimeoutMillis());
-        this.restClient = RestClient.builder()
+        this.restClient = restClientBuilder
                 .requestFactory(requestFactory)
                 .build();
     }

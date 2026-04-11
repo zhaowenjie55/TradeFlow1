@@ -96,13 +96,14 @@ public class HttpLLMGateway {
     private final ObjectMapper objectMapper;
 
     public HttpLLMGateway(
+            RestClient.Builder restClientBuilder,
             IntegrationGatewayProperties integrationGatewayProperties,
             ObjectMapper objectMapper
     ) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(CONNECT_TIMEOUT_MILLIS);
         requestFactory.setReadTimeout(READ_TIMEOUT_MILLIS);
-        this.restClient = RestClient.builder()
+        this.restClient = restClientBuilder
                 .requestFactory(requestFactory)
                 .build();
         this.integrationGatewayProperties = integrationGatewayProperties;
