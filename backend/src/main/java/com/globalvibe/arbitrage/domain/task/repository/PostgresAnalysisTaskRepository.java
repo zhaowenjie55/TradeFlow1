@@ -172,7 +172,8 @@ public class PostgresAnalysisTaskRepository implements AnalysisTaskRepository {
                         rs.getBigDecimal("score"),
                         rs.getString("risk_tag"),
                         rs.getString("recommendation_reason"),
-                        rs.getBoolean("suggest_second_phase")
+                        rs.getBoolean("suggest_second_phase"),
+                        rs.getString("link")
                 ),
                 taskId
         );

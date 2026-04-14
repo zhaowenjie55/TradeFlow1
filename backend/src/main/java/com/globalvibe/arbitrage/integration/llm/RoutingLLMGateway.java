@@ -1,12 +1,16 @@
 package com.globalvibe.arbitrage.integration.llm;
 
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Component
 @Primary
 public class RoutingLLMGateway implements LLMGateway {
+
+    private static final Logger log = LoggerFactory.getLogger(RoutingLLMGateway.class);
 
     private final IntegrationGatewayProperties integrationGatewayProperties;
     private final FastApiLLMGateway fastApiLLMGateway;
@@ -33,6 +37,7 @@ public class RoutingLLMGateway implements LLMGateway {
         try {
             return fastApiLLMGateway.rewriteTitle(sourceTitle);
         } catch (RuntimeException ex) {
+            log.info("LLM rewriteTitle failed, falling back to simulated: {}", ex.getMessage());
             return simulatedLLMGateway.rewriteTitle(sourceTitle, ex.getMessage());
         }
     }
@@ -48,6 +53,7 @@ public class RoutingLLMGateway implements LLMGateway {
         try {
             return fastApiLLMGateway.generateReportNarrative(request);
         } catch (RuntimeException ex) {
+            log.info("LLM generateReportNarrative failed, falling back to simulated: {}", ex.getMessage());
             return simulatedLLMGateway.generateReportNarrative(request, ex.getMessage());
         }
     }
@@ -63,6 +69,7 @@ public class RoutingLLMGateway implements LLMGateway {
         try {
             return fastApiLLMGateway.generateReasoning(request);
         } catch (RuntimeException ex) {
+            log.info("LLM generateReasoning failed, falling back to simulated: {}", ex.getMessage());
             return simulatedLLMGateway.generateReasoning(request, ex.getMessage());
         }
     }
@@ -78,6 +85,7 @@ public class RoutingLLMGateway implements LLMGateway {
         try {
             return fastApiLLMGateway.analyzeTranscript(request);
         } catch (RuntimeException ex) {
+            log.info("LLM analyzeTranscript failed, falling back to simulated: {}", ex.getMessage());
             return simulatedLLMGateway.analyzeTranscript(request, ex.getMessage());
         }
     }

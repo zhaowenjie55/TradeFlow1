@@ -10,12 +10,18 @@ from app.services.providers.provider_1688 import (
     DomesticDetailError,
     DomesticSearchError,
     DomesticVerificationRequiredError,
+    DOMESTIC_SESSION_MANAGER,
     fetch_1688_product_detail,
     search_1688_products,
 )
 
 
 router = APIRouter(prefix="/api/domestic", tags=["domestic"])
+
+
+@router.get("/session-status")
+def domestic_session_status() -> dict:
+    return DOMESTIC_SESSION_MANAGER.status()
 
 
 @router.post("/search", response_model=DomesticSearchResponse)

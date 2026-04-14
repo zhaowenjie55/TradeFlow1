@@ -3,6 +3,8 @@ package com.globalvibe.arbitrage.integration.overseas;
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
 import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.integration.GatewayFallbackException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,8 @@ import java.util.List;
 @Component
 @Primary
 public class RoutingOverseasMarketplaceGateway implements OverseasMarketplaceGateway {
+
+    private static final Logger log = LoggerFactory.getLogger(RoutingOverseasMarketplaceGateway.class);
 
     private final IntegrationGatewayProperties integrationGatewayProperties;
     private final HttpAmazonMarketplaceGateway httpAmazonMarketplaceGateway;
@@ -34,6 +38,7 @@ public class RoutingOverseasMarketplaceGateway implements OverseasMarketplaceGat
         try {
             return httpAmazonMarketplaceGateway.searchProducts(keyword, limit);
         } catch (RuntimeException ex) {
+            log.warn("overseas search gateway failed for keyword '{}': {}", keyword, ex.getMessage(), ex);
             throw new GatewayFallbackException("海外实时商品抓取失败，将转入数据库快照兜底: " + ex.getMessage(), ex);
         }
     }

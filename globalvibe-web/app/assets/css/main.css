@@ -152,6 +152,98 @@ body {
   animation: tradeflow-log-entry-in 220ms ease-out;
 }
 
+.tradeflow-legacy-shell {
+  display: flex;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.tradeflow-legacy-card {
+  width: min(720px, 100%);
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-radius-2xl);
+  background: var(--tf-bg-panel);
+  box-shadow: var(--tf-shadow);
+  padding: 32px;
+  backdrop-filter: blur(18px);
+}
+
+.tradeflow-legacy-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--tf-accent-soft);
+  color: var(--tf-accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 6px 12px;
+  text-transform: uppercase;
+}
+
+.tradeflow-legacy-title {
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--tf-text);
+}
+
+.tradeflow-legacy-copy {
+  max-width: 54ch;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--tf-text-secondary);
+}
+
+.tradeflow-legacy-list {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--tf-border);
+  border-radius: 20px;
+  background: var(--tf-bg-soft);
+  padding: 18px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--tf-text-secondary);
+}
+
+.tradeflow-legacy-link {
+  color: var(--tf-accent);
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.tradeflow-legacy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tradeflow-legacy-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 9999px;
+  background: var(--tf-accent);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 18px;
+  text-decoration: none;
+  transition:
+    transform var(--tf-duration) ease,
+    box-shadow var(--tf-duration) ease,
+    opacity var(--tf-duration) ease;
+}
+
+.tradeflow-legacy-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.22);
+}
+
 @keyframes tradeflow-log-entry-in {
   from {
     opacity: 0;

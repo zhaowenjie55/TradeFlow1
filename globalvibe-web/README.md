@@ -1,75 +1,31 @@
-# Nuxt Minimal Starter
+# Legacy Nuxt Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This frontend is no longer the primary TradeFlow UI.
 
-## Setup
+## Status
 
-Make sure to install dependencies:
+`globalvibe-web/` is kept only as a legacy reference while `tradeflow-web-next/` becomes the sole supported frontend.
 
-```bash
-# npm
-npm install
+Rules for this app:
 
-# pnpm
-pnpm install
+- do not add new product features here
+- do not treat this app as the source of truth for backend compatibility
+- only use it for migration comparison or emergency regression checks
 
-# yarn
-yarn install
+## Active Frontend
 
-# bun
-bun install
+The canonical frontend now lives in:
+
+```text
+../tradeflow-web-next
 ```
 
-## Development Server
+## Local Use
 
-Start the development server on `http://localhost:3000`:
+If you explicitly need to run the legacy UI:
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+But normal development should happen in the React app instead.

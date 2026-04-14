@@ -1,9 +1,13 @@
 package com.globalvibe.arbitrage.integration.overseas;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.globalvibe.arbitrage.common.retry.RetryExecutor;
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
 import com.globalvibe.arbitrage.domain.marketplace.model.MarketplaceType;
 import com.globalvibe.arbitrage.domain.product.model.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -16,15 +20,29 @@ import java.util.Map;
 @Component
 public class HttpAmazonMarketplaceGateway {
 
+    private static final Logger log = LoggerFactory.getLogger(HttpAmazonMarketplaceGateway.class);
+
     private final RestClient restClient;
     private final IntegrationGatewayProperties integrationGatewayProperties;
+    private final RetryExecutor retryExecutor;
 
     public HttpAmazonMarketplaceGateway(
             RestClient.Builder restClientBuilder,
             IntegrationGatewayProperties integrationGatewayProperties
     ) {
-        this.restClient = restClientBuilder.build();
+        IntegrationGatewayProperties.OverseasProperties overseasProperties = integrationGatewayProperties.getOverseas();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(overseasProperties.getConnectTimeoutMillis());
+        requestFactory.setReadTimeout(overseasProperties.getReadTimeoutMillis());
+        this.restClient = restClientBuilder
+                .requestFactory(requestFactory)
+                .build();
         this.integrationGatewayProperties = integrationGatewayProperties;
+        this.retryExecutor = new RetryExecutor(
+                overseasProperties.getMaxRetries(),
+                overseasProperties.getRetryInitialBackoffMillis(),
+                log
+        );
     }
 
     public List<Product> searchProducts(String keyword, int limit) {
@@ -33,11 +51,11 @@ public class HttpAmazonMarketplaceGateway {
             throw new IllegalStateException("Overseas search endpoint is not configured.");
         }
 
-        JsonNode root = restClient.get()
+        JsonNode root = retryExecutor.execute(() -> restClient.get()
                 .uri(endpoint + "?keyword={keyword}&limit={limit}", keyword == null ? "" : keyword, limit)
                 .headers(headers -> applyApiKey(headers, integrationGatewayProperties.getOverseas().getApiKey()))
                 .retrieve()
-                .body(JsonNode.class);
+                .body(JsonNode.class), "overseas-search");
 
         return parseProducts(root, limit);
     }
@@ -77,7 +95,23 @@ public class HttpAmazonMarketplaceGateway {
             return BigDecimal.ZERO;
         }
         String normalized = raw.replaceAll("[^0-9.]", "");
-        return normalized.isBlank() ? BigDecimal.ZERO : new BigDecimal(normalized);
+        if (normalized.isBlank()) {
+            return BigDecimal.ZERO;
+        }
+        // Handle range prices like "$12.34 - $56.00" which become "12.3456.00"
+        int firstDot = normalized.indexOf('.');
+        if (firstDot >= 0) {
+            int secondDot = normalized.indexOf('.', firstDot + 1);
+            if (secondDot >= 0) {
+                normalized = normalized.substring(0, secondDot);
+            }
+        }
+        try {
+            return new BigDecimal(normalized);
+        } catch (NumberFormatException ex) {
+            log.warn("overseas gateway: malformed price value '{}', defaulting to ZERO", raw);
+            return BigDecimal.ZERO;
+        }
     }
 
     private String chooseImage(JsonNode item, JsonNode details) {

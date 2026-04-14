@@ -9,6 +9,7 @@ import com.globalvibe.arbitrage.domain.product.model.ProductDetailSnapshot;
 import com.globalvibe.arbitrage.domain.product.repository.ProductRepository;
 import com.globalvibe.arbitrage.domain.report.service.ReportAssembler;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
+import com.globalvibe.arbitrage.domain.task.model.TaskMode;
 import com.globalvibe.arbitrage.integration.llm.LLMGateway;
 import org.junit.jupiter.api.Test;
 
@@ -74,7 +75,8 @@ class ProductAnalysisServiceTest {
                 new BigDecimal("25.0"),
                 "低风险",
                 "reason",
-                true
+                true,
+                null
         );
         QueryRewrite queryRewrite = QueryRewrite.builder()
                 .rewriteId("rewrite-1")
@@ -115,7 +117,7 @@ class ProductAnalysisServiceTest {
                 Map.of("shippingText", "5元")
         );
 
-        var report = service.buildReport("report-1", candidate, detailSnapshot, queryRewrite, List.of(match));
+        var report = service.buildReport("report-1", candidate, detailSnapshot, queryRewrite, TaskMode.AUTO_FALLBACK, List.of(match));
 
         assertEquals(new BigDecimal("93.53"), report.costBreakdown().targetSellingPrice());
         assertEquals(new BigDecimal("5.00"), report.costBreakdown().domesticShippingCost());

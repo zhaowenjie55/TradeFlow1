@@ -14,6 +14,7 @@ import com.globalvibe.arbitrage.domain.report.model.AnalysisTraceRewrite;
 import com.globalvibe.arbitrage.domain.report.model.ArbitrageReport;
 import com.globalvibe.arbitrage.domain.report.service.ReportAssembler;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
+import com.globalvibe.arbitrage.domain.task.model.TaskMode;
 import com.globalvibe.arbitrage.integration.llm.LLMGateway;
 import org.springframework.stereotype.Service;
 
@@ -62,12 +63,19 @@ public class ProductAnalysisService {
             CandidateProduct candidate,
             ProductDetailSnapshot domesticDetail,
             QueryRewrite queryRewrite,
+            TaskMode mode,
             List<CandidateMatchRecord> domesticMatches
     ) {
-        List<CandidateMatchRecord> topDomesticMatches = matchSelectionPolicy.selectTopMatches(domesticMatches, 3);
-        Map<String, ProductDetailSnapshot> detailSnapshots = loadDetailSnapshots(topDomesticMatches);
-
-        CandidateMatchRecord benchmark = topDomesticMatches.isEmpty() ? null : topDomesticMatches.get(0);
+        Map<String, ProductDetailSnapshot> detailSnapshots = loadDetailSnapshots(domesticMatches, 5);
+        CandidateMatchRecord benchmark = matchSelectionPolicy.selectBenchmark(
+                domesticMatches,
+                detailSnapshots,
+                mode == TaskMode.REAL
+        );
+        List<CandidateMatchRecord> topDomesticMatches = matchSelectionPolicy.selectTopMatches(domesticMatches, detailSnapshots, 3);
+        if (mode == TaskMode.REAL && benchmark == null) {
+            throw new IllegalStateException("未找到可作为真实对标的 1688 货源：需要实时检索命中、详情已补齐且匹配质量达标。");
+        }
         Product sourceProduct = productRepository.findById(candidate.productId()).orElse(null);
         BigDecimal amazonPriceUsd = candidate.overseasPrice() != null
                 ? scale(candidate.overseasPrice())
@@ -102,6 +110,9 @@ public class ProductAnalysisService {
                 benchmark,
                 topDomesticMatches
         );
+        if (mode == TaskMode.REAL && narrative.fallbackUsed()) {
+            throw new IllegalStateException("真实 LLM 报告生成失败: " + normalizeNarrativeFallbackReason(narrative.fallbackReason()));
+        }
 
         AnalysisTrace analysisTrace = buildAnalysisTrace(
                 candidate,
@@ -123,6 +134,7 @@ public class ProductAnalysisService {
                 expectedMargin
         );
 
+        boolean sourcingCostFallbackUsed = benchmark == null;
         return reportAssembler.assemble(
                 new ReportAssembler.ReportAssemblyInput(
                         reportId,
@@ -139,14 +151,18 @@ public class ProductAnalysisService {
                         shippingText,
                         narrative,
                         analysisTrace,
-                        buildRiskNotes(domesticDetail, benchmark, shippingText, usedDefaultShipping)
+                        buildRiskNotes(domesticDetail, benchmark, shippingText, usedDefaultShipping, sourcingCostFallbackUsed),
+                        sourcingCostFallbackUsed
                 )
         );
     }
 
-    private Map<String, ProductDetailSnapshot> loadDetailSnapshots(List<CandidateMatchRecord> matches) {
+    private Map<String, ProductDetailSnapshot> loadDetailSnapshots(List<CandidateMatchRecord> matches, int limit) {
         Map<String, ProductDetailSnapshot> snapshots = new HashMap<>();
-        for (CandidateMatchRecord match : matches) {
+        if (matches == null || matches.isEmpty()) {
+            return snapshots;
+        }
+        for (CandidateMatchRecord match : matches.stream().limit(Math.max(limit, 1)).toList()) {
             if (match.externalItemId() == null || match.externalItemId().isBlank()) {
                 continue;
             }
@@ -217,7 +233,8 @@ public class ProductAnalysisService {
             ProductDetailSnapshot domesticDetail,
             CandidateMatchRecord benchmark,
             String shippingText,
-            boolean usedDefaultShipping
+            boolean usedDefaultShipping,
+            boolean sourcingCostFallbackUsed
     ) {
         List<String> notes = new ArrayList<>();
         notes.add(domesticDetail != null
@@ -229,6 +246,9 @@ public class ProductAnalysisService {
         notes.add(usedDefaultShipping
                 ? "国内运费采用配置默认值，建议补录真实运费后再确认利润。"
                 : "国内运费已从商品详情解析: " + shippingText);
+        if (sourcingCostFallbackUsed) {
+            notes.add("警告：无真实供应商报价，采购成本基于估算（Amazon 售价的45%），实际利润率可能存在较大偏差。");
+        }
         return notes;
     }
 
@@ -260,6 +280,12 @@ public class ProductAnalysisService {
             return 63;
         }
         return 38;
+    }
+
+    private String normalizeNarrativeFallbackReason(String fallbackReason) {
+        return fallbackReason == null || fallbackReason.isBlank()
+                ? "报告叙事链路返回了模拟结果。"
+                : fallbackReason;
     }
 
     private Optional<BigDecimal> extractDecimal(Product sourceProduct, String key) {

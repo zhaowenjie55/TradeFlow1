@@ -4,3 +4,4 @@ requests
 playwright
 python-multipart
 faster-whisper
+python-dotenv

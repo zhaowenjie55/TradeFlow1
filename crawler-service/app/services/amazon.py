@@ -6,7 +6,13 @@ from fastapi import HTTPException
 
 
 SERPAPI_URL = "https://serpapi.com/search.json"
-SERPAPI_KEY = os.getenv("SERPAPI_KEY")
+
+
+def get_serpapi_key() -> str:
+    key = os.getenv("SERPAPI_KEY")
+    if not key:
+        raise HTTPException(status_code=500, detail="SERPAPI_KEY is not set")
+    return key
 
 
 def normalize_amazon_item(raw: dict[str, Any]) -> dict[str, Any]:
@@ -24,14 +30,11 @@ def normalize_amazon_item(raw: dict[str, Any]) -> dict[str, Any]:
 
 
 def fetch_amazon_products(keyword: str, page: int) -> list[dict[str, Any]]:
-    if not SERPAPI_KEY:
-        raise HTTPException(status_code=500, detail="SERPAPI_KEY is not set")
-
     params = {
         "engine": "amazon",
         "k": keyword,
         "page": page,
-        "api_key": SERPAPI_KEY,
+        "api_key": get_serpapi_key(),
     }
 
     try:
@@ -77,13 +80,10 @@ def normalize_image_list(raw: Any) -> list[str]:
 
 
 def fetch_amazon_product_detail(external_item_id: str) -> dict[str, Any]:
-    if not SERPAPI_KEY:
-        raise HTTPException(status_code=500, detail="SERPAPI_KEY is not set")
-
     params = {
         "engine": "amazon_product",
         "product_id": external_item_id,
-        "api_key": SERPAPI_KEY,
+        "api_key": get_serpapi_key(),
     }
 
     try:

@@ -13,7 +13,10 @@ import com.globalvibe.arbitrage.domain.search.service.QueryRewriteService;
 import com.globalvibe.arbitrage.domain.task.model.AnalysisTask;
 import com.globalvibe.arbitrage.domain.task.model.TaskLogEntry;
 import com.globalvibe.arbitrage.domain.task.model.TaskLogLevel;
+import com.globalvibe.arbitrage.domain.task.model.TaskMode;
 import com.globalvibe.arbitrage.domain.task.service.InvalidTaskContextException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -22,6 +25,8 @@ import java.util.List;
 
 @Component
 public class SourcingPhase2Workflow implements Phase2Workflow {
+
+    private static final Logger log = LoggerFactory.getLogger(SourcingPhase2Workflow.class);
 
     private final ProductAnalysisService productAnalysisService;
     private final QueryRewriteService queryRewriteService;
@@ -65,6 +70,7 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
                 candidateId,
                 candidate,
                 queryRewrite,
+                phase2Task.getMode(),
                 5
         );
         List<CandidateMatchRecord> matches = matchExecutionResult.matches();
@@ -76,6 +82,7 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
                 candidate,
                 detail1688,
                 queryRewrite,
+                phase2Task.getMode(),
                 matches
         );
 
@@ -83,7 +90,9 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
                 report,
                 List.of(
                         log("phase2.rewrite", "已完成商品标题关键词改写，并生成国内检索词。"),
-                        log("phase2.domestic-search", matchExecutionResult.fallbackUsed()
+                        log("phase2.domestic-search", phase2Task.getMode() == TaskMode.REAL
+                                ? "已按真实 1688 实时链路完成国内货源检索。"
+                                : matchExecutionResult.fallbackUsed()
                                 ? "国内实时货源检索未命中，已切换到本地商品库兜底匹配。"
                                 : "已完成 1688 实时货源检索，并结合本地商品库完成混合匹配。"),
                         log("phase2.product-detail", detailHydrationResult.loadedCount() > 0
@@ -132,19 +141,17 @@ public class SourcingPhase2Workflow implements Phase2Workflow {
             }
             try {
                 productCatalogSyncService.sync1688Detail(externalItemId).ifPresent(snapshots::add);
-            } catch (RuntimeException ignored) {
-                // Fall back to search-only reporting when detail hydration fails.
+            } catch (RuntimeException e) {
+                log.error("Detail hydration failed for match {} (externalItemId={}): {}", match.matchId(), externalItemId, e.getMessage(), e);
             }
         }
         return new DetailHydrationResult(snapshots.isEmpty() ? null : snapshots.get(0), snapshots.size());
     }
 
     private boolean shouldHydrateDetail(CandidateMatchRecord match) {
-        String matchSource = match.matchSource();
-        if (matchSource == null || matchSource.isBlank()) {
-            return false;
-        }
-        return matchSource.contains("REALTIME");
+        // Hydrate all matches that have an externalItemId — catalog matches benefit
+        // from detail hydration just as much as realtime matches.
+        return match.externalItemId() != null && !match.externalItemId().isBlank();
     }
 
     private record DetailHydrationResult(ProductDetailSnapshot primaryDetail, int loadedCount) {

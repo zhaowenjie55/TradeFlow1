@@ -17,6 +17,7 @@ public record CandidateSnapshot(
         String riskTag,
         String recommendationReason,
         boolean suggestSecondPhase,
+        String link,
         OffsetDateTime createdAt
 ) {
 }

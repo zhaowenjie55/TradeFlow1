@@ -26,8 +26,8 @@ public class PostgresCandidateSnapshotRepository implements CandidateSnapshotRep
                         INSERT INTO gv_analysis_candidate (
                             candidate_id, task_id, platform, external_item_id, title, price,
                             image, score, risk_tag, recommendation_reason,
-                            suggest_second_phase, status, created_at
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            suggest_second_phase, link, status, created_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                 taskId + ":" + snapshot.productId(),
                 taskId,
@@ -40,6 +40,7 @@ public class PostgresCandidateSnapshotRepository implements CandidateSnapshotRep
                 snapshot.riskTag(),
                 snapshot.recommendationReason(),
                 snapshot.suggestSecondPhase(),
+                snapshot.link(),
                 snapshot.suggestSecondPhase() ? "READY" : "REVIEW",
                 snapshot.createdAt()
         ));
@@ -66,6 +67,7 @@ public class PostgresCandidateSnapshotRepository implements CandidateSnapshotRep
                 .riskTag(rs.getString("risk_tag"))
                 .recommendationReason(rs.getString("recommendation_reason"))
                 .suggestSecondPhase(rs.getBoolean("suggest_second_phase"))
+                .link(rs.getString("link"))
                 .createdAt(rs.getObject("created_at", OffsetDateTime.class))
                 .build();
     }

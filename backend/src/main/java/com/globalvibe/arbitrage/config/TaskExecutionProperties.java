@@ -10,5 +10,6 @@ public class TaskExecutionProperties {
 
     private int phase1CandidateLimit = 20;
     private long processingDelayMillis = 250L;
+    private long phase1WorkflowTimeoutMillis = 60_000L;
     private TaskMode defaultMode = TaskMode.AUTO_FALLBACK;
 }

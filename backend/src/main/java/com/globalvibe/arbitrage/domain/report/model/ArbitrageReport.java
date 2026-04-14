@@ -11,6 +11,7 @@ public record ArbitrageReport(
         String title,
         String market,
         String image,
+        String overseasLink,
         String decision,
         String riskLevel,
         BigDecimal expectedMargin,

@@ -1,0 +1,12 @@
+{
+  "name": "tradeflow",
+  "private": true,
+  "scripts": {
+    "frontend:dev": "npm --prefix tradeflow-web-next run dev",
+    "frontend:build": "npm --prefix tradeflow-web-next run build",
+    "frontend:start": "npm --prefix tradeflow-web-next run start",
+    "frontend:lint": "npm --prefix tradeflow-web-next run lint",
+    "frontend:legacy:dev": "npm --prefix globalvibe-web run dev",
+    "frontend:legacy:build": "npm --prefix globalvibe-web run build"
+  }
+}

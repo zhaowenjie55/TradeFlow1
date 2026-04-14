@@ -29,6 +29,7 @@ public class CandidateSnapshotService {
                         .riskTag(candidate.riskTag())
                         .recommendationReason(candidate.recommendationReason())
                         .suggestSecondPhase(candidate.suggestSecondPhase())
+                        .link(candidate.link())
                         .createdAt(analysisTask.getUpdatedAt())
                         .build())
                 .toList();

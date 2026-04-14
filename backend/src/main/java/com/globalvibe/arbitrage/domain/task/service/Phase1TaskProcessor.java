@@ -1,14 +1,14 @@
 package com.globalvibe.arbitrage.domain.task.service;
 
 import com.globalvibe.arbitrage.ai.workflow.Phase1Workflow;
+import com.globalvibe.arbitrage.ai.workflow.Phase1WorkflowFailedException;
 import com.globalvibe.arbitrage.ai.workflow.Phase1WorkflowResult;
 import com.globalvibe.arbitrage.config.TaskExecutionProperties;
 import com.globalvibe.arbitrage.domain.candidate.service.CandidateSnapshotService;
-import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.domain.search.model.SearchRun;
-import com.globalvibe.arbitrage.domain.search.model.SearchRunResult;
 import com.globalvibe.arbitrage.domain.search.model.SearchRunStatus;
 import com.globalvibe.arbitrage.domain.search.repository.SearchRunRepository;
+import com.globalvibe.arbitrage.domain.search.service.SearchRunResultDeduplicator;
 import com.globalvibe.arbitrage.domain.task.model.AnalysisTask;
 import com.globalvibe.arbitrage.domain.task.model.TaskLogEntry;
 import com.globalvibe.arbitrage.domain.task.model.TaskLogLevel;
@@ -21,6 +21,11 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 public class Phase1TaskProcessor {
@@ -58,7 +63,7 @@ public class Phase1TaskProcessor {
         pause();
 
         try {
-            Phase1WorkflowResult workflowResult = phase1Workflow.run(analysisTask);
+            Phase1WorkflowResult workflowResult = runWorkflowWithTimeout(analysisTask);
             analysisTask.getLogs().addAll(workflowResult.logs());
             analysisTask.setCandidates(workflowResult.candidates());
             taskStatusTransitionPolicy.assertAllowed(analysisTask.getStatus(), TaskStatus.WAITING_USER_SELECTION);
@@ -67,9 +72,46 @@ public class Phase1TaskProcessor {
             candidateSnapshotService.replaceForTask(analysisTask);
             analysisTaskRepository.save(analysisTask);
             finalizeSearchRun(searchRun, workflowResult, analysisTask);
+        } catch (Phase1WorkflowFailedException ex) {
+            analysisTask.getLogs().addAll(ex.logs());
+            markSearchRunFailed(searchRun, ex.getMessage());
+            markTaskFailed(analysisTask, "phase1.failed", "海外盘点执行失败: " + ex.getMessage());
         } catch (RuntimeException ex) {
             markSearchRunFailed(searchRun, ex.getMessage());
             markTaskFailed(analysisTask, "phase1.failed", "海外盘点执行失败: " + ex.getMessage());
+        } catch (Throwable ex) {
+            markSearchRunFailed(searchRun, ex.getMessage());
+            markTaskFailed(analysisTask, "phase1.failed", "海外盘点执行异常终止: " + ex.getMessage());
+        }
+    }
+
+    private Phase1WorkflowResult runWorkflowWithTimeout(AnalysisTask analysisTask) {
+        long timeoutMillis = Math.max(1_000L, taskExecutionProperties.getPhase1WorkflowTimeoutMillis());
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            Future<Phase1WorkflowResult> future = executor.submit(() -> phase1Workflow.run(analysisTask));
+            return future.get(timeoutMillis, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException ex) {
+            throw new Phase1WorkflowFailedException(
+                    "Amazon 一阶段检索超时（>" + timeoutMillis + "ms）。请检查 crawler 负载或缩短返回载荷后重试。",
+                    List.of(buildLog("phase1.timeout", TaskLogLevel.ERROR,
+                            "一阶段工作流执行超时，系统已中止本次 Amazon 候选检索。"))
+            );
+        } catch (ExecutionException ex) {
+            Throwable cause = ex.getCause();
+            if (cause instanceof Phase1WorkflowFailedException workflowFailedException) {
+                throw workflowFailedException;
+            }
+            if (cause instanceof RuntimeException runtimeException) {
+                throw runtimeException;
+            }
+            throw new RuntimeException(cause == null ? ex.getMessage() : cause.getMessage(), cause == null ? ex : cause);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new Phase1WorkflowFailedException(
+                    "Amazon 一阶段检索被中断，请重试。",
+                    List.of(buildLog("phase1.interrupted", TaskLogLevel.ERROR,
+                            "一阶段工作流在执行过程中被中断，已提前结束。"))
+            );
         }
     }
 
@@ -126,7 +168,7 @@ public class Phase1TaskProcessor {
         searchRunRepository.save(finalized);
         searchRunRepository.replaceResults(
                 searchRun.searchRunId(),
-                toSearchRunResults(searchRun.searchRunId(), workflowResult.sourceProducts())
+                SearchRunResultDeduplicator.fromProducts(searchRun.searchRunId(), workflowResult.sourceProducts())
         );
     }
 
@@ -149,32 +191,18 @@ public class Phase1TaskProcessor {
         taskStatusTransitionPolicy.assertAllowed(analysisTask.getStatus(), TaskStatus.FAILED);
         analysisTask.setStatus(TaskStatus.FAILED);
         analysisTask.setUpdatedAt(OffsetDateTime.now());
-        analysisTask.getLogs().add(new TaskLogEntry(
-                OffsetDateTime.now(),
-                stage,
-                TaskLogLevel.ERROR,
-                message,
-                "phase1-processor"
-        ));
+        analysisTask.getLogs().add(buildLog(stage, TaskLogLevel.ERROR, message));
         analysisTaskRepository.save(analysisTask);
     }
 
-    private List<SearchRunResult> toSearchRunResults(String searchRunId, List<Product> products) {
-        return java.util.stream.IntStream.range(0, products.size())
-                .mapToObj(index -> {
-                    Product product = products.get(index);
-                    return SearchRunResult.builder()
-                            .searchRunId(searchRunId)
-                            .platform(product.platform().value())
-                            .externalItemId(product.id())
-                            .rankNo(index + 1)
-                            .title(product.title())
-                            .price(product.price())
-                            .image(product.image())
-                            .link(product.link())
-                            .rawData(product.rawData())
-                            .build();
-                })
-                .toList();
+    private TaskLogEntry buildLog(String stage, TaskLogLevel level, String message) {
+        return new TaskLogEntry(
+                OffsetDateTime.now(),
+                stage,
+                level,
+                message,
+                "phase1-processor"
+        );
     }
+
 }

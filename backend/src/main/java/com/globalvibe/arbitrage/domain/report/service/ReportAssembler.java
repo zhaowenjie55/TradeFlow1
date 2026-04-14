@@ -38,6 +38,7 @@ public class ReportAssembler {
                 input.candidate().title(),
                 input.candidate().market(),
                 input.candidate().imageUrl(),
+                input.candidate().link(),
                 input.decision(),
                 input.riskLevel(),
                 input.pricing().expectedMargin(),
@@ -71,7 +72,8 @@ public class ReportAssembler {
                         input.pricing().amazonPriceRmb(),
                         input.shippingText(),
                         input.narrative(),
-                        input.analysisTrace()
+                        input.analysisTrace(),
+                        input.sourcingCostFallbackUsed()
                 )
         );
     }
@@ -146,7 +148,8 @@ public class ReportAssembler {
             BigDecimal amazonPriceRmb,
             String shippingText,
             LLMGateway.ReportNarrativeResult narrative,
-            AnalysisTrace analysisTrace
+            AnalysisTrace analysisTrace,
+            boolean sourcingCostFallbackUsed
     ) {
         Map<String, Object> auditData = new LinkedHashMap<>();
         auditData.put("priceAmountUsd", amazonPriceUsd);
@@ -167,6 +170,7 @@ public class ReportAssembler {
         if (renderedDomesticMatches != null && !renderedDomesticMatches.isEmpty()) {
             auditData.put("detailSource", renderedDomesticMatches.get(0).detailSource());
         }
+        auditData.put("sourcingCostFallbackUsed", sourcingCostFallbackUsed);
         auditData.put("narrativeProvider", narrative.provider());
         auditData.put("narrativeModel", narrative.model());
         auditData.put("narrativeFallbackUsed", narrative.fallbackUsed());
@@ -193,7 +197,8 @@ public class ReportAssembler {
             String shippingText,
             LLMGateway.ReportNarrativeResult narrative,
             AnalysisTrace analysisTrace,
-            List<String> riskNotes
+            List<String> riskNotes,
+            boolean sourcingCostFallbackUsed
     ) {
     }
 }

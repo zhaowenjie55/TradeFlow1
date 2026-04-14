@@ -58,6 +58,41 @@ public class Phase2TaskApplicationService {
         );
     }
 
+    public Phase2CreateTaskResponse retryTask(String taskId) {
+        AnalysisTask phase2Task = analysisTaskRepository.findById(taskId)
+                .orElseThrow(() -> new AnalysisTaskNotFoundException(taskId));
+
+        if (phase2Task.getPhase() != TaskPhase.PHASE2) {
+            throw new InvalidTaskContextException("当前任务不是二阶段任务，无法重试。");
+        }
+        if (phase2Task.getStatus() != TaskStatus.FAILED) {
+            throw new InvalidTaskContextException("当前任务不处于失败状态，无法重试。");
+        }
+
+        taskStatusTransitionPolicy.assertAllowed(phase2Task.getStatus(), TaskStatus.QUEUED);
+        phase2Task.setStatus(TaskStatus.QUEUED);
+        phase2Task.setUpdatedAt(OffsetDateTime.now());
+        phase2Task.getLogs().add(new TaskLogEntry(
+                OffsetDateTime.now(),
+                "phase2.retry",
+                TaskLogLevel.INFO,
+                "任务重试已发起，正在重新执行二阶段国内货源匹配。",
+                "phase2-task-application-service"
+        ));
+        analysisTaskRepository.save(phase2Task);
+        phase2TaskProcessor.processAsync(phase2Task.getTaskId());
+
+        return new Phase2CreateTaskResponse(
+                phase2Task.getTaskId(),
+                phase2Task.getPhase(),
+                phase2Task.getStatus(),
+                phase2Task.getMode(),
+                phase2Task.getParentTaskId(),
+                phase2Task.getSelectedProductId(),
+                phase2Task.getCreatedAt()
+        );
+    }
+
     public Phase2CreateTaskResponse resumeTask(String taskId) {
         AnalysisTask phase2Task = analysisTaskRepository.findById(taskId)
                 .orElseThrow(() -> new AnalysisTaskNotFoundException(taskId));

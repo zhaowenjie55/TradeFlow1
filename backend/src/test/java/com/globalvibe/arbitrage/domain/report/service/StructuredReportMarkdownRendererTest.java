@@ -25,6 +25,7 @@ class StructuredReportMarkdownRendererTest {
                 "Acrylic Desktop Organizer",
                 "AMAZON",
                 null,
+                null,
                 "recommended",
                 "low",
                 new BigDecimal("32.10"),

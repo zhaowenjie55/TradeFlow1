@@ -91,7 +91,8 @@ public class AnalysisTaskStatusViewAssembler {
                 candidateProduct.estimatedMargin(),
                 candidateProduct.riskTag(),
                 candidateProduct.recommendationReason(),
-                candidateProduct.suggestSecondPhase()
+                candidateProduct.suggestSecondPhase(),
+                candidateProduct.link()
         );
     }
 

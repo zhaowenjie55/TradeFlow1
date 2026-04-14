@@ -10,7 +10,11 @@ import com.globalvibe.arbitrage.domain.task.dto.Phase2CreateTaskRequest;
 import com.globalvibe.arbitrage.domain.task.dto.Phase2CreateTaskResponse;
 import com.globalvibe.arbitrage.domain.task.dto.SelectCandidateRequest;
 import com.globalvibe.arbitrage.domain.task.dto.TaskHistoryResponse;
+import com.globalvibe.arbitrage.domain.task.model.AnalysisTask;
+import com.globalvibe.arbitrage.domain.task.model.TaskPhase;
+import com.globalvibe.arbitrage.domain.task.repository.AnalysisTaskRepository;
 import com.globalvibe.arbitrage.domain.task.service.AnalysisTaskHistoryQueryService;
+import com.globalvibe.arbitrage.domain.task.service.AnalysisTaskNotFoundException;
 import com.globalvibe.arbitrage.domain.task.service.AnalysisTaskStatusQueryService;
 import com.globalvibe.arbitrage.domain.task.service.Phase1TaskApplicationService;
 import com.globalvibe.arbitrage.domain.task.service.Phase2TaskApplicationService;
@@ -33,19 +37,22 @@ public class AnalysisTaskController {
     private final AnalysisTaskStatusQueryService analysisTaskStatusQueryService;
     private final AnalysisTaskHistoryQueryService analysisTaskHistoryQueryService;
     private final CandidateQueryService candidateQueryService;
+    private final AnalysisTaskRepository analysisTaskRepository;
 
     public AnalysisTaskController(
             Phase1TaskApplicationService phase1TaskApplicationService,
             Phase2TaskApplicationService phase2TaskApplicationService,
             AnalysisTaskStatusQueryService analysisTaskStatusQueryService,
             AnalysisTaskHistoryQueryService analysisTaskHistoryQueryService,
-            CandidateQueryService candidateQueryService
+            CandidateQueryService candidateQueryService,
+            AnalysisTaskRepository analysisTaskRepository
     ) {
         this.phase1TaskApplicationService = phase1TaskApplicationService;
         this.phase2TaskApplicationService = phase2TaskApplicationService;
         this.analysisTaskStatusQueryService = analysisTaskStatusQueryService;
         this.analysisTaskHistoryQueryService = analysisTaskHistoryQueryService;
         this.candidateQueryService = candidateQueryService;
+        this.analysisTaskRepository = analysisTaskRepository;
     }
 
     @PostMapping
@@ -92,5 +99,16 @@ public class AnalysisTaskController {
     @PostMapping("/{taskId}/resume")
     public ApiResponse<Phase2CreateTaskResponse> resumePhase2Task(@PathVariable String taskId) {
         return ApiResponse.success(phase2TaskApplicationService.resumeTask(taskId));
+    }
+
+    @PostMapping("/{taskId}/retry")
+    public ApiResponse<?> retryTask(@PathVariable String taskId) {
+        AnalysisTask task = analysisTaskRepository.findById(taskId)
+                .orElseThrow(() -> new AnalysisTaskNotFoundException(taskId));
+
+        if (task.getPhase() == TaskPhase.PHASE1) {
+            return ApiResponse.success(phase1TaskApplicationService.retryTask(taskId));
+        }
+        return ApiResponse.success(phase2TaskApplicationService.retryTask(taskId));
     }
 }

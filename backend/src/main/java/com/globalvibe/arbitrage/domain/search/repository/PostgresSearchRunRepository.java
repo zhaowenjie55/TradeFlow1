@@ -69,6 +69,13 @@ public class PostgresSearchRunRepository implements SearchRunRepository {
                             search_run_id, platform, external_item_id, rank_no, title,
                             price, image, link, raw_jsonb
                         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT (search_run_id, platform, external_item_id) DO UPDATE SET
+                            rank_no = EXCLUDED.rank_no,
+                            title = EXCLUDED.title,
+                            price = EXCLUDED.price,
+                            image = EXCLUDED.image,
+                            link = EXCLUDED.link,
+                            raw_jsonb = EXCLUDED.raw_jsonb
                         """,
                 result.searchRunId(),
                 result.platform(),

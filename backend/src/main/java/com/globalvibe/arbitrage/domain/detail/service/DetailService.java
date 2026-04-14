@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.globalvibe.arbitrage.domain.detail.dto.DetailRequest;
 import com.globalvibe.arbitrage.domain.detail.dto.ProductDetailResponse;
 import com.globalvibe.arbitrage.integration.crawler.PythonCrawlerClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,8 @@ import java.util.Map;
 @Service
 public class DetailService {
 
-    private static final Duration DETAIL_CACHE_TTL = Duration.ofHours(6);
+    private static final Duration DETAIL_CACHE_TTL = Duration.ofHours(24);
+    private static final Logger log = LoggerFactory.getLogger(DetailService.class);
 
     private final PythonCrawlerClient pythonCrawlerClient;
     private final RedisTemplate<String, Object> redisTemplate;
@@ -37,8 +40,10 @@ public class DetailService {
         String cacheKey = buildCacheKey(request.externalItemId());
         ProductDetailResponse cached = readFromCache(cacheKey);
         if (cached != null) {
+            log.info("amazon detail cache hit externalItemId={}", request.externalItemId());
             return cached;
         }
+        log.info("amazon detail cache miss externalItemId={}", request.externalItemId());
 
         JsonNode root = pythonCrawlerClient.getProductDetail(request.externalItemId());
         ProductDetailResponse response = new ProductDetailResponse(
@@ -65,6 +70,7 @@ public class DetailService {
             Object cached = redisTemplate.opsForValue().get(cacheKey);
             return cached instanceof ProductDetailResponse response ? response : null;
         } catch (RuntimeException ex) {
+            log.warn("amazon detail cache read failed key={}", cacheKey, ex);
             return null;
         }
     }
@@ -72,7 +78,8 @@ public class DetailService {
     private void writeToCache(String cacheKey, ProductDetailResponse response) {
         try {
             redisTemplate.opsForValue().set(cacheKey, response, DETAIL_CACHE_TTL);
-        } catch (RuntimeException ignored) {
+        } catch (RuntimeException ex) {
+            log.warn("amazon detail cache write failed key={}", cacheKey, ex);
         }
     }
 

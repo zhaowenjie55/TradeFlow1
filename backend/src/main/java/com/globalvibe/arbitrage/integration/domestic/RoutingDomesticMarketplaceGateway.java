@@ -5,6 +5,8 @@ import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.domain.product.model.ProductDetailSnapshot;
 import com.globalvibe.arbitrage.integration.GatewayFallbackException;
 import com.globalvibe.arbitrage.integration.VerificationRequiredException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,8 @@ import java.util.Optional;
 @Component
 @Primary
 public class RoutingDomesticMarketplaceGateway implements DomesticMarketplaceGateway {
+
+    private static final Logger log = LoggerFactory.getLogger(RoutingDomesticMarketplaceGateway.class);
 
     private final IntegrationGatewayProperties integrationGatewayProperties;
     private final Http1688MarketplaceGateway http1688MarketplaceGateway;
@@ -39,6 +43,7 @@ public class RoutingDomesticMarketplaceGateway implements DomesticMarketplaceGat
         } catch (VerificationRequiredException ex) {
             throw ex;
         } catch (RuntimeException ex) {
+            log.warn("domestic search gateway failed for keyword '{}': {}", keyword, ex.getMessage(), ex);
             throw new GatewayFallbackException("国内实时货源搜索失败，将转入数据库货源兜底: " + ex.getMessage(), ex);
         }
     }
@@ -56,6 +61,7 @@ public class RoutingDomesticMarketplaceGateway implements DomesticMarketplaceGat
         } catch (VerificationRequiredException ex) {
             throw ex;
         } catch (RuntimeException ex) {
+            log.warn("domestic detail gateway failed for productId '{}': {}", productId, ex.getMessage(), ex);
             throw new GatewayFallbackException("国内详情抓取失败，将转入数据库详情兜底: " + ex.getMessage(), ex);
         }
     }

@@ -9,6 +9,18 @@ WHERE NOT EXISTS (
     WHERE s.search_run_id = r.search_run_id
 );
 
+DELETE FROM gv_search_run_result r
+WHERE EXISTS (
+    SELECT 1
+    FROM gv_search_run s
+    WHERE s.search_run_id = r.search_run_id
+      AND NOT EXISTS (
+          SELECT 1
+          FROM gv_analysis_task t
+          WHERE t.task_id = s.task_id
+      )
+);
+
 DELETE FROM gv_query_rewrite q
 WHERE (q.task_id IS NOT NULL AND NOT EXISTS (
            SELECT 1

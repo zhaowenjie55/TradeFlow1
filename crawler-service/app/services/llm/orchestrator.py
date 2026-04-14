@@ -151,6 +151,8 @@ def analyze_transcript(request: LlmTranscriptIntentRequest) -> LlmTranscriptInte
 
 def _fallback_rewrite(source_title: str, fallback_reason: str) -> LlmRewriteResponse:
     normalized = (source_title or "").lower()
+    if "coffee" in normalized:
+        return _rewrite_response(_build_coffee_rewrite(normalized), _build_coffee_keywords(normalized), fallback_reason)
     if "cat water fountain" in normalized or "pet fountain" in normalized or "dog water dispenser" in normalized or "water fountain" in normalized:
         keywords = ["宠物饮水机", "猫饮水机", "自动饮水器", "循环饮水器", "宠物饮水器"]
         if "filter" in normalized and "fountain" not in normalized and "dispenser" not in normalized:
@@ -200,6 +202,40 @@ def _fallback_report(request: LlmReportNarrativeRequest, fallback_reason: str) -
         fallbackReason=_normalize_fallback_reason(fallback_reason),
         generatedAt=_now_iso(),
     )
+
+
+def _build_coffee_rewrite(normalized: str) -> str:
+    if "ground" in normalized:
+        return "夏威夷咖啡粉" if "hawaiian" in normalized else "研磨咖啡粉"
+    if "bean" in normalized:
+        return "夏威夷咖啡豆" if "hawaiian" in normalized else "咖啡豆"
+    if "instant" in normalized:
+        return "速溶咖啡"
+    if "hawaiian" in normalized:
+        return "夏威夷咖啡"
+    return "咖啡"
+
+
+def _build_coffee_keywords(normalized: str) -> list[str]:
+    keywords: list[str] = []
+    if "hawaiian" in normalized:
+        keywords.append("夏威夷咖啡")
+    if "ground" in normalized:
+        keywords.extend(["咖啡粉", "研磨咖啡"])
+    elif "bean" in normalized:
+        keywords.append("咖啡豆")
+    elif "instant" in normalized:
+        keywords.append("速溶咖啡")
+    if "vanilla" in normalized:
+        keywords.append("香草咖啡")
+    if "macadamia" in normalized:
+        keywords.append("夏威夷果咖啡")
+    keywords.append("咖啡")
+    deduped: list[str] = []
+    for keyword in keywords:
+        if keyword not in deduped:
+            deduped.append(keyword)
+    return deduped
 
 
 def _fallback_reasoning(request: LlmReasoningRequest, fallback_reason: str) -> LlmReasoningResponse:

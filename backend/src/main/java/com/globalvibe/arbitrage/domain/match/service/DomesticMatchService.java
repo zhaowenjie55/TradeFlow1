@@ -12,8 +12,11 @@ import com.globalvibe.arbitrage.domain.product.service.DomesticVectorSearchServi
 import com.globalvibe.arbitrage.domain.product.service.DomesticVectorSearchService.VectorSearchResult;
 import com.globalvibe.arbitrage.domain.product.service.ProductCatalogSyncService;
 import com.globalvibe.arbitrage.domain.search.model.QueryRewrite;
+import com.globalvibe.arbitrage.domain.task.model.TaskMode;
 import com.globalvibe.arbitrage.integration.GatewayFallbackException;
 import com.globalvibe.arbitrage.integration.VerificationRequiredException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,8 @@ import java.util.UUID;
 
 @Service
 public class DomesticMatchService {
+
+    private static final Logger log = LoggerFactory.getLogger(DomesticMatchService.class);
 
     private static final Pattern DOMESTIC_MODIFIER_PATTERN = Pattern.compile(
             "^(简约|新款|便携|折叠|可折叠|多功能|家用|办公|学生|儿童|成人|时尚|创意|通用|加厚|升级款|轻便|大容量|防水|旅行|校园)+"
@@ -63,9 +68,10 @@ public class DomesticMatchService {
             String candidateId,
             CandidateProduct sourceCandidate,
             QueryRewrite queryRewrite,
+            TaskMode mode,
             int limit
     ) {
-        DomesticSearchExecution searchExecution = searchDomesticProducts(sourceCandidate, queryRewrite, limit);
+        DomesticSearchExecution searchExecution = searchDomesticProducts(sourceCandidate, queryRewrite, mode, limit);
         List<CandidateMatchRecord> matches = searchExecution.scoredCandidates().stream()
                 .sorted(Comparator
                         .comparing(ScoredCandidate::finalScore, Comparator.reverseOrder())
@@ -86,7 +92,12 @@ public class DomesticMatchService {
         return new MatchExecutionResult(matches, !searchExecution.liveSearchUsed());
     }
 
-    private DomesticSearchExecution searchDomesticProducts(CandidateProduct sourceCandidate, QueryRewrite queryRewrite, int limit) {
+    private DomesticSearchExecution searchDomesticProducts(
+            CandidateProduct sourceCandidate,
+            QueryRewrite queryRewrite,
+            TaskMode mode,
+            int limit
+    ) {
         int searchLimit = Math.max(limit * 4, 12);
         Map<String, MatchCandidateAccumulator> merged = new LinkedHashMap<>();
         List<String> retrievalTerms = buildSearchTerms(sourceCandidate, queryRewrite);
@@ -119,6 +130,7 @@ public class DomesticMatchService {
                 }
                 throw ex;
             } catch (GatewayFallbackException ex) {
+                log.info("domestic gateway fallback for term '{}': {}", term, ex.getMessage());
                 if (liveSearchFallbackReason == null) {
                     liveSearchFallbackReason = ex.getMessage();
                 }
@@ -126,6 +138,7 @@ public class DomesticMatchService {
                     break;
                 }
             } catch (RuntimeException ex) {
+                log.warn("live domestic search failed for term '{}', falling back to catalog", term, ex);
                 if (liveSearchFallbackReason == null) {
                     liveSearchFallbackReason = "国内实时货源搜索失败，已切换到本地商品库。";
                 }
@@ -133,6 +146,21 @@ public class DomesticMatchService {
                     break;
                 }
             }
+        }
+
+        if (mode == TaskMode.REAL) {
+            if (!liveSearchUsed) {
+                String fallbackReason = liveSearchFallbackReason == null || liveSearchFallbackReason.isBlank()
+                        ? "1688 实时检索未返回可用候选。"
+                        : liveSearchFallbackReason;
+                throw new IllegalStateException(fallbackReason);
+            }
+            return new DomesticSearchExecution(
+                    scoreCandidates(sourceCandidate, queryRewrite, merged.values()),
+                    retrievalTerms,
+                    true,
+                    liveSearchFallbackReason
+            );
         }
 
         for (String term : retrievalTerms) {
@@ -213,6 +241,7 @@ public class DomesticMatchService {
             return liveTerms.stream().limit(6).toList();
         }
         return retrievalTerms.stream()
+                .filter(term -> !isWeakAsciiTerm(term))
                 .limit(2)
                 .toList();
     }
@@ -228,7 +257,7 @@ public class DomesticMatchService {
             return;
         }
         String normalized = value.trim();
-        if (containsHan(normalized)) {
+        if (containsHan(normalized) || !isWeakAsciiTerm(normalized)) {
             terms.add(normalized);
         }
     }
@@ -298,6 +327,7 @@ public class DomesticMatchService {
                     BigDecimal priceReasonability = scorePriceReasonability(candidate.product.price(), minPrice, maxPrice);
                     BigDecimal vectorBoost = scoreVectorBoost(candidate.vectorScore);
                     BigDecimal attributeAlignment = scoreAttributeAlignment(sourceCandidate.title(), candidate.product, detailSnapshot);
+                    BigDecimal categoryAlignment = scoreCategoryAlignment(sourceCandidate, queryRewrite, candidate.product, detailSnapshot);
                     BigDecimal accessoryPenalty = scoreAccessoryPenalty(queryRewrite, candidate.product, detailSnapshot);
                     Map<String, BigDecimal> scoreBreakdown = buildScoreBreakdown(
                             titleOverlap,
@@ -305,6 +335,7 @@ public class DomesticMatchService {
                             priceReasonability,
                             vectorBoost,
                             attributeAlignment,
+                            categoryAlignment,
                             accessoryPenalty
                     );
                     BigDecimal finalScore = scoreBreakdown.values().stream()
@@ -322,6 +353,7 @@ public class DomesticMatchService {
                             priceReasonability,
                             vectorBoost,
                             attributeAlignment,
+                            categoryAlignment,
                             scoreBreakdown,
                             finalScore,
                             buildEvidence(queryRewrite, candidate.product, detailSnapshot, candidate.retrievalTerms, scoreBreakdown)
@@ -391,6 +423,7 @@ public class DomesticMatchService {
             BigDecimal priceReasonability,
             BigDecimal vectorBoost,
             BigDecimal attributeAlignment,
+            BigDecimal categoryAlignment,
             BigDecimal accessoryPenalty
     ) {
         Map<String, BigDecimal> breakdown = new LinkedHashMap<>();
@@ -399,6 +432,7 @@ public class DomesticMatchService {
         breakdown.put("priceReasonability", priceReasonability);
         breakdown.put("vectorBoost", vectorBoost);
         breakdown.put("attributeAlignment", attributeAlignment);
+        breakdown.put("categoryAlignment", categoryAlignment);
         breakdown.put("accessoryPenalty", accessoryPenalty);
         return breakdown;
     }
@@ -456,6 +490,47 @@ public class DomesticMatchService {
         return BigDecimal.ZERO;
     }
 
+    private BigDecimal scoreCategoryAlignment(
+            CandidateProduct sourceCandidate,
+            QueryRewrite queryRewrite,
+            Product product,
+            ProductDetailSnapshot detailSnapshot
+    ) {
+        String sourceText = String.join(" ",
+                sourceCandidate.title() == null ? "" : sourceCandidate.title(),
+                queryRewrite.rewrittenText() == null ? "" : queryRewrite.rewrittenText(),
+                queryRewrite.keywords() == null ? "" : String.join(" ", queryRewrite.keywords())
+        ).toLowerCase(Locale.ROOT);
+        String targetText = String.join(" ",
+                product.title() == null ? "" : product.title(),
+                detailSnapshot == null || detailSnapshot.title() == null ? "" : detailSnapshot.title(),
+                detailSnapshot == null || detailSnapshot.description() == null ? "" : detailSnapshot.description()
+        ).toLowerCase(Locale.ROOT);
+
+        if (containsCoffeeIntent(sourceText)) {
+            if (containsCoffeeToken(targetText)) {
+                return new BigDecimal("10.00");
+            }
+            if (containsLabelToken(targetText)) {
+                return new BigDecimal("-15.00");
+            }
+            return new BigDecimal("-8.00");
+        }
+        List<String> intentTokens = new ArrayList<>(tokens(queryRewrite.rewrittenText()));
+        if (queryRewrite.keywords() != null) {
+            queryRewrite.keywords().forEach(keyword -> intentTokens.addAll(tokens(keyword)));
+        }
+        List<String> targetTokens = new ArrayList<>(tokens(product.title()));
+        if (detailSnapshot != null) {
+            targetTokens.addAll(tokens(detailSnapshot.title()));
+            targetTokens.addAll(tokens(detailSnapshot.description()));
+            if (detailSnapshot.attributes() != null) {
+                detailSnapshot.attributes().values().forEach(value -> targetTokens.addAll(tokens(value == null ? null : value.toString())));
+            }
+        }
+        return ratioScore(intentTokens, targetTokens, 10);
+    }
+
     private List<String> tokens(String value) {
         if (value == null || value.isBlank()) {
             return List.of();
@@ -497,6 +572,41 @@ public class DomesticMatchService {
                 || value.contains("accessory");
     }
 
+    private boolean containsCoffeeIntent(String value) {
+        if (value == null || value.isBlank()) {
+            return false;
+        }
+        return value.contains("coffee") || value.contains("咖啡");
+    }
+
+    private boolean containsCoffeeToken(String value) {
+        if (value == null || value.isBlank()) {
+            return false;
+        }
+        return value.contains("咖啡")
+                || value.contains("coffee")
+                || value.contains("咖啡豆")
+                || value.contains("咖啡粉")
+                || value.contains("挂耳")
+                || value.contains("速溶");
+    }
+
+    private boolean containsLabelToken(String value) {
+        if (value == null || value.isBlank()) {
+            return false;
+        }
+        return value.contains("织唛")
+                || value.contains("织章")
+                || value.contains("布贴")
+                || value.contains("臂章")
+                || value.contains("徽章")
+                || value.contains("贴标")
+                || value.contains("商标")
+                || value.contains("label")
+                || value.contains("patch")
+                || value.contains("woven");
+    }
+
     private List<String> chineseNgrams(String value, int size) {
         if (value == null || value.isBlank() || value.length() < size) {
             return List.of();
@@ -506,6 +616,18 @@ public class DomesticMatchService {
             grams.add(value.substring(index, index + size));
         }
         return grams;
+    }
+
+    private boolean isWeakAsciiTerm(String term) {
+        if (term == null || term.isBlank() || containsHan(term)) {
+            return false;
+        }
+        String normalized = term.toLowerCase(Locale.ROOT).trim();
+        String[] parts = normalized.split("\\s+");
+        if (parts.length >= 2) {
+            return false;
+        }
+        return parts[0].length() <= 10;
     }
 
     private CandidateMatchRecord toMatch(
@@ -559,13 +681,14 @@ public class DomesticMatchService {
     private String buildReason(QueryRewrite queryRewrite, ScoredCandidate scoredCandidate) {
         return String.format(
                 Locale.ROOT,
-                "围绕“%s”完成国内货源混合检索，标题重合 %.2f，改写覆盖 %.2f，价格合理性 %.2f，向量加权 %.2f，属性对齐 %.2f。",
+                "围绕“%s”完成国内货源混合检索，标题重合 %.2f，改写覆盖 %.2f，价格合理性 %.2f，向量加权 %.2f，属性对齐 %.2f，品类对齐 %.2f。",
                 queryRewrite.rewrittenText(),
                 scoredCandidate.titleOverlap().doubleValue(),
                 scoredCandidate.rewriteCoverage().doubleValue(),
                 scoredCandidate.priceReasonability().doubleValue(),
                 scoredCandidate.vectorBoost().doubleValue(),
-                scoredCandidate.attributeAlignment().doubleValue()
+                scoredCandidate.attributeAlignment().doubleValue(),
+                scoredCandidate.categoryAlignment().doubleValue()
         );
     }
 
@@ -601,6 +724,7 @@ public class DomesticMatchService {
             BigDecimal priceReasonability,
             BigDecimal vectorBoost,
             BigDecimal attributeAlignment,
+            BigDecimal categoryAlignment,
             Map<String, BigDecimal> scoreBreakdown,
             BigDecimal finalScore,
             List<String> evidence

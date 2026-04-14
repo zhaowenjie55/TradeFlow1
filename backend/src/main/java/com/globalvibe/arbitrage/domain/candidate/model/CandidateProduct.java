@@ -11,6 +11,7 @@ public record CandidateProduct(
         BigDecimal estimatedMargin,
         String riskTag,
         String recommendationReason,
-        boolean suggestSecondPhase
+        boolean suggestSecondPhase,
+        String link
 ) {
 }

@@ -28,8 +28,13 @@ public class IntegrationGatewayProperties {
     @Data
     public static class CrawlerProperties {
         private boolean enabled = true;
+        private boolean cacheEnabled = false;
         private String searchEndpoint;
         private String detailEndpoint;
+        private int connectTimeoutMillis = 5000;
+        private int readTimeoutMillis = 30000;
+        private int maxRetries = 2;
+        private long retryInitialBackoffMillis = 1000;
     }
 
     @Data
@@ -41,6 +46,8 @@ public class IntegrationGatewayProperties {
         private String apiKey;
         private int connectTimeoutMillis = 5000;
         private int readTimeoutMillis = 300000;
+        private int maxRetries = 2;
+        private long retryInitialBackoffMillis = 1500;
     }
 
     @Data
@@ -49,5 +56,9 @@ public class IntegrationGatewayProperties {
         private boolean forceFallback = true;
         private String searchEndpoint;
         private String apiKey;
+        private int connectTimeoutMillis = 5000;
+        private int readTimeoutMillis = 30000;
+        private int maxRetries = 2;
+        private long retryInitialBackoffMillis = 1000;
     }
 }

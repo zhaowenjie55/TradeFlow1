@@ -21,7 +21,7 @@ public class TaskStatusTransitionPolicy {
         allow(TaskStatus.WAITING_1688_VERIFICATION, TaskStatus.QUEUED, TaskStatus.FAILED);
         allow(TaskStatus.WAITING_USER_SELECTION, TaskStatus.CREATED, TaskStatus.QUEUED, TaskStatus.FAILED);
         allow(TaskStatus.REPORT_READY);
-        allow(TaskStatus.FAILED);
+        allow(TaskStatus.FAILED, TaskStatus.QUEUED);
         allow(TaskStatus.FALLBACK_MOCK);
     }
 

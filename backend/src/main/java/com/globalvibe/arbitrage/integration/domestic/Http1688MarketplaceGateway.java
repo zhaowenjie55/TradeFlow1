@@ -2,16 +2,18 @@ package com.globalvibe.arbitrage.integration.domestic;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.globalvibe.arbitrage.common.retry.RetryExecutor;
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
 import com.globalvibe.arbitrage.domain.marketplace.model.MarketplaceType;
 import com.globalvibe.arbitrage.domain.product.model.Product;
 import com.globalvibe.arbitrage.domain.product.model.ProductDetailSnapshot;
 import com.globalvibe.arbitrage.integration.VerificationRequiredException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 
 import java.math.BigDecimal;
@@ -23,13 +25,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @Component
 public class Http1688MarketplaceGateway {
 
+    private static final Logger log = LoggerFactory.getLogger(Http1688MarketplaceGateway.class);
+
     private final RestClient restClient;
     private final IntegrationGatewayProperties integrationGatewayProperties;
     private final ObjectMapper objectMapper;
+    private final RetryExecutor retryExecutor;
 
     public Http1688MarketplaceGateway(
             RestClient.Builder restClientBuilder,
@@ -45,6 +51,11 @@ public class Http1688MarketplaceGateway {
                 .build();
         this.integrationGatewayProperties = integrationGatewayProperties;
         this.objectMapper = objectMapper;
+        this.retryExecutor = new RetryExecutor(
+                domesticProperties.getMaxRetries(),
+                domesticProperties.getRetryInitialBackoffMillis(),
+                log
+        );
     }
 
     public List<Product> searchProducts(String keyword) {
@@ -53,7 +64,7 @@ public class Http1688MarketplaceGateway {
             throw new IllegalStateException("Domestic search endpoint is not configured.");
         }
 
-        JsonNode root = executeWithRetry(() -> restClient.post()
+        JsonNode root = retryExecutor.execute(() -> executeOrThrowVerification(() -> restClient.post()
                 .uri(endpoint)
                 .headers(headers -> applyApiKey(headers, integrationGatewayProperties.getDomestic().getApiKey()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -63,7 +74,7 @@ public class Http1688MarketplaceGateway {
                         "page", 1
                 ))
                 .retrieve()
-                .body(JsonNode.class));
+                .body(JsonNode.class)), "domestic-search");
 
         return parseKeywordProducts(root);
     }
@@ -74,7 +85,7 @@ public class Http1688MarketplaceGateway {
             throw new IllegalStateException("Domestic detail endpoint is not configured.");
         }
 
-        JsonNode root = executeWithRetry(() -> restClient.post()
+        JsonNode root = retryExecutor.execute(() -> executeOrThrowVerification(() -> restClient.post()
                 .uri(endpoint)
                 .headers(headers -> applyApiKey(headers, integrationGatewayProperties.getDomestic().getApiKey()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -83,7 +94,7 @@ public class Http1688MarketplaceGateway {
                         "externalItemId", productId
                 ))
                 .retrieve()
-                .body(JsonNode.class));
+                .body(JsonNode.class)), "domestic-detail");
 
         return parseDetail(root, productId);
     }
@@ -172,7 +183,15 @@ public class Http1688MarketplaceGateway {
             return BigDecimal.ZERO;
         }
         String value = node.asText();
-        return value == null || value.isBlank() ? BigDecimal.ZERO : new BigDecimal(value);
+        if (value == null || value.isBlank()) {
+            return BigDecimal.ZERO;
+        }
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException ex) {
+            log.warn("domestic gateway: malformed price value '{}', defaulting to ZERO", value);
+            return BigDecimal.ZERO;
+        }
     }
 
     private String normalizeImage(String url) {
@@ -262,40 +281,16 @@ public class Http1688MarketplaceGateway {
         return value == null || value.isBlank() ? null : value;
     }
 
-    private JsonNode executeWithRetry(ExchangeAction action) {
-        RestClientException lastError = null;
-        for (int attempt = 1; attempt <= 2; attempt++) {
-            try {
-                return action.execute();
-            } catch (RestClientResponseException ex) {
-                VerificationRequiredException verificationRequiredException = resolveVerificationRequired(ex);
-                if (verificationRequiredException != null) {
-                    throw verificationRequiredException;
-                }
-                lastError = ex;
-                if (attempt == 2) {
-                    throw ex;
-                }
-                try {
-                    Thread.sleep(1500L);
-                } catch (InterruptedException interruptedException) {
-                    Thread.currentThread().interrupt();
-                    throw ex;
-                }
-            } catch (RestClientException ex) {
-                lastError = ex;
-                if (attempt == 2) {
-                    throw ex;
-                }
-                try {
-                    Thread.sleep(1500L);
-                } catch (InterruptedException interruptedException) {
-                    Thread.currentThread().interrupt();
-                    throw ex;
-                }
+    private JsonNode executeOrThrowVerification(Supplier<JsonNode> action) {
+        try {
+            return action.get();
+        } catch (RestClientResponseException ex) {
+            VerificationRequiredException verification = resolveVerificationRequired(ex);
+            if (verification != null) {
+                throw verification;
             }
+            throw ex;
         }
-        throw lastError == null ? new IllegalStateException("Domestic gateway request failed.") : lastError;
     }
 
     private VerificationRequiredException resolveVerificationRequired(RestClientResponseException ex) {
@@ -324,11 +319,6 @@ public class Http1688MarketplaceGateway {
             return new VerificationRequiredException("1688 需要完成人工验证，请在浏览器窗口完成登录或滑块验证后继续。", ex);
         }
         return null;
-    }
-
-    @FunctionalInterface
-    private interface ExchangeAction {
-        JsonNode execute();
     }
 
     private String syntheticProductId(String productUrl, String title) {

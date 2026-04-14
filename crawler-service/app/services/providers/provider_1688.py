@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from threading import RLock
@@ -8,8 +9,8 @@ from urllib.parse import quote
 
 from playwright.sync_api import Error as PlaywrightError
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
-from playwright.sync_api import sync_playwright
 
+from app.services.providers.domestic_browser_session import DomesticBrowserSessionManager
 
 SEARCH_ENTRY_SELECTORS = (
     # These selectors are tuned for the current 1688 search result markup and
@@ -90,12 +91,9 @@ EMPTY_RESULT_MARKERS = (
 PRICE_PATTERN = re.compile(r"(\d+(?:\.\d+)?)")
 ITEM_ID_PATTERN = re.compile(r"/offer/(\d+)\.html")
 ITEM_ID_QUERY_PATTERN = re.compile(r"[?&]offerId=(\d+)")
-PROFILE_LOCK_ERROR_MARKERS = (
-    "ProcessSingleton",
-    "SingletonLock",
-    "profile is already in use",
-)
 DOMESTIC_BROWSER_LOCK = RLock()
+DOMESTIC_SESSION_MANAGER = DomesticBrowserSessionManager()
+logger = logging.getLogger(__name__)
 
 
 class DomesticSearchError(RuntimeError):
@@ -159,83 +157,97 @@ def _fetch_1688_search_results(keyword: str, page: int) -> list[DomesticSearchIt
 
     try:
         with DOMESTIC_BROWSER_LOCK:
-            with sync_playwright() as playwright:
-                launch_kwargs: dict[str, Any] = {
-                    "headless": headless,
-                    "slow_mo": slow_mo,
-                    "args": [
-                        "--disable-blink-features=AutomationControlled",
-                        "--lang=zh-CN",
-                    ],
-                }
-                if browser_channel:
-                    launch_kwargs["channel"] = browser_channel
-                context_kwargs: dict[str, Any] = {
-                    "locale": "zh-CN",
-                    "timezone_id": "Asia/Shanghai",
-                    "viewport": {"width": 1600, "height": 1200},
-                    "user_agent": (
-                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-                    ),
-                }
-                if storage_state_path and Path(storage_state_path).exists():
-                    context_kwargs["storage_state"] = storage_state_path
-                context, page_ref = open_browser_context(
-                    playwright,
-                    cdp_url=cdp_url,
-                    user_data_dir=user_data_dir,
-                    launch_kwargs=launch_kwargs,
-                    context_kwargs=context_kwargs,
-                )
-                context.add_init_script(
-                    """
-                    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-                    window.chrome = window.chrome || { runtime: {} };
-                    Object.defineProperty(navigator, 'languages', { get: () => ['zh-CN', 'zh', 'en'] });
-                    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
-                    """
-                )
+            launch_kwargs: dict[str, Any] = {
+                "headless": headless,
+                "slow_mo": slow_mo,
+                "args": [
+                    "--disable-blink-features=AutomationControlled",
+                    "--lang=zh-CN",
+                ],
+            }
+            if browser_channel:
+                launch_kwargs["channel"] = browser_channel
+            context_kwargs: dict[str, Any] = {
+                "locale": "zh-CN",
+                "timezone_id": "Asia/Shanghai",
+                "viewport": {"width": 1600, "height": 1200},
+                "user_agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+                ),
+            }
+            if storage_state_path and Path(storage_state_path).exists():
+                context_kwargs["storage_state"] = storage_state_path
+            _context, page_ref = DOMESTIC_SESSION_MANAGER.acquire(
+                cdp_url=cdp_url,
+                user_data_dir=user_data_dir,
+                launch_kwargs=launch_kwargs,
+                context_kwargs=context_kwargs,
+                storage_state_path=storage_state_path,
+            )
 
-                try:
-                    page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
-                except PlaywrightTimeoutError as exc:
-                    if not page_ref.url or page_ref.url == "about:blank":
-                        raise DomesticSearchError("1688 页面打开超时，请稍后重试。") from exc
-                try:
-                    page_ref.wait_for_load_state("networkidle", timeout=15000)
-                except PlaywrightTimeoutError:
-                    # 1688 长轮询较多，networkidle 不稳定，不作为硬失败条件。
-                    pass
-
+            if DOMESTIC_SESSION_MANAGER.has_pending_verification(looks_like_antibot):
+                if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
+                    if _await_manual_verification(
+                            page_ref,
+                            manual_solve_timeout_ms,
+                            "1688 验证过程中浏览器会话已关闭，请重新打开会话后重试。",
+                    ):
+                        DOMESTIC_SESSION_MANAGER.mark_success()
                 if looks_like_antibot(page_ref):
-                    if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
-                        page_ref.bring_to_front()
-                        page_ref.wait_for_timeout(manual_solve_timeout_ms)
-                        if not looks_like_antibot(page_ref):
-                            wait_for_results(page_ref)
-                            items = extract_items(page_ref)
-                            if items:
-                                return items
-                    dump_debug_artifacts(page_ref, debug_dir, "anti_bot")
+                    dump_debug_artifacts(page_ref, debug_dir, "blocked_session")
                     raise DomesticVerificationRequiredError(
-                        f"1688 返回了风控/验证码页面，已预留约 {manual_solve_timeout_ms // 1000} 秒人工登录/验证时间，请完成后重试。"
+                        "1688 浏览器会话仍停留在风控/验证码页面，请在复用浏览器中先完成验证后重试。"
                     )
 
-                wait_for_results(page_ref)
-                items = extract_items(page_ref)
-                if not items:
-                    if looks_like_empty_result(page_ref):
-                        return []
-                    dump_debug_artifacts(page_ref, debug_dir, "no_results")
-                    raise DomesticSearchError(
-                        "1688 页面已打开，但未解析到商品卡片。需要我本地在浏览器中确认 selector。"
-                    )
-                return items
+            try:
+                page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
+            except PlaywrightTimeoutError as exc:
+                if not page_ref.url or page_ref.url == "about:blank":
+                    DOMESTIC_SESSION_MANAGER.invalidate()
+                    raise DomesticSearchError("1688 页面打开超时，请稍后重试。") from exc
+            try:
+                page_ref.wait_for_load_state("networkidle", timeout=15000)
+            except PlaywrightTimeoutError:
+                # 1688 长轮询较多，networkidle 不稳定，不作为硬失败条件。
+                pass
+
+            if looks_like_antibot(page_ref):
+                DOMESTIC_SESSION_MANAGER.mark_verification_required(page_ref)
+                if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
+                    if _await_manual_verification(
+                            page_ref,
+                            manual_solve_timeout_ms,
+                            "1688 验证过程中浏览器会话已关闭，请重新打开会话后重试。",
+                    ):
+                        wait_for_results(page_ref)
+                        items = extract_items(page_ref)
+                        if items:
+                            DOMESTIC_SESSION_MANAGER.mark_success()
+                            return items
+                dump_debug_artifacts(page_ref, debug_dir, "anti_bot")
+                raise DomesticVerificationRequiredError(
+                    f"1688 返回了风控/验证码页面，已预留约 {manual_solve_timeout_ms // 1000} 秒人工登录/验证时间，请完成后重试。"
+                )
+
+            wait_for_results(page_ref)
+            items = extract_items(page_ref)
+            if not items:
+                if looks_like_empty_result(page_ref):
+                    DOMESTIC_SESSION_MANAGER.mark_success()
+                    return []
+                dump_debug_artifacts(page_ref, debug_dir, "no_results")
+                raise DomesticSearchError(
+                    "1688 页面已打开，但未解析到商品卡片。需要我本地在浏览器中确认 selector。"
+                )
+            DOMESTIC_SESSION_MANAGER.mark_success()
+            logger.info("1688 search succeeded keyword='%s' page=%s count=%s", keyword, page, len(items))
+            return items
             
     except DomesticSearchError:
         raise
     except PlaywrightError as exc:
+        DOMESTIC_SESSION_MANAGER.invalidate()
         raise DomesticSearchError(f"Playwright 启动或执行失败: {exc}") from exc
 
 
@@ -254,73 +266,86 @@ def _fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
 
     try:
         with DOMESTIC_BROWSER_LOCK:
-            with sync_playwright() as playwright:
-                launch_kwargs: dict[str, Any] = {
-                    "headless": headless,
-                    "slow_mo": slow_mo,
-                    "args": [
-                        "--disable-blink-features=AutomationControlled",
-                        "--lang=zh-CN",
-                    ],
-                }
-                if browser_channel:
-                    launch_kwargs["channel"] = browser_channel
-                context_kwargs: dict[str, Any] = {
-                    "locale": "zh-CN",
-                    "timezone_id": "Asia/Shanghai",
-                    "viewport": {"width": 1600, "height": 1200},
-                    "user_agent": (
-                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-                    ),
-                }
-                if storage_state_path and Path(storage_state_path).exists():
-                    context_kwargs["storage_state"] = storage_state_path
-                context, page_ref = open_browser_context(
-                    playwright,
-                    cdp_url=cdp_url,
-                    user_data_dir=user_data_dir,
-                    launch_kwargs=launch_kwargs,
-                    context_kwargs=context_kwargs,
-                )
-                context.add_init_script(
-                    """
-                    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-                    window.chrome = window.chrome || { runtime: {} };
-                    Object.defineProperty(navigator, 'languages', { get: () => ['zh-CN', 'zh', 'en'] });
-                    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
-                    """
-                )
+            launch_kwargs: dict[str, Any] = {
+                "headless": headless,
+                "slow_mo": slow_mo,
+                "args": [
+                    "--disable-blink-features=AutomationControlled",
+                    "--lang=zh-CN",
+                ],
+            }
+            if browser_channel:
+                launch_kwargs["channel"] = browser_channel
+            context_kwargs: dict[str, Any] = {
+                "locale": "zh-CN",
+                "timezone_id": "Asia/Shanghai",
+                "viewport": {"width": 1600, "height": 1200},
+                "user_agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+                ),
+            }
+            if storage_state_path and Path(storage_state_path).exists():
+                context_kwargs["storage_state"] = storage_state_path
+            _context, page_ref = DOMESTIC_SESSION_MANAGER.acquire(
+                cdp_url=cdp_url,
+                user_data_dir=user_data_dir,
+                launch_kwargs=launch_kwargs,
+                context_kwargs=context_kwargs,
+                storage_state_path=storage_state_path,
+            )
 
-                try:
-                    page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
-                except PlaywrightTimeoutError as exc:
-                    if not page_ref.url or page_ref.url == "about:blank":
-                        raise DomesticDetailError("1688 详情页打开超时，请稍后重试。") from exc
-
+            if DOMESTIC_SESSION_MANAGER.has_pending_verification(looks_like_antibot):
+                if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
+                    if _await_manual_verification(
+                            page_ref,
+                            manual_solve_timeout_ms,
+                            "1688 详情验证过程中浏览器会话已关闭，请重新打开会话后重试。",
+                    ):
+                        DOMESTIC_SESSION_MANAGER.mark_success()
                 if looks_like_antibot(page_ref):
-                    if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
-                        page_ref.bring_to_front()
-                        page_ref.wait_for_timeout(manual_solve_timeout_ms)
-                        if not looks_like_antibot(page_ref):
-                            wait_for_detail(page_ref)
-                            detail = extract_detail_payload(page_ref, external_item_id)
-                            if detail:
-                                return detail
-                    dump_debug_artifacts(page_ref, debug_dir, "detail_anti_bot")
+                    dump_debug_artifacts(page_ref, debug_dir, "detail_blocked_session")
                     raise DomesticVerificationRequiredError(
-                        f"1688 详情页返回了风控/验证码页面，已预留约 {manual_solve_timeout_ms // 1000} 秒人工登录/验证时间，请完成后重试。"
+                        "1688 浏览器会话仍停留在风控/验证码页面，请先完成验证后重试详情抓取。"
                     )
 
-                wait_for_detail(page_ref)
-                detail = extract_detail_payload(page_ref, external_item_id)
-                if not detail:
-                    dump_debug_artifacts(page_ref, debug_dir, "detail_no_data")
-                    raise DomesticDetailError("1688 详情页已打开，但未提取到结构化详情数据。")
-                return detail
+            try:
+                page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
+            except PlaywrightTimeoutError as exc:
+                if not page_ref.url or page_ref.url == "about:blank":
+                    DOMESTIC_SESSION_MANAGER.invalidate()
+                    raise DomesticDetailError("1688 详情页打开超时，请稍后重试。") from exc
+
+            if looks_like_antibot(page_ref):
+                DOMESTIC_SESSION_MANAGER.mark_verification_required(page_ref)
+                if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
+                    if _await_manual_verification(
+                            page_ref,
+                            manual_solve_timeout_ms,
+                            "1688 详情验证过程中浏览器会话已关闭，请重新打开会话后重试。",
+                    ):
+                        wait_for_detail(page_ref)
+                        detail = extract_detail_payload(page_ref, external_item_id)
+                        if detail:
+                            DOMESTIC_SESSION_MANAGER.mark_success()
+                            return detail
+                dump_debug_artifacts(page_ref, debug_dir, "detail_anti_bot")
+                raise DomesticVerificationRequiredError(
+                    f"1688 详情页返回了风控/验证码页面，已预留约 {manual_solve_timeout_ms // 1000} 秒人工登录/验证时间，请完成后重试。"
+                )
+
+            wait_for_detail(page_ref)
+            detail = extract_detail_payload(page_ref, external_item_id)
+            if not detail:
+                dump_debug_artifacts(page_ref, debug_dir, "detail_no_data")
+                raise DomesticDetailError("1688 详情页已打开，但未提取到结构化详情数据。")
+            DOMESTIC_SESSION_MANAGER.mark_success()
+            logger.info("1688 detail succeeded external_item_id=%s", external_item_id)
+            return detail
     except DomesticDetailError:
         raise
     except PlaywrightError as exc:
+        DOMESTIC_SESSION_MANAGER.invalidate()
         raise DomesticDetailError(f"Playwright 启动或执行详情抓取失败: {exc}") from exc
 
 
@@ -332,39 +357,6 @@ def build_1688_search_url(keyword: str, page: int) -> str:
     if page <= 1:
         return f"https://s.1688.com/selloffer/offer_search.htm?keywords={encoded}"
     return f"https://s.1688.com/selloffer/offer_search.htm?keywords={encoded}&beginPage={page}"
-
-
-def open_browser_context(playwright, *, cdp_url: str, user_data_dir: str, launch_kwargs: dict[str, Any], context_kwargs: dict[str, Any]):
-    if cdp_url:
-        browser = playwright.chromium.connect_over_cdp(cdp_url)
-        context = browser.contexts[0] if browser.contexts else browser.new_context(**context_kwargs)
-        page_ref = context.new_page()
-        return context, page_ref
-
-    if user_data_dir:
-        persistent_kwargs = dict(context_kwargs)
-        persistent_kwargs.pop("storage_state", None)
-        try:
-            context = playwright.chromium.launch_persistent_context(
-                user_data_dir,
-                **launch_kwargs,
-                **persistent_kwargs,
-            )
-            page_ref = context.pages[0] if context.pages else context.new_page()
-            return context, page_ref
-        except PlaywrightError as exc:
-            if not is_profile_lock_error(exc):
-                raise
-
-    browser = playwright.chromium.launch(**launch_kwargs)
-    context = browser.new_context(**context_kwargs)
-    page_ref = context.new_page()
-    return context, page_ref
-
-
-def is_profile_lock_error(exc: Exception) -> bool:
-    message = str(exc)
-    return any(marker in message for marker in PROFILE_LOCK_ERROR_MARKERS)
 
 
 def wait_for_results(page_ref) -> None:
@@ -389,6 +381,24 @@ def wait_for_detail(page_ref) -> None:
             continue
     dump_debug_artifacts(page_ref, os.getenv("PLAYWRIGHT_DEBUG_DIR", "").strip(), "detail_selector_timeout")
     raise DomesticDetailError("1688 详情页未正常渲染，未找到可用详情 selector。")
+
+
+def _await_manual_verification(page_ref, timeout_ms: int, closed_message: str) -> bool:
+    try:
+        page_ref.bring_to_front()
+    except PlaywrightError:
+        DOMESTIC_SESSION_MANAGER.invalidate()
+        raise DomesticVerificationRequiredError(closed_message)
+    try:
+        page_ref.wait_for_timeout(timeout_ms)
+    except PlaywrightError as exc:
+        DOMESTIC_SESSION_MANAGER.invalidate()
+        raise DomesticVerificationRequiredError(closed_message) from exc
+    try:
+        return not looks_like_antibot(page_ref)
+    except PlaywrightError as exc:
+        DOMESTIC_SESSION_MANAGER.invalidate()
+        raise DomesticVerificationRequiredError(closed_message) from exc
 
 
 def extract_items(page_ref) -> list[DomesticSearchItem]:

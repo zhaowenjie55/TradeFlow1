@@ -59,11 +59,11 @@ public class Phase2TaskProcessor {
                     .map(match -> match.externalItemId())
                     .toList());
             phase2Task.setReportId(workflowResult.report().reportId());
+            reportAggregateService.save(phase2Task.getTaskId(), workflowResult.report());
             taskStatusTransitionPolicy.assertAllowed(phase2Task.getStatus(), TaskStatus.REPORT_READY);
             phase2Task.setStatus(TaskStatus.REPORT_READY);
             phase2Task.setUpdatedAt(OffsetDateTime.now());
             analysisTaskRepository.save(phase2Task);
-            reportAggregateService.save(phase2Task.getTaskId(), workflowResult.report());
         } catch (VerificationRequiredException ex) {
             markWaitingVerification(phase2Task, ex.getMessage());
         } catch (RuntimeException ex) {

@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ReportAggregateService {
@@ -86,11 +87,11 @@ public class ReportAggregateService {
                 detailSource
         );
 
-        String fallbackReason = List.of(
+        String fallbackReason = Stream.of(
                         stringAuditValue(report, "rewriteFallbackReason"),
                         stringAuditValue(report, "retrievalFallbackReason"),
                         stringAuditValue(report, "narrativeFallbackReason")
-                ).stream()
+                )
                 .filter(value -> value != null && !value.isBlank())
                 .distinct()
                 .collect(Collectors.joining("; "));

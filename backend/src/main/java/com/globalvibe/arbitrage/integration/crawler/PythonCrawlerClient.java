@@ -1,8 +1,12 @@
 package com.globalvibe.arbitrage.integration.crawler;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.globalvibe.arbitrage.common.retry.RetryExecutor;
 import com.globalvibe.arbitrage.config.IntegrationGatewayProperties;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -15,15 +19,29 @@ import org.springframework.web.client.RestClient;
 @Component
 public class PythonCrawlerClient {
 
+    private static final Logger log = LoggerFactory.getLogger(PythonCrawlerClient.class);
+
     private final RestClient restClient;
     private final IntegrationGatewayProperties integrationGatewayProperties;
+    private final RetryExecutor retryExecutor;
 
     public PythonCrawlerClient(
             RestClient.Builder restClientBuilder,
             IntegrationGatewayProperties integrationGatewayProperties
     ) {
-        this.restClient = restClientBuilder.build();
+        IntegrationGatewayProperties.CrawlerProperties crawlerProperties = integrationGatewayProperties.getCrawler();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(crawlerProperties.getConnectTimeoutMillis());
+        requestFactory.setReadTimeout(crawlerProperties.getReadTimeoutMillis());
+        this.restClient = restClientBuilder
+                .requestFactory(requestFactory)
+                .build();
         this.integrationGatewayProperties = integrationGatewayProperties;
+        this.retryExecutor = new RetryExecutor(
+                crawlerProperties.getMaxRetries(),
+                crawlerProperties.getRetryInitialBackoffMillis(),
+                log
+        );
     }
 
     /**
@@ -37,12 +55,12 @@ public class PythonCrawlerClient {
             throw new IllegalStateException("Crawler search endpoint is not configured.");
         }
 
-        return restClient.post()
+        return retryExecutor.execute(() -> restClient.post()
                 .uri(endpoint)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new PythonCrawlerSearchRequest(keyword, page))
                 .retrieve()
-                .body(JsonNode.class);
+                .body(JsonNode.class), "crawler-search");
     }
 
     /**
@@ -54,11 +72,11 @@ public class PythonCrawlerClient {
             throw new IllegalStateException("Crawler detail endpoint is not configured.");
         }
 
-        return restClient.post()
+        return retryExecutor.execute(() -> restClient.post()
                 .uri(endpoint)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new PythonCrawlerDetailRequest(externalItemId))
                 .retrieve()
-                .body(JsonNode.class);
+                .body(JsonNode.class), "crawler-detail");
     }
 }

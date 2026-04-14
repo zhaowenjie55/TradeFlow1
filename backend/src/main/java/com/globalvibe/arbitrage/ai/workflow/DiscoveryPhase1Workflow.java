@@ -50,6 +50,7 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
         int sourceFetchLimit = Math.max(candidateLimit * 3, candidateLimit);
         boolean attemptedLiveSearch = shouldAttemptLiveSearch(analysisTask);
         boolean liveSearchUsed = false;
+        String liveSearchFailureReason = null;
 
         List<Product> sourceProducts = List.of();
         if (attemptedLiveSearch) {
@@ -63,7 +64,8 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
                     logs.add(log("phase1.live-search.hit", "实时检索成功，已获取 Amazon 候选商品。"));
                 }
             } catch (RuntimeException ex) {
-                logs.add(warnLog("phase1.live-search.failed", "实时检索失败，切换至本地商品库/历史快照兜底: " + ex.getMessage()));
+                liveSearchFailureReason = summarizeLiveSearchFailure(ex);
+                logs.add(warnLog("phase1.live-search.failed", "实时检索失败，切换至本地商品库/历史快照兜底: " + liveSearchFailureReason));
             }
         }
 
@@ -90,7 +92,7 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
             }
         }
         if (sourceProducts.isEmpty()) {
-            throw new IllegalStateException("未命中可用的 Amazon 候选，请调整关键词后重试。");
+            throw buildFailure(analysisTask, logs, attemptedLiveSearch, liveSearchFailureReason);
         }
 
         boolean fallbackUsed = attemptedLiveSearch && !liveSearchUsed;
@@ -167,7 +169,8 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
                 candidate.estimatedMargin(),
                 candidate.riskTag(),
                 candidate.recommendationReason(),
-                candidate.totalScore().compareTo(new BigDecimal("58")) >= 0
+                candidate.totalScore().compareTo(new BigDecimal("58")) >= 0,
+                candidate.product().link()
         );
     }
 
@@ -291,6 +294,47 @@ public class DiscoveryPhase1Workflow implements Phase1Workflow {
 
     private boolean shouldAttemptHistoryFallback(AnalysisTask analysisTask) {
         return analysisTask.getMode() != TaskMode.MOCK;
+    }
+
+    private Phase1WorkflowFailedException buildFailure(
+            AnalysisTask analysisTask,
+            List<TaskLogEntry> logs,
+            boolean attemptedLiveSearch,
+            String liveSearchFailureReason
+    ) {
+        if (attemptedLiveSearch && liveSearchFailureReason != null) {
+            return new Phase1WorkflowFailedException(
+                    "Amazon 实时检索失败（" + liveSearchFailureReason + "），且本地商品库/历史快照未命中关键词“"
+                            + analysisTask.getKeyword() + "”。请先修复 crawler / SerpApi 配置后重试。",
+                    logs
+            );
+        }
+        return new Phase1WorkflowFailedException(
+                "未命中可用的 Amazon 候选，请调整关键词后重试。",
+                logs
+        );
+    }
+
+    private String summarizeLiveSearchFailure(RuntimeException ex) {
+        String message = ex.getMessage();
+        if (message == null || message.isBlank()) {
+            return "下游服务未返回可识别的错误信息";
+        }
+        java.util.regex.Matcher detailMatcher = java.util.regex.Pattern
+                .compile("\"detail\"\\s*:\\s*\"([^\"]+)\"")
+                .matcher(message);
+        if (detailMatcher.find()) {
+            return detailMatcher.group(1).trim();
+        }
+        String normalized = message
+                .replaceAll("^\\d{3}\\s+[A-Za-z ]+:\\s*", "")
+                .replace("\\\"", "\"")
+                .replaceAll("\\s+", " ")
+                .trim();
+        if (normalized.length() > 160) {
+            return normalized.substring(0, 160) + "...";
+        }
+        return normalized;
     }
 
     private TaskLogEntry log(String stage, String message) {

@@ -8,6 +8,8 @@ spring:
       mode: ${SPRING_SQL_INIT_MODE:never}
 
 app:
+  task:
+    default-mode: ${TASK_DEFAULT_MODE:REAL}
   integration:
     asr:
       enabled: ${ASR_ENABLED:true}
@@ -23,6 +25,8 @@ app:
     llm:
       endpoint-base: ${LLM_ENDPOINT_BASE:http://127.0.0.1:8001/api/llm}
       read-timeout-millis: ${LLM_READ_TIMEOUT_MILLIS:60000}
+      chat-endpoint: ${LLM_CHAT_ENDPOINT:https://api.deepseek.com/chat/completions}
+      model: ${LLM_MODEL:deepseek-chat}
       api-key: ${LLM_API_KEY:}
   vector:
     enabled: ${VECTOR_ENABLED:false}

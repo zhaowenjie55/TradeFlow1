@@ -32,6 +32,11 @@ spring:
 server:
   port: ${SERVER_PORT:8080}
 
+management:
+  health:
+    redis:
+      enabled: false
+
 logging:
   pattern:
     level: "%5p [%X{traceId:-no-trace}]"
@@ -50,6 +55,7 @@ app:
   task:
     phase1-candidate-limit: 20
     processing-delay-millis: 250
+    phase1-workflow-timeout-millis: ${PHASE1_WORKFLOW_TIMEOUT_MILLIS:60000}
     default-mode: AUTO_FALLBACK
   integration:
     llm:
@@ -65,8 +71,13 @@ app:
     crawler:
       # Override this when the local FastAPI crawler runs on a different host or port.
       enabled: ${CRAWLER_SERVICE_ENABLED:true}
+      cache-enabled: ${CRAWLER_CACHE_ENABLED:false}
       search-endpoint: ${CRAWLER_SEARCH_ENDPOINT:http://127.0.0.1:8001/api/search}
       detail-endpoint: ${CRAWLER_DETAIL_ENDPOINT:http://127.0.0.1:8001/api/detail}
+      connect-timeout-millis: ${CRAWLER_CONNECT_TIMEOUT_MILLIS:5000}
+      read-timeout-millis: ${CRAWLER_READ_TIMEOUT_MILLIS:30000}
+      max-retries: ${CRAWLER_MAX_RETRIES:2}
+      retry-initial-backoff-millis: ${CRAWLER_RETRY_INITIAL_BACKOFF_MILLIS:1000}
     asr:
       enabled: ${ASR_ENABLED:true}
       endpoint: ${ASR_ENDPOINT:http://127.0.0.1:8001/api/asr/transcribe}
@@ -81,11 +92,17 @@ app:
       api-key: ${DOMESTIC_API_KEY:}
       connect-timeout-millis: ${DOMESTIC_CONNECT_TIMEOUT_MILLIS:5000}
       read-timeout-millis: ${DOMESTIC_READ_TIMEOUT_MILLIS:300000}
+      max-retries: ${DOMESTIC_MAX_RETRIES:2}
+      retry-initial-backoff-millis: ${DOMESTIC_RETRY_INITIAL_BACKOFF_MILLIS:1500}
     overseas:
       enabled: ${OVERSEAS_GATEWAY_ENABLED:false}
       force-fallback: ${OVERSEAS_FORCE_FALLBACK:true}
       search-endpoint: ${OVERSEAS_SEARCH_ENDPOINT:}
       api-key: ${OVERSEAS_API_KEY:}
+      connect-timeout-millis: ${OVERSEAS_CONNECT_TIMEOUT_MILLIS:5000}
+      read-timeout-millis: ${OVERSEAS_READ_TIMEOUT_MILLIS:30000}
+      max-retries: ${OVERSEAS_MAX_RETRIES:2}
+      retry-initial-backoff-millis: ${OVERSEAS_RETRY_INITIAL_BACKOFF_MILLIS:1000}
   pricing:
     usd-to-cny-rate: ${USD_TO_CNY_RATE:7.20}
     cross-border-logistics-rate: ${CROSS_BORDER_LOGISTICS_RATE:0.12}
@@ -101,7 +118,7 @@ app:
     pooling-mode: ${VECTOR_POOLING_MODE:CLS}
     bootstrap-on-startup: ${VECTOR_BOOTSTRAP_ON_STARTUP:true}
     domestic-platform: ${VECTOR_DOMESTIC_PLATFORM:TAOBAO}
-    fixed-keyword: ${VECTOR_FIXED_KEYWORD:亚克力透明收纳架}
+    fixed-keyword: ${VECTOR_FIXED_KEYWORD:}
     max-results: ${VECTOR_MAX_RESULTS:12}
     min-score: ${VECTOR_MIN_SCORE:0.55}
     dimension: ${VECTOR_DIMENSION:1024}

@@ -1,6 +1,10 @@
 import logging
 import uuid
 from contextvars import ContextVar
+from pathlib import Path
+
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 from fastapi import FastAPI, Request
 from starlette.middleware.base import BaseHTTPMiddleware

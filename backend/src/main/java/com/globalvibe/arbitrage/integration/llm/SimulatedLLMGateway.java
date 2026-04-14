@@ -38,6 +38,13 @@ public class SimulatedLLMGateway {
 
     public LLMGateway.RewriteResult rewriteTitle(String sourceTitle, String fallbackReason) {
         String normalized = sourceTitle == null ? "" : sourceTitle.toLowerCase(Locale.ROOT);
+        if (normalized.contains("coffee")) {
+            return simulatedRewrite(
+                    buildCoffeeRewrite(normalized),
+                    buildCoffeeKeywords(normalized),
+                    fallbackReason
+            );
+        }
         if (normalized.contains("cat water fountain")
                 || normalized.contains("pet fountain")
                 || normalized.contains("dog water dispenser")
@@ -257,6 +264,51 @@ public class SimulatedLLMGateway {
         }
         String rewritten = String.join(" ", fallbackKeywords);
         return new RewriteHeuristic(rewritten, new ArrayList<>(fallbackKeywords));
+    }
+
+    private String buildCoffeeRewrite(String normalized) {
+        if (normalized.contains("ground")) {
+            if (normalized.contains("hawaiian")) {
+                return "夏威夷咖啡粉";
+            }
+            return "研磨咖啡粉";
+        }
+        if (normalized.contains("bean")) {
+            if (normalized.contains("hawaiian")) {
+                return "夏威夷咖啡豆";
+            }
+            return "咖啡豆";
+        }
+        if (normalized.contains("instant")) {
+            return "速溶咖啡";
+        }
+        if (normalized.contains("hawaiian")) {
+            return "夏威夷咖啡";
+        }
+        return "咖啡";
+    }
+
+    private List<String> buildCoffeeKeywords(String normalized) {
+        LinkedHashSet<String> keywords = new LinkedHashSet<>();
+        if (normalized.contains("hawaiian")) {
+            keywords.add("夏威夷咖啡");
+        }
+        if (normalized.contains("ground")) {
+            keywords.add("咖啡粉");
+            keywords.add("研磨咖啡");
+        } else if (normalized.contains("bean")) {
+            keywords.add("咖啡豆");
+        } else if (normalized.contains("instant")) {
+            keywords.add("速溶咖啡");
+        }
+        if (normalized.contains("vanilla")) {
+            keywords.add("香草咖啡");
+        }
+        if (normalized.contains("macadamia")) {
+            keywords.add("夏威夷果咖啡");
+        }
+        keywords.add("咖啡");
+        return new ArrayList<>(keywords);
     }
 
     private void addPhraseIfMatched(LinkedHashSet<String> keywords, String normalizedSource, String englishPhrase, String chinesePhrase) {
