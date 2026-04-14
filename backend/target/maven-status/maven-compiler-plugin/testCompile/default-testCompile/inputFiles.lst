@@ -1,4 +1,13 @@
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/ai/workflow/DiscoveryPhase1WorkflowTest.java
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/analysis/policy/FallbackPolicyTest.java
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/analysis/service/MatchSelectionPolicyTest.java
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/analysis/service/PricingEngineTest.java
 /Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/analysis/service/ProductAnalysisServiceTest.java
 /Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/report/service/StructuredReportMarkdownRendererTest.java
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/search/service/AmazonCrawlerProductSearchServiceTest.java
 /Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/search/service/QueryRewriteServiceTest.java
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/search/service/SearchRunResultDeduplicatorTest.java
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/system/service/RelationalIntegrityAuditServiceTest.java
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/domain/task/service/TaskStatusTransitionPolicyTest.java
 /Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/integration/llm/RoutingLLMGatewayTest.java
+/Users/coolmood/TradeFlow/backend/src/test/java/com/globalvibe/arbitrage/integration/llm/SimulatedLLMGatewayTest.java

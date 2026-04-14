@@ -1,14 +1,36 @@
 spring:
   datasource:
-    url: jdbc:postgresql://47.103.117.192:5432/tradeflow
-    username: postgres
-    password: admin123456
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://127.0.0.1:5432/tradeflow}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+  sql:
+    init:
+      mode: ${SPRING_SQL_INIT_MODE:never}
 
 app:
+  task:
+    default-mode: ${TASK_DEFAULT_MODE:REAL}
   integration:
+    asr:
+      enabled: ${ASR_ENABLED:true}
+      endpoint: ${ASR_ENDPOINT:http://127.0.0.1:8001/api/asr/transcribe}
+      read-timeout-millis: ${ASR_READ_TIMEOUT_MILLIS:600000}
+    domestic:
+      enabled: ${DOMESTIC_GATEWAY_ENABLED:true}
+      force-fallback: ${DOMESTIC_FORCE_FALLBACK:false}
+      search-endpoint: ${DOMESTIC_SEARCH_ENDPOINT:http://127.0.0.1:8001/api/domestic/search}
+      detail-endpoint: ${DOMESTIC_DETAIL_ENDPOINT:http://127.0.0.1:8001/api/domestic/detail}
+      connect-timeout-millis: ${DOMESTIC_CONNECT_TIMEOUT_MILLIS:5000}
+      read-timeout-millis: ${DOMESTIC_READ_TIMEOUT_MILLIS:300000}
     llm:
+      endpoint-base: ${LLM_ENDPOINT_BASE:http://127.0.0.1:8001/api/llm}
+      read-timeout-millis: ${LLM_READ_TIMEOUT_MILLIS:60000}
+      chat-endpoint: ${LLM_CHAT_ENDPOINT:https://api.deepseek.com/chat/completions}
+      model: ${LLM_MODEL:deepseek-chat}
       api-key: ${LLM_API_KEY:}
   vector:
+    enabled: ${VECTOR_ENABLED:false}
     provider: ${VECTOR_PROVIDER:local-bge-m3}
     model-path: ${VECTOR_MODEL_PATH:/Users/coolmood/BGE/onnx/model_quantized.onnx}
     tokenizer-path: ${VECTOR_TOKENIZER_PATH:/Users/coolmood/BGE/tokenizer.json}
+    bootstrap-on-startup: ${VECTOR_BOOTSTRAP_ON_STARTUP:false}

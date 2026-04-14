@@ -121,11 +121,12 @@
       "Bash(echo \"PID $!\")",
       "Bash(pkill -f \"spring-boot:run\\\\|tradeflow.*jar\")",
       "Bash(SPRING_PROFILES_ACTIVE=local nohup mvn spring-boot:run)",
-      "Bash(echo \"PID: $!\")"
+      "Bash(echo \"PID: $!\")",
+      "Skill(commit-commands:commit)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "supabase"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

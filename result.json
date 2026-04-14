@@ -1,0 +1,2341 @@
+{
+  "search_metadata": {
+    "id": "69d478196adf2700a901ca3d",
+    "status": "Success",
+    "json_endpoint": "https://serpapi.com/searches/wzAB_OwpCZUkgGGY8J3PTA/69d478196adf2700a901ca3d.json",
+    "created_at": "2026-04-07 03:20:57 UTC",
+    "processed_at": "2026-04-07 03:20:57 UTC",
+    "amazon_url": "https://www.amazon.com/s?k=portable+blender",
+    "raw_html_file": "https://serpapi.com/searches/wzAB_OwpCZUkgGGY8J3PTA/69d478196adf2700a901ca3d.html",
+    "total_time_taken": 1.43
+  },
+  "search_parameters": {
+    "engine": "amazon",
+    "k": "portable blender",
+    "amazon_domain": "amazon.com",
+    "device": "desktop"
+  },
+  "search_information": {
+    "total_results": 54946,
+    "query_displayed": "portable blender",
+    "store": "gateway",
+    "page": 1
+  },
+  "organic_results": [
+    {
+      "position": 1,
+      "asin": "B0GJTD1KBC",
+      "sponsored": true,
+      "title": "Portable Blender for Smoothies, 600ML Capacity, Rechargeable Personal Blender with Leak Proof Lid and Safety Lock, USB Charging, Black",
+      "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfYXRmOjMwMTIyODAwODA4NTYwMjo6MDo6&url=%2FPortable-Smoothies-Capacity-Rechargeable-Personal%2Fdp%2FB0GJTD1KBC%2Fref%3Dsr_1_1_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-1-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1",
+      "link_clean": "https://www.amazon.com/dp/B0GJTD1KBC/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0GJTD1KBC&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71lFgq44yPL._AC_UY218_.jpg",
+      "rating": 4.0,
+      "reviews": 21,
+      "price": "$39.90",
+      "extracted_price": 39.9,
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Thu, Apr 9"
+      ]
+    },
+    {
+      "position": 2,
+      "asin": "B0FQ5DF649",
+      "sponsored": true,
+      "title": "Portable Blender for Smoothies & Shakes - 20oz Mini Smoothie Maker - USB-C Rechargeable Juicer - Leakproof Lid with Filter & Carry Handle - Self-Cleaning Personal Blender - Dishwasher Safe - BFA Free",
+      "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfYXRmOjMwMTIyMzc1ODEyODUwMjo6MDo6&url=%2FPortable-Blender-Smoothies-Shakes-Self-Cleaning%2Fdp%2FB0FQ5DF649%2Fref%3Dsr_1_2_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-2-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1",
+      "link_clean": "https://www.amazon.com/dp/B0FQ5DF649/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FQ5DF649&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71wXUgPlI0L._AC_UY218_.jpg",
+      "rating": 3.7,
+      "reviews": 33,
+      "price": "$34.99",
+      "extracted_price": 34.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Thu, Apr 9"
+      ]
+    },
+    {
+      "position": 3,
+      "asin": "B0DB8ZN253",
+      "badges": [
+        "Overall Pick",
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DB8ZN253",
+            "title": "Navy",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB8ZN253/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-3"
+          },
+          {
+            "position": 2,
+            "asin": "B0DB964918",
+            "title": "Cream",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB964918/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-3"
+          },
+          {
+            "position": 3,
+            "asin": "B0DB6KW9SQ",
+            "title": "Gray",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB6KW9SQ/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-3"
+          },
+          {
+            "position": 4,
+            "asin": "B0DB8WZGSQ",
+            "title": "Lavender",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB8WZGSQ/ref=cs_sr_dp_loc_4?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-3"
+          },
+          {
+            "position": 5,
+            "asin": "B0DB8Y9C6H",
+            "title": "Pink",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB8Y9C6H/ref=cs_sr_dp_loc_5?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-3"
+          },
+          {
+            "position": 6,
+            "asin": "B0DB8XLWQ8",
+            "title": "Sea Glass",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB8XLWQ8/ref=cs_sr_dp_loc_6?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-3"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB8ZN253/ref=cs_sr_dp_loc_n?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-3"
+      },
+      "title": "Ninja Blast Max, Portable Blender + Twist & Go, Personal Smoothie, Blend, Ice Crush, 3 Programs, Cordless, 22 oz removable Vessel, Dishwasher Safe, Leakproof, Navy, BC251NV",
+      "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB8ZN253/ref=sr_1_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-3",
+      "link_clean": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251NV/dp/B0DB8ZN253/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DB8ZN253&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71lJNuwnCcL._AC_UY218_.jpg",
+      "rating": 4.4,
+      "reviews": 2200,
+      "bought_last_month": "3K+ bought in past month",
+      "price": "$69.99",
+      "extracted_price": 69.99,
+      "old_price": "$99.99",
+      "extracted_old_price": 99.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "more_buying_choices": "$64.39 (4+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DB8ZN253/ref=sr_1_3_olp?keywords=portable+blender&dib_tag=se&dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&qid=1775532057&sr=8-3"
+    },
+    {
+      "position": 4,
+      "asin": "B0GMNTCQVQ",
+      "variants": {
+        "more_variants": "+4 other colors/patterns",
+        "more_variants_link": "https://www.amazon.com/Cordless-Personal-Size-Portable-Blender/dp/B0GMNTCQVQ/ref=cs_sr_dp_loc?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-4"
+      },
+      "title": "Cordless Personal Size Portable Blender - 380Ml Blender Smoothies and Shakes, BPA Free Traveling Juice Cup with Powerful Blending, Freshly Squeezed in Sports/Travel/Home",
+      "link": "https://www.amazon.com/Cordless-Personal-Size-Portable-Blender/dp/B0GMNTCQVQ/ref=sr_1_4?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-4",
+      "link_clean": "https://www.amazon.com/Cordless-Personal-Size-Portable-Blender/dp/B0GMNTCQVQ/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0GMNTCQVQ&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/7110fAeNOIL._AC_UY218_.jpg",
+      "rating": 5.0,
+      "reviews": 4,
+      "bought_last_month": "New on Amazon in past month",
+      "price": "$14.99",
+      "extracted_price": 14.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ]
+    },
+    {
+      "position": 5,
+      "asin": "B01FHOWYA2",
+      "badges": [
+        "Limited time deal"
+      ],
+      "title": "Ninja Fit Compact Personal Blender, Portable Blender for-Smoothies, Shakes, Food Prep, and Frozen Blending, 700-Watt Base, (2) 16-oz. Cups and Spout Lids, Black QB3001SS",
+      "link": "https://www.amazon.com/Ninja-Personal-Smoothies-Blending-700-Watt/dp/B01FHOWYA2/ref=sr_1_5?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-5",
+      "link_clean": "https://www.amazon.com/Ninja-Personal-Smoothies-Blending-700-Watt/dp/B01FHOWYA2/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B01FHOWYA2&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/710oNE8RCjL._AC_UY218_.jpg",
+      "rating": 4.6,
+      "reviews": 41500,
+      "bought_last_month": "6K+ bought in past month",
+      "price": "$54.95",
+      "extracted_price": 54.95,
+      "old_price": "$69.99",
+      "extracted_old_price": 69.99,
+      "offers": [
+        "$2.75 Amazon credit on any 1 or more"
+      ],
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "more_buying_choices": "$50.04 (3+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B01FHOWYA2/ref=sr_1_5_olp?keywords=portable+blender&dib_tag=se&dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&qid=1775532057&sr=8-5"
+    },
+    {
+      "position": 6,
+      "asin": "B0C2FF74J6",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0C2FF74J6",
+            "title": "Blue",
+            "link": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0C2FF74J6/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-6"
+          },
+          {
+            "position": 2,
+            "asin": "B0D6HNZH5V",
+            "title": "Aqua",
+            "link": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0D6HNZH5V/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-6"
+          },
+          {
+            "position": 3,
+            "asin": "B0C2FF4JD1",
+            "title": "Black",
+            "link": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0C2FF4JD1/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-6"
+          },
+          {
+            "position": 4,
+            "asin": "B0DKV8P5WQ",
+            "title": "Black Glitter",
+            "link": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0DKV8P5WQ/ref=cs_sr_dp_loc_4?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-6"
+          },
+          {
+            "position": 5,
+            "asin": "B0C2FRWBD6",
+            "title": "Cranberry",
+            "link": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0C2FRWBD6/ref=cs_sr_dp_loc_5?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-6"
+          },
+          {
+            "position": 6,
+            "asin": "B0DKVGVP21",
+            "title": "Cream",
+            "link": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0DKVGVP21/ref=cs_sr_dp_loc_6?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-6"
+          }
+        ],
+        "more_variants": "+22",
+        "more_variants_link": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0C2FF74J6/ref=cs_sr_dp_loc_n?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-6"
+      },
+      "title": "Ninja BC151NV Blast Portable Blender, Cordless, 18oz. Vessel, Personal Blender-for Shakes & Smoothies, BPA Free, Leakproof-Lid & Sip Spout, USB-C Rechargeable, Dishwasher Safe Parts, Denim Blue",
+      "link": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0C2FF74J6/ref=sr_1_6?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-6",
+      "link_clean": "https://www.amazon.com/Ninja-BC151NV-Smoothies-Rechargeable-Dishwasher/dp/B0C2FF74J6/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0C2FF74J6&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71mq2bihOPL._AC_UY218_.jpg",
+      "rating": 4.2,
+      "reviews": 12900,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$69.99",
+      "extracted_price": 69.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "more_buying_choices": "$44.95 (5+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0C2FF74J6/ref=sr_1_6_olp?keywords=portable+blender&dib_tag=se&dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&qid=1775532057&sr=8-6"
+    },
+    {
+      "position": 7,
+      "asin": "B0FFH8NNGW",
+      "sponsored": true,
+      "options": "See options",
+      "options_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfbXRmOjMwMTAzODcyMTY1NzQwMjo6MDo6&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsr_1_7_so_FOOD_BLENDER%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-7-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9tdGY%26psc%3D1",
+      "variants": {
+        "more_variants": "+1 other color/pattern",
+        "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfbXRmOjMwMTAzODcyMTY1NzQwMjo6MDo6&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsr_1_7_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-7-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9tdGY%26psc%3D1"
+      },
+      "title": "Sangcon 1000w Smoothie Blender for Kitchen, Blender for Smoothies, with 24oz/19oz/10oz Bpa-Free Cups – Upgraded Portable Personal Blenders for Shakes, Frozen fruit, Baby Food, Spice Grinding & More",
+      "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfbXRmOjMwMTAzODcyMTY1NzQwMjo6MDo6&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsr_1_7_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-7-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9tdGY%26psc%3D1",
+      "link_clean": "https://www.amazon.com/dp/B0FFH8NNGW/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FFH8NNGW&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71HqkDvGlZL._AC_UY218_.jpg",
+      "rating": 4.5,
+      "reviews": 593,
+      "bought_last_month": "300+ bought in past month",
+      "price": "$49.99",
+      "extracted_price": 49.99,
+      "old_price": "$55.55",
+      "extracted_old_price": 55.55,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Wed, Apr 8"
+      ]
+    },
+    {
+      "position": 8,
+      "asin": "B00QNUCV0I",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B00QNUCV0I",
+            "title": "Raspberry",
+            "link": "https://www.amazon.com/Hamilton-Beach-51131-Single-Serve-Raspberry/dp/B00QNUCV0I/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-8"
+          },
+          {
+            "position": 2,
+            "asin": "B00QNUCRW0",
+            "title": "Blue",
+            "link": "https://www.amazon.com/Hamilton-Beach-51131-Single-Serve-Raspberry/dp/B00QNUCRW0/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-8"
+          }
+        ]
+      },
+      "title": "Hamilton Beach Portable Blender for Shakes and Smoothies, 14 Oz BPA Free Travel Cup & Lid, Durable Stainless Steel Blades, Personal Smoothie Blender, Raspberry, 51131G",
+      "link": "https://www.amazon.com/Hamilton-Beach-51131-Single-Serve-Raspberry/dp/B00QNUCV0I/ref=sr_1_8?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-8",
+      "link_clean": "https://www.amazon.com/Hamilton-Beach-51131-Single-Serve-Raspberry/dp/B00QNUCV0I/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B00QNUCV0I&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61twvHkbgAL._AC_UY218_.jpg",
+      "rating": 4.2,
+      "reviews": 50300,
+      "bought_last_month": "3K+ bought in past month",
+      "price": "$26.45",
+      "extracted_price": 26.45,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "more_buying_choices": "$17.09 (2+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B00QNUCV0I/ref=sr_1_8_olp?keywords=portable+blender&dib_tag=se&dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&qid=1775532057&sr=8-8"
+    },
+    {
+      "position": 9,
+      "asin": "B0CN3S2SW2",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0CN3S2SW2",
+            "title": "Tranquil Blue",
+            "link": "https://www.amazon.com/Hamilton-Beach-Smoothies-Performance-51172/dp/B0CN3S2SW2/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-9"
+          },
+          {
+            "position": 2,
+            "asin": "B085FXHQZB",
+            "title": "2 Jars - White",
+            "link": "https://www.amazon.com/Hamilton-Beach-Smoothies-Performance-51172/dp/B085FXHQZB/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-9"
+          },
+          {
+            "position": 3,
+            "asin": "B00KVZ27UA",
+            "title": "Black",
+            "link": "https://www.amazon.com/Hamilton-Beach-Smoothies-Performance-51172/dp/B00KVZ27UA/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-9"
+          },
+          {
+            "position": 4,
+            "asin": "B0CN3PZX5W",
+            "title": "Coral",
+            "link": "https://www.amazon.com/Hamilton-Beach-Smoothies-Performance-51172/dp/B0CN3PZX5W/ref=cs_sr_dp_loc_4?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-9"
+          },
+          {
+            "position": 5,
+            "asin": "B0017XHSC2",
+            "title": "Red",
+            "link": "https://www.amazon.com/Hamilton-Beach-Smoothies-Performance-51172/dp/B0017XHSC2/ref=cs_sr_dp_loc_5?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-9"
+          },
+          {
+            "position": 6,
+            "asin": "B00065L6CU",
+            "title": "White",
+            "link": "https://www.amazon.com/Hamilton-Beach-Smoothies-Performance-51172/dp/B00065L6CU/ref=cs_sr_dp_loc_6?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-9"
+          }
+        ]
+      },
+      "title": "Hamilton Beach Portable Blender for Shakes and Smoothies, 14 Oz BPA Free Travel Cup & Lid, Durable Stainless Steel Blades, Personal Smoothie Blender, Tranquil Blue (51172)",
+      "link": "https://www.amazon.com/Hamilton-Beach-Smoothies-Performance-51172/dp/B0CN3S2SW2/ref=sr_1_9?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-9",
+      "link_clean": "https://www.amazon.com/Hamilton-Beach-Smoothies-Performance-51172/dp/B0CN3S2SW2/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0CN3S2SW2&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61R7wiDoKCL._AC_UY218_.jpg",
+      "rating": 4.2,
+      "reviews": 69900,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$23.26",
+      "extracted_price": 23.26,
+      "old_price": "$24.95",
+      "extracted_old_price": 24.95,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "more_buying_choices": "$17.87 (2+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0CN3S2SW2/ref=sr_1_9_olp?keywords=portable+blender&dib_tag=se&dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&qid=1775532057&sr=8-9"
+    },
+    {
+      "position": 10,
+      "asin": "B012T634SM",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B012T634SM",
+            "title": "Silver",
+            "link": "https://www.amazon.com/Magic-Bullet-Blender-Small-Silver/dp/B012T634SM/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-10"
+          },
+          {
+            "position": 2,
+            "asin": "B0BPDG1331",
+            "title": "Black",
+            "link": "https://www.amazon.com/Magic-Bullet-Blender-Small-Silver/dp/B0BPDG1331/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-10"
+          }
+        ]
+      },
+      "title": "Magic Bullet Blender, Small, Silver, 11 Piece Set",
+      "link": "https://www.amazon.com/Magic-Bullet-Blender-Small-Silver/dp/B012T634SM/ref=sr_1_10?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-10",
+      "link_clean": "https://www.amazon.com/Magic-Bullet-Blender-Small-Silver/dp/B012T634SM/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B012T634SM&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61w2Tj7r0BL._AC_UY218_.jpg",
+      "rating": 4.4,
+      "reviews": 118900,
+      "bought_last_month": "20K+ bought in past month",
+      "price": "$34.99",
+      "extracted_price": 34.99,
+      "old_price": "$49.99",
+      "extracted_old_price": 49.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ]
+    },
+    {
+      "position": 11,
+      "asin": "B0FS2161LC",
+      "badges": [
+        "Save 5%"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0FS2161LC",
+            "title": "Black",
+            "link": "https://www.amazon.com/Portable-Personal-Blenders-Smoothies-Cleaning/dp/B0FS2161LC/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-11"
+          },
+          {
+            "position": 2,
+            "asin": "B0FS1VFBLL",
+            "title": "Green",
+            "link": "https://www.amazon.com/Portable-Personal-Blenders-Smoothies-Cleaning/dp/B0FS1VFBLL/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-11"
+          },
+          {
+            "position": 3,
+            "asin": "B0FS1S7MQN",
+            "title": "White",
+            "link": "https://www.amazon.com/Portable-Personal-Blenders-Smoothies-Cleaning/dp/B0FS1S7MQN/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-11"
+          }
+        ]
+      },
+      "title": "Portable Blender, 360 Watt Personal Blenders with Pulse Mode, Shakes and Smoothies, 6000mAh, BPA Free 24 Oz Blender Cup with 6 Blades and Lid, USB-C, Self Cleaning Portable Juicer For Travel, Black",
+      "link": "https://www.amazon.com/Portable-Personal-Blenders-Smoothies-Cleaning/dp/B0FS2161LC/ref=sr_1_11?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-11",
+      "link_clean": "https://www.amazon.com/Portable-Personal-Blenders-Smoothies-Cleaning/dp/B0FS2161LC/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FS2161LC&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71Hg1g62BSL._AC_UY218_.jpg",
+      "rating": 5.0,
+      "reviews": 20,
+      "bought_last_month": "50+ bought in past month",
+      "price": "$34.19",
+      "extracted_price": 34.19,
+      "old_price": "$35.99",
+      "extracted_old_price": 35.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "stock": "Lowest price in 30 days"
+    },
+    {
+      "position": 12,
+      "asin": "B0DY788W8S",
+      "sponsored": true,
+      "variants": {
+        "more_variants": "+2 other colors/patterns",
+        "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfbXRmOjMwMDc4ODMwNTc4NDgwMjo6MDo6&url=%2FPortable-Juicer%25EF%25BC%258C500ML-Smoothies-Mixing%25EF%25BC%258CCompact%25E3%2580%2581Convenient-Versatile%2Fdp%2FB0DY788W8S%2Fref%3Dsr_1_12_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-12-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9tdGY%26psc%3D1"
+      },
+      "title": "Portable Blender Personal Electric USB，500ML Portable juicer Shakes and Smoothies Blender，Small Blenders，Mixing，Compact、Convenient and Versatile (Purple)",
+      "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfbXRmOjMwMDc4ODMwNTc4NDgwMjo6MDo6&url=%2FPortable-Juicer%25EF%25BC%258C500ML-Smoothies-Mixing%25EF%25BC%258CCompact%25E3%2580%2581Convenient-Versatile%2Fdp%2FB0DY788W8S%2Fref%3Dsr_1_12_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-12-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9tdGY%26psc%3D1",
+      "link_clean": "https://www.amazon.com/dp/B0DY788W8S/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DY788W8S&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71BKFkl+I7L._AC_UY218_.jpg",
+      "rating": 4.1,
+      "reviews": 422,
+      "bought_last_month": "500+ bought in past month",
+      "price": "$29.99",
+      "extracted_price": 29.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon"
+      ]
+    },
+    {
+      "position": 13,
+      "asin": "B0DBN6DS6F",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DBN6DS6F",
+            "title": "Metallic Black",
+            "link": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0DBN6DS6F/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-13"
+          },
+          {
+            "position": 2,
+            "asin": "B0D6HNZH5V",
+            "title": "Aqua",
+            "link": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0D6HNZH5V/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-13"
+          },
+          {
+            "position": 3,
+            "asin": "B0C2FF4JD1",
+            "title": "Black",
+            "link": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0C2FF4JD1/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-13"
+          },
+          {
+            "position": 4,
+            "asin": "B0DKV8P5WQ",
+            "title": "Black Glitter",
+            "link": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0DKV8P5WQ/ref=cs_sr_dp_loc_4?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-13"
+          },
+          {
+            "position": 5,
+            "asin": "B0C2FF74J6",
+            "title": "Blue",
+            "link": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0C2FF74J6/ref=cs_sr_dp_loc_5?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-13"
+          },
+          {
+            "position": 6,
+            "asin": "B0C2FRWBD6",
+            "title": "Cranberry",
+            "link": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0C2FRWBD6/ref=cs_sr_dp_loc_6?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-13"
+          }
+        ],
+        "more_variants": "+22",
+        "more_variants_link": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0DBN6DS6F/ref=cs_sr_dp_loc_n?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-13"
+      },
+      "title": "Ninja Blast Portable Blender, Cordless, 18oz. Vessel, Personal Blender For-Shakes and Smoothies, BPA Free, Leakproof-Lid and Sip Spout, USB-C Rechargeable, Dishwasher Safe, Metallic Black, BC151MB",
+      "link": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0DBN6DS6F/ref=sr_1_13?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-13",
+      "link_clean": "https://www.amazon.com/Ninja-Leakproof-Lid-Rechargeable-Dishwasher-BC151MB/dp/B0DBN6DS6F/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DBN6DS6F&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71hlmsrHl+L._AC_UY218_.jpg",
+      "rating": 4.2,
+      "reviews": 12900,
+      "bought_last_month": "800+ bought in past month",
+      "price": "$69.99",
+      "extracted_price": 69.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "more_buying_choices": "$42.85 (4+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DBN6DS6F/ref=sr_1_13_olp?keywords=portable+blender&dib_tag=se&dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&qid=1775532057&sr=8-13"
+    },
+    {
+      "position": 14,
+      "asin": "B0G6KPHRJ9",
+      "badges": [
+        "Save 43%"
+      ],
+      "title": "Tolaist Portable Blender for Smoothies, BPA Free Small Blender for Shakes and Fresh Juices, 15 Oz Dishwasher Safe Portable Bottle with 12-Blade, Rechargable Sport Bottle Compact and Easy to Clean",
+      "link": "https://www.amazon.com/Portable-Smoothies-Dishwasher-12-Blade-Rechargable/dp/B0G6KPHRJ9/ref=sr_1_14?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-14",
+      "link_clean": "https://www.amazon.com/Portable-Smoothies-Dishwasher-12-Blade-Rechargable/dp/B0G6KPHRJ9/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0G6KPHRJ9&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71ICk1M5CLL._AC_UY218_.jpg",
+      "rating": 4.0,
+      "reviews": 26,
+      "bought_last_month": "400+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "old_price": "$34.99",
+      "extracted_old_price": 34.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "stock": "Lowest price in 30 days"
+    },
+    {
+      "position": 15,
+      "asin": "B0G6K4PVPT",
+      "options": "See options",
+      "options_link": "https://www.amazon.com/COKUNST-Portable-Rechargeable-Personal-Smoothie/dp/B0G6K4PVPT/ref=sr_1_15_so_FOOD_BLENDER?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-15",
+      "title": "COKUNST Portable Blender, USB C Rechargeable Personal Blender, Small Smoothie & Shake Maker with 6 Blades, Compact Travel Mini Juicer Cup with Extra Lid for Home, Gym, Office, 18oz, Green",
+      "link": "https://www.amazon.com/COKUNST-Portable-Rechargeable-Personal-Smoothie/dp/B0G6K4PVPT/ref=sr_1_15?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-15",
+      "link_clean": "https://www.amazon.com/COKUNST-Portable-Rechargeable-Personal-Smoothie/dp/B0G6K4PVPT/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0G6K4PVPT&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/612AENln9ML._AC_UY218_.jpg",
+      "rating": 5.0,
+      "reviews": 31,
+      "bought_last_month": "200+ bought in past month",
+      "price": "$29.99",
+      "extracted_price": 29.99,
+      "old_price": "$39.99",
+      "extracted_old_price": 39.99,
+      "offers": [
+        "Exclusive Prime price"
+      ],
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ]
+    },
+    {
+      "position": 16,
+      "asin": "B0DB964918",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0DB964918",
+            "title": "Cream",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB964918/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-16"
+          },
+          {
+            "position": 2,
+            "asin": "B0DB6KW9SQ",
+            "title": "Gray",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB6KW9SQ/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-16"
+          },
+          {
+            "position": 3,
+            "asin": "B0DB8WZGSQ",
+            "title": "Lavender",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB8WZGSQ/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-16"
+          },
+          {
+            "position": 4,
+            "asin": "B0DB8ZN253",
+            "title": "Navy",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB8ZN253/ref=cs_sr_dp_loc_4?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-16"
+          },
+          {
+            "position": 5,
+            "asin": "B0DB8Y9C6H",
+            "title": "Pink",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB8Y9C6H/ref=cs_sr_dp_loc_5?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-16"
+          },
+          {
+            "position": 6,
+            "asin": "B0DB8XLWQ8",
+            "title": "Sea Glass",
+            "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB8XLWQ8/ref=cs_sr_dp_loc_6?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-16"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB964918/ref=cs_sr_dp_loc_n?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-16"
+      },
+      "title": "Ninja Blast Max, Portable Blender + Twist & Go, Personal Ninja Blender, Smoothie, Blend, Ice Crush, 3 Programs, Cordless, 22 oz removable Vessel, Dishwasher Safe, Leakproof, Cream, BC251IV",
+      "link": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB964918/ref=sr_1_16?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-16",
+      "link_clean": "https://www.amazon.com/Ninja-removable-Dishwasher-Leakproof-BC251IV/dp/B0DB964918/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DB964918&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/715XyuRBiNL._AC_UY218_.jpg",
+      "rating": 4.4,
+      "reviews": 2200,
+      "bought_last_month": "1K+ bought in past month",
+      "price": "$69.95",
+      "extracted_price": 69.95,
+      "old_price": "$99.99",
+      "extracted_old_price": 99.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "more_buying_choices": "$64.35 (4+ used & new offers)",
+      "more_buying_choices_link": "https://www.amazon.com/gp/offer-listing/B0DB964918/ref=sr_1_16_olp?keywords=portable+blender&dib_tag=se&dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&qid=1775532057&sr=8-16"
+    },
+    {
+      "position": 17,
+      "asin": "B0FMY6YJ3B",
+      "sponsored": true,
+      "variants": {
+        "more_variants": "+3 other colors/patterns",
+        "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfbXRmOjMwMTAzODYzNzM3MDYwMjo6MDo6&url=%2FVELOMIX-Electric-Protein-Shaker-Bottle%2Fdp%2FB0FMY6YJ3B%2Fref%3Dsr_1_17_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-17-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9tdGY%26psc%3D1"
+      },
+      "title": "VELOMIX Electric Protein Shaker Bottle - 24 oz | USB-C Rechargeable | Leak Proof Shaker Cups for Protein Shakes | Portable Blender for Shakes and Smoothies (Electric-Transparent)",
+      "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfbXRmOjMwMTAzODYzNzM3MDYwMjo6MDo6&url=%2FVELOMIX-Electric-Protein-Shaker-Bottle%2Fdp%2FB0FMY6YJ3B%2Fref%3Dsr_1_17_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-17-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9tdGY%26psc%3D1",
+      "link_clean": "https://www.amazon.com/dp/B0FMY6YJ3B/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FMY6YJ3B&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/714abMfhwoL._AC_UY218_.jpg",
+      "rating": 4.5,
+      "reviews": 709,
+      "bought_last_month": "200+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ],
+      "small_business": true
+    },
+    {
+      "position": 18,
+      "asin": "B0BFF5MN6T",
+      "options": "2 sizes",
+      "options_link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0BFF5MN6T/ref=vo_sr_l_dp?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0BFF5MN6T",
+            "title": "orange",
+            "link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0BFF5MN6T/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18"
+          },
+          {
+            "position": 2,
+            "asin": "B0DRHRP1HK",
+            "title": "Blush Pink",
+            "link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0DRHRP1HK/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18"
+          },
+          {
+            "position": 3,
+            "asin": "B0FWJCT3KM",
+            "title": "Neon Pink",
+            "link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0FWJCT3KM/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18"
+          },
+          {
+            "position": 4,
+            "asin": "B0FWJHDJ1S",
+            "title": "Obsidian Black",
+            "link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0FWJHDJ1S/ref=cs_sr_dp_loc_4?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18"
+          },
+          {
+            "position": 5,
+            "asin": "B0FWJ2JLMZ",
+            "title": "Steel Teal",
+            "link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0FWJ2JLMZ/ref=cs_sr_dp_loc_5?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18"
+          },
+          {
+            "position": 6,
+            "asin": "B0FWHVW48K",
+            "title": "Vivid Yellow",
+            "link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0FWHVW48K/ref=cs_sr_dp_loc_6?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18"
+          }
+        ],
+        "more_variants": "+5",
+        "more_variants_link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0BFF5MN6T/ref=cs_sr_dp_loc_n?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18"
+      },
+      "title": "VOLTRX Electric Protein Shaker Bottle - USB Rechargeable Mixer Cup for Shakes and Meal Replacements, BPA-Free Tritan, 24oz",
+      "link": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0BFF5MN6T/ref=sr_1_18?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-18",
+      "link_clean": "https://www.amazon.com/VOLTRX-Gallium-Rechargeable-Electric-Replacement/dp/B0BFF5MN6T/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0BFF5MN6T&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61xY5x1JAkL._AC_UY218_.jpg",
+      "rating": 4.4,
+      "reviews": 16200,
+      "bought_last_month": "9K+ bought in past month",
+      "price": "$19.99",
+      "extracted_price": 19.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ]
+    },
+    {
+      "position": 19,
+      "asin": "B0D22NH2K4",
+      "badges": [
+        "Limited time deal"
+      ],
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0D22NH2K4",
+            "title": "Green",
+            "link": "https://www.amazon.com/COKUNST-Portable-Rechargeable-Personal-Blenders/dp/B0D22NH2K4/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-19"
+          },
+          {
+            "position": 2,
+            "asin": "B0F18M7X9J",
+            "title": "Beige",
+            "link": "https://www.amazon.com/COKUNST-Portable-Rechargeable-Personal-Blenders/dp/B0F18M7X9J/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-19"
+          },
+          {
+            "position": 3,
+            "asin": "B0D9Y66ML1",
+            "title": "Matte black",
+            "link": "https://www.amazon.com/COKUNST-Portable-Rechargeable-Personal-Blenders/dp/B0D9Y66ML1/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-19"
+          }
+        ]
+      },
+      "title": "COKUNST Portable Blender, USB Rechargeable Personal Size Blenders, Smoothie Blender with 6 Blades for Protein & Shakes, Mini juicer with Extra Handle Lid for Travel Sports Outgoing, 18oz, Green",
+      "link": "https://www.amazon.com/COKUNST-Portable-Rechargeable-Personal-Blenders/dp/B0D22NH2K4/ref=sr_1_19?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-19",
+      "link_clean": "https://www.amazon.com/COKUNST-Portable-Rechargeable-Personal-Blenders/dp/B0D22NH2K4/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0D22NH2K4&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71rGxes2MRL._AC_UY218_.jpg",
+      "rating": 4.0,
+      "reviews": 2200,
+      "bought_last_month": "200+ bought in past month",
+      "price": "$19.79",
+      "extracted_price": 19.79,
+      "old_price": "$22.79",
+      "extracted_old_price": 22.79,
+      "delivery": [
+        "FREE delivery Apr 12 - 14 on $35 of items shipped by Amazon",
+        "Or fastest delivery Sun, Apr 12"
+      ],
+      "stock": "Only 2 left in stock - order soon."
+    },
+    {
+      "position": 20,
+      "asin": "B0GJ2TRBXZ",
+      "variants": {
+        "more_variants": "+6 other colors/patterns",
+        "more_variants_link": "https://www.amazon.com/Cordless-Portable-Personal-Size-Blender/dp/B0GJ2TRBXZ/ref=cs_sr_dp_loc?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-20"
+      },
+      "title": "Cordless Portable Personal Size Blender - Mini Blender Make Smoothies and Shakes, 380Ml BPA Free Travel Cup, Powerful Blending Suit in Office/Home/Gym",
+      "link": "https://www.amazon.com/Cordless-Portable-Personal-Size-Blender/dp/B0GJ2TRBXZ/ref=sr_1_20?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-20",
+      "link_clean": "https://www.amazon.com/Cordless-Portable-Personal-Size-Blender/dp/B0GJ2TRBXZ/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0GJ2TRBXZ&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71QRvV-QcuL._AC_UY218_.jpg",
+      "rating": 5.0,
+      "reviews": 11,
+      "price": "$14.99",
+      "extracted_price": 14.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+        "Or fastest delivery Wed, Apr 8"
+      ]
+    },
+    {
+      "position": 21,
+      "asin": "B0FKRW2MBK",
+      "variants": {
+        "options": [
+          {
+            "position": 1,
+            "asin": "B0FKRW2MBK",
+            "title": "Gunmetal Gray",
+            "link": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0FKRW2MBK/ref=cs_sr_dp_loc_1?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-21"
+          },
+          {
+            "position": 2,
+            "asin": "B0GFBHZ96B",
+            "title": "Black and White",
+            "link": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0GFBHZ96B/ref=cs_sr_dp_loc_2?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-21"
+          },
+          {
+            "position": 3,
+            "asin": "B0FLN4ZB7V",
+            "title": "Forest Green",
+            "link": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0FLN4ZB7V/ref=cs_sr_dp_loc_3?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-21"
+          },
+          {
+            "position": 4,
+            "asin": "B0FLLFYCJJ",
+            "title": "Orchid Purple",
+            "link": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0FLLFYCJJ/ref=cs_sr_dp_loc_4?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-21"
+          },
+          {
+            "position": 5,
+            "asin": "B0FLN8DF5R",
+            "title": "Ruby Red",
+            "link": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0FLN8DF5R/ref=cs_sr_dp_loc_5?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-21"
+          },
+          {
+            "position": 6,
+            "asin": "B0FLKVKHLH",
+            "title": "Sapphire Blue",
+            "link": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0FLKVKHLH/ref=cs_sr_dp_loc_6?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-21"
+          }
+        ],
+        "more_variants": "+1",
+        "more_variants_link": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0FKRW2MBK/ref=cs_sr_dp_loc_n?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-21"
+      },
+      "title": "nutribullet Flex Portable Blender NBPB50200, Gunmetal Gray",
+      "link": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0FKRW2MBK/ref=sr_1_21?dib=eyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co&dib_tag=se&keywords=portable+blender&qid=1775532057&sr=8-21",
+      "link_clean": "https://www.amazon.com/nutribullet-Portable-Blender-NBPB50200-Gunmetal/dp/B0FKRW2MBK/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FKRW2MBK&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/71pT9rCSACL._AC_UY218_.jpg",
+      "rating": 3.8,
+      "reviews": 433,
+      "bought_last_month": "800+ bought in past month",
+      "price": "$49.95",
+      "extracted_price": 49.95,
+      "old_price": "$69.99",
+      "extracted_old_price": 69.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Wed, Apr 8"
+      ]
+    },
+    {
+      "position": 22,
+      "asin": "B0F9L62GXF",
+      "sponsored": true,
+      "title": "UTALENT Cordless Portable Blender, 25 oz removable Vessel, 700W Personal Blender, For-Smoothies, Ice Crush, 4 Programs, Leakproof-Lid & Sip Spout, USB-C Rechargeable, Dishwasher Safe Parts, Black",
+      "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo4NTcwMTk1OTQyMzkyMDI2OjE3NzU1MzIwNTc6c3BfYnRmOjMwMTE0ODk0OTYwOTMwMjo6MDo6&url=%2FUTALENT-Vessel%25EF%25BC%258CPowerful-Leakproof-Lid-Rechargeable-Dishwasher%2Fdp%2FB0F9L62GXF%2Fref%3Dsr_1_22_sspa%3Fdib%3DeyJ2IjoiMSJ9.nyf5qi0U0_aRcouBqPfZWDWd2t2ggUE8h6ZE2nAngQbleNNYXO39b7trnTJsicDXDiMp16Dd5ZUQK_1ZHlxlAb1cPYzHTecyutIp5wwm0W1UuMfvUfH3mjad2U0uN4z-0knJXmbXRas9s2aS6hRvmbrZYZ3eB0ILsphVd65QC6mawsC73V4qTp0qBASpvVrtSR_e-i_SYEL8amHdnTn39SPH8f6WvREubtf7keI9Ptg.P-p70-2O6yVndCsx01pVmuF4zk4VCNoRe8TiqugE9co%26dib_tag%3Dse%26keywords%3Dportable%2Bblender%26qid%3D1775532057%26sr%3D8-22-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGY%26psc%3D1",
+      "link_clean": "https://www.amazon.com/dp/B0F9L62GXF/",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0F9L62GXF&device=desktop&engine=amazon_product",
+      "thumbnail": "https://m.media-amazon.com/images/I/61MNGBlyOaL._AC_UY218_.jpg",
+      "rating": 4.5,
+      "reviews": 140,
+      "bought_last_month": "500+ bought in past month",
+      "price": "$59.99",
+      "extracted_price": 59.99,
+      "delivery": [
+        "FREE delivery Sat, Apr 11",
+        "Or fastest delivery Thu, Apr 9"
+      ]
+    }
+  ],
+  "featured_products": [
+    {
+      "title": "Trending now",
+      "products": [
+        {
+          "position": 1,
+          "asin": "B0F9L62GXF",
+          "sponsored": true,
+          "title": "UTALENT Cordless Portable Blender, 25 oz removable Vessel, 700W Personal Blender, For-Smoothies, Ice Crush, 4 Programs, Leakproof-Lid & Sip Spout, USB-C Rechargeable, Dishwasher Safe Parts, Black",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMTE0ODk0OTYwOTMwMjo6MDo6&url=%2FUTALENT-Vessel%25EF%25BC%258CPowerful-Leakproof-Lid-Rechargeable-Dishwasher%2Fdp%2FB0F9L62GXF%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0F9L62GXF%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-1-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DOhhqDDYVde%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=OhhqDDYVde",
+          "link_clean": "https://www.amazon.com/dp/B0F9L62GXF/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0F9L62GXF&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/61MNGBlyOaL._AC_UL320_.jpg",
+          "rating": 4.5,
+          "reviews": 140,
+          "bought_last_month": "500+ bought in past month",
+          "price": "$59.99",
+          "extracted_price": 59.99,
+          "delivery": [
+            "FREE delivery Sat, Apr 11Or fastest delivery Thu, Apr 9",
+            "FREE delivery Sat, Apr 11",
+            "Or fastest delivery Thu, Apr 9"
+          ]
+        },
+        {
+          "position": 2,
+          "asin": "B0DY788W8S",
+          "sponsored": true,
+          "variants": {
+            "more_variants": "+2 other colors/patterns",
+            "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMDcxNTcwNzg3MzkwMjo6MTo6&url=%2FPortable-Juicer%25EF%25BC%258C500ML-Smoothies-Mixing%25EF%25BC%258CCompact%25E3%2580%2581Convenient-Versatile%2Fdp%2FB0DY788W8S%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0DY788W8S%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-2-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DLxKgFs5bDf%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=LxKgFs5bDf"
+          },
+          "title": "Portable Blender Personal Electric USB，500ML Portable juicer Shakes and Smoothies Blender，Small Blenders，Mixing，Compact、Convenient and Versatile (Purple)",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMDcxNTcwNzg3MzkwMjo6MTo6&url=%2FPortable-Juicer%25EF%25BC%258C500ML-Smoothies-Mixing%25EF%25BC%258CCompact%25E3%2580%2581Convenient-Versatile%2Fdp%2FB0DY788W8S%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0DY788W8S%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-2-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DLxKgFs5bDf%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=LxKgFs5bDf",
+          "link_clean": "https://www.amazon.com/dp/B0DY788W8S/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DY788W8S&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/71BKFkl+I7L._AC_UL320_.jpg",
+          "rating": 4.1,
+          "reviews": 422,
+          "bought_last_month": "500+ bought in past month",
+          "price": "$29.99",
+          "extracted_price": 29.99,
+          "delivery": [
+            "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon"
+          ]
+        },
+        {
+          "position": 3,
+          "asin": "B0FFH8NNGW",
+          "sponsored": true,
+          "options": "See options",
+          "options_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMTAzODcyMTY1NzQwMjo6Mjo6&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsxin_17_pa_sp_search_thematic_so_FOOD_BLENDER%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FFH8NNGW%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3D9ZOMT9Jm0JH%252Ft%252BWi68iDSA%253D%253D%26sr%3D1-3-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DTJjbsKYI74%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=TJjbsKYI74",
+          "variants": {
+            "more_variants": "+1 other color/pattern",
+            "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMTAzODcyMTY1NzQwMjo6Mjo6&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FFH8NNGW%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3D9ZOMT9Jm0JH%252Ft%252BWi68iDSA%253D%253D%26sr%3D1-3-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DTJjbsKYI74%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=TJjbsKYI74"
+          },
+          "title": "Sangcon 1000w Smoothie Blender for Kitchen, Blender for Smoothies, with 24oz/19oz/10oz Bpa-Free Cups – Upgraded Portable Personal Blenders for Shakes, Frozen fruit, Baby Food, Spice Grinding & More",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMTAzODcyMTY1NzQwMjo6Mjo6&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FFH8NNGW%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3D9ZOMT9Jm0JH%252Ft%252BWi68iDSA%253D%253D%26sr%3D1-3-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DTJjbsKYI74%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=TJjbsKYI74",
+          "link_clean": "https://www.amazon.com/dp/B0FFH8NNGW/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FFH8NNGW&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/71HqkDvGlZL._AC_UL320_.jpg",
+          "rating": 4.5,
+          "reviews": 593,
+          "bought_last_month": "300+ bought in past month",
+          "price": "$49.99",
+          "extracted_price": 49.99,
+          "old_price": "$55.55",
+          "extracted_old_price": 55.55,
+          "offers": [
+            "Exclusive Prime price"
+          ],
+          "delivery": [
+            "FREE delivery Sat, Apr 11Or fastest delivery Wed, Apr 8",
+            "FREE delivery Sat, Apr 11",
+            "Or fastest delivery Wed, Apr 8"
+          ]
+        },
+        {
+          "position": 4,
+          "asin": "B0FZMXFFZJ",
+          "sponsored": true,
+          "variants": {
+            "more_variants": "+5 other colors/patterns",
+            "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMTE5NDk3MDM1MDYwMjo6Mzo6&url=%2FYETI-Helimix-Blending-Portable-Dishwasher%2Fdp%2FB0FZMXFFZJ%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FZMXFFZJ%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-4-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DdYqyqiH4vc%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=dYqyqiH4vc"
+          },
+          "title": "YETI Yonder Helimix Vortex Blender Shaker Bottle Holds up to 27oz | No Blending Ball or Whisk | USA Made | Portable Pre Workout Whey Protein Drink Shaker Cup | Dishwasher Safe, Rescue Red",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMTE5NDk3MDM1MDYwMjo6Mzo6&url=%2FYETI-Helimix-Blending-Portable-Dishwasher%2Fdp%2FB0FZMXFFZJ%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FZMXFFZJ%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-4-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DdYqyqiH4vc%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=dYqyqiH4vc",
+          "link_clean": "https://www.amazon.com/dp/B0FZMXFFZJ/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FZMXFFZJ&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/61Zo5TzUa7L._AC_UL320_.jpg",
+          "rating": 4.6,
+          "reviews": 839,
+          "bought_last_month": "1K+ bought in past month",
+          "price": "$25.00",
+          "extracted_price": 25.0,
+          "delivery": [
+            "FREE delivery Sat, Apr 11 on $35 of items shipped by AmazonOr fastest delivery Wed, Apr 8",
+            "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+            "Or fastest delivery Wed, Apr 8"
+          ]
+        },
+        {
+          "position": 5,
+          "asin": "B0FTLS1F67",
+          "sponsored": true,
+          "variants": {
+            "more_variants": "+2 other colors/patterns",
+            "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMTA5NDU2NzMxMTkwMjo6NDo6&url=%2FPortable-Electric-Smoothies-Automatic-Multi-Purpose%2Fdp%2FB0FTLS1F67%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FTLS1F67%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-5-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DrYtRdO1ECh%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=rYtRdO1ECh"
+          },
+          "title": "530ML Portable Blender,Mini Portable Electric USB Juicer,Small Personal Blender for Smoothies and Shakes,With Automatic Cleaning Function,Multi-Purpose and Easy To Use(green)",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTozNzc4MTA3NjA3MDEwMjAyOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljOjMwMTA5NDU2NzMxMTkwMjo6NDo6&url=%2FPortable-Electric-Smoothies-Automatic-Multi-Purpose%2Fdp%2FB0FTLS1F67%2Fref%3Dsxin_17_pa_sp_search_thematic_sspa%3Fcontent-id%3Damzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%253Aamzn1.sym.89bcfe96-dab9-4d13-a562-400fcdc39cc5%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FTLS1F67%26pd_rd_r%3D16346b54-0867-40e4-8983-97ac63e3858b%26pd_rd_w%3DynNsQ%26pd_rd_wg%3DXnBO1%26pf_rd_p%3D89bcfe96-dab9-4d13-a562-400fcdc39cc5%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-5-9428117c-b940-4daa-97e9-ad363ada7940-spons%26aref%3DrYtRdO1ECh%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM%26psc%3D1&aref=rYtRdO1ECh",
+          "link_clean": "https://www.amazon.com/dp/B0FTLS1F67/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FTLS1F67&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/71FxAJcIIoL._AC_UL320_.jpg",
+          "rating": 4.3,
+          "reviews": 31,
+          "bought_last_month": "50+ bought in past month",
+          "price": "$29.80",
+          "extracted_price": 29.8,
+          "old_price": "$35.90",
+          "extracted_old_price": 35.9,
+          "delivery": [
+            "FREE delivery Sat, Apr 11 on $35 of items shipped by AmazonOr fastest delivery Fri, Apr 10",
+            "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon",
+            "Or fastest delivery Fri, Apr 10"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Picks from Amazon Influencers",
+      "description": "From Amazon Influencer storefronts",
+      "products": [
+        {
+          "position": 1,
+          "asin": "B0GJTD1KBC",
+          "sponsored": true,
+          "title": "Portable Blender for Smoothies, 600ML Capacity, Rechargeable Personal Blender with Leak Proof Lid and Safety Lock, USB Charging, Black",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo3NTI1Nzg3NDA3MzgyOTgwOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljX2J0ZjozMDEyMjgwMDgwODU2MDI6OjE6Og&url=%2FPortable-Smoothies-Capacity-Rechargeable-Personal%2Fdp%2FB0GJTD1KBC%2Fref%3Dsxbs_pa_sp_search_thematic_btf_sspa%3Fcontent-id%3Damzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%253Aamzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0GJTD1KBC%26pd_rd_r%3Dad1353b6-4205-445d-93dc-38b70f3ff1c1%26pd_rd_w%3D4Qbng%26pd_rd_wg%3DPFTv6%26pf_rd_p%3D502f29c7-6a9c-40da-9475-bc147691be32%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-1-fb395260-7243-4e30-82ce-3176e35831b6-spons%26aref%3DYfCLAUpCOT%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWNfYnRm%26psc%3D1&aref=YfCLAUpCOT",
+          "link_clean": "https://www.amazon.com/dp/B0GJTD1KBC/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0GJTD1KBC&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/71lFgq44yPL._AC_UL320_.jpg",
+          "rating": 4.0,
+          "reviews": 21,
+          "price": "$39.90",
+          "extracted_price": 39.9,
+          "delivery": [
+            "FREE delivery Sat, Apr 11Or fastest delivery Thu, Apr 9",
+            "FREE delivery Sat, Apr 11",
+            "Or fastest delivery Thu, Apr 9"
+          ]
+        },
+        {
+          "position": 2,
+          "asin": "B0FFH8NNGW",
+          "sponsored": true,
+          "options": "See options",
+          "options_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo3NTI1Nzg3NDA3MzgyOTgwOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljX2J0ZjozMDEwMzg3MjE2NTc0MDI6OjI6Og&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsxbs_pa_sp_search_thematic_btf_so_FOOD_BLENDER%3Fcontent-id%3Damzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%253Aamzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FFH8NNGW%26pd_rd_r%3Dad1353b6-4205-445d-93dc-38b70f3ff1c1%26pd_rd_w%3D4Qbng%26pd_rd_wg%3DPFTv6%26pf_rd_p%3D502f29c7-6a9c-40da-9475-bc147691be32%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3D9ZOMT9Jm0JH%252Ft%252BWi68iDSA%253D%253D%26sr%3D1-2-fb395260-7243-4e30-82ce-3176e35831b6-spons%26aref%3DTJjbsKYI74%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWNfYnRm%26psc%3D1&aref=TJjbsKYI74",
+          "variants": {
+            "more_variants": "+1 other color/pattern",
+            "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo3NTI1Nzg3NDA3MzgyOTgwOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljX2J0ZjozMDEwMzg3MjE2NTc0MDI6OjI6Og&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsxbs_pa_sp_search_thematic_btf_sspa%3Fcontent-id%3Damzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%253Aamzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FFH8NNGW%26pd_rd_r%3Dad1353b6-4205-445d-93dc-38b70f3ff1c1%26pd_rd_w%3D4Qbng%26pd_rd_wg%3DPFTv6%26pf_rd_p%3D502f29c7-6a9c-40da-9475-bc147691be32%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3D9ZOMT9Jm0JH%252Ft%252BWi68iDSA%253D%253D%26sr%3D1-2-fb395260-7243-4e30-82ce-3176e35831b6-spons%26aref%3DTJjbsKYI74%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWNfYnRm%26psc%3D1&aref=TJjbsKYI74"
+          },
+          "title": "Sangcon 1000w Smoothie Blender for Kitchen, Blender for Smoothies, with 24oz/19oz/10oz Bpa-Free Cups – Upgraded Portable Personal Blenders for Shakes, Frozen fruit, Baby Food, Spice Grinding & More",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo3NTI1Nzg3NDA3MzgyOTgwOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljX2J0ZjozMDEwMzg3MjE2NTc0MDI6OjI6Og&url=%2FSangcon-Smoothie-Blender-Smoothies-Bpa-Free%2Fdp%2FB0FFH8NNGW%2Fref%3Dsxbs_pa_sp_search_thematic_btf_sspa%3Fcontent-id%3Damzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%253Aamzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FFH8NNGW%26pd_rd_r%3Dad1353b6-4205-445d-93dc-38b70f3ff1c1%26pd_rd_w%3D4Qbng%26pd_rd_wg%3DPFTv6%26pf_rd_p%3D502f29c7-6a9c-40da-9475-bc147691be32%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3D9ZOMT9Jm0JH%252Ft%252BWi68iDSA%253D%253D%26sr%3D1-2-fb395260-7243-4e30-82ce-3176e35831b6-spons%26aref%3DTJjbsKYI74%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWNfYnRm%26psc%3D1&aref=TJjbsKYI74",
+          "link_clean": "https://www.amazon.com/dp/B0FFH8NNGW/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FFH8NNGW&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/71HqkDvGlZL._AC_UL320_.jpg",
+          "rating": 4.5,
+          "reviews": 593,
+          "bought_last_month": "300+ bought in past month",
+          "price": "$49.99",
+          "extracted_price": 49.99,
+          "old_price": "$55.55",
+          "extracted_old_price": 55.55,
+          "offers": [
+            "Exclusive Prime price"
+          ],
+          "delivery": [
+            "FREE delivery Sat, Apr 11Or fastest delivery Wed, Apr 8",
+            "FREE delivery Sat, Apr 11",
+            "Or fastest delivery Wed, Apr 8"
+          ]
+        },
+        {
+          "position": 3,
+          "asin": "B0DY788W8S",
+          "sponsored": true,
+          "variants": {
+            "more_variants": "+2 other colors/patterns",
+            "more_variants_link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo3NTI1Nzg3NDA3MzgyOTgwOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljX2J0ZjozMDA3ODgzMDU3ODQ4MDI6OjM6Og&url=%2FPortable-Juicer%25EF%25BC%258C500ML-Smoothies-Mixing%25EF%25BC%258CCompact%25E3%2580%2581Convenient-Versatile%2Fdp%2FB0DY788W8S%2Fref%3Dsxbs_pa_sp_search_thematic_btf_sspa%3Fcontent-id%3Damzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%253Aamzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0DY788W8S%26pd_rd_r%3Dad1353b6-4205-445d-93dc-38b70f3ff1c1%26pd_rd_w%3D4Qbng%26pd_rd_wg%3DPFTv6%26pf_rd_p%3D502f29c7-6a9c-40da-9475-bc147691be32%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-3-fb395260-7243-4e30-82ce-3176e35831b6-spons%26aref%3DCn5IdfesOc%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWNfYnRm%26psc%3D1&aref=Cn5IdfesOc"
+          },
+          "title": "Portable Blender Personal Electric USB，500ML Portable juicer Shakes and Smoothies Blender，Small Blenders，Mixing，Compact、Convenient and Versatile (Purple)",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo3NTI1Nzg3NDA3MzgyOTgwOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljX2J0ZjozMDA3ODgzMDU3ODQ4MDI6OjM6Og&url=%2FPortable-Juicer%25EF%25BC%258C500ML-Smoothies-Mixing%25EF%25BC%258CCompact%25E3%2580%2581Convenient-Versatile%2Fdp%2FB0DY788W8S%2Fref%3Dsxbs_pa_sp_search_thematic_btf_sspa%3Fcontent-id%3Damzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%253Aamzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0DY788W8S%26pd_rd_r%3Dad1353b6-4205-445d-93dc-38b70f3ff1c1%26pd_rd_w%3D4Qbng%26pd_rd_wg%3DPFTv6%26pf_rd_p%3D502f29c7-6a9c-40da-9475-bc147691be32%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-3-fb395260-7243-4e30-82ce-3176e35831b6-spons%26aref%3DCn5IdfesOc%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWNfYnRm%26psc%3D1&aref=Cn5IdfesOc",
+          "link_clean": "https://www.amazon.com/dp/B0DY788W8S/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0DY788W8S&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/71BKFkl+I7L._AC_UL320_.jpg",
+          "rating": 4.1,
+          "reviews": 422,
+          "bought_last_month": "500+ bought in past month",
+          "price": "$29.99",
+          "extracted_price": 29.99,
+          "delivery": [
+            "FREE delivery Sat, Apr 11 on $35 of items shipped by Amazon"
+          ]
+        },
+        {
+          "position": 4,
+          "asin": "B0FX5J6V6Q",
+          "sponsored": true,
+          "title": "TorqueHome 3-in-1 Portable Blender Cup - 24oz Cordless Personal Blender, USB-C Rechargeable, Self-Cleaning, Leakproof Tumbler with Lid, for Making Smoothies Shakes Protein Drinks, BPA Free (black)",
+          "link": "https://www.amazon.com/sspa/click?ie=UTF8&spc=MTo3NTI1Nzg3NDA3MzgyOTgwOjE3NzU1MzIwNTc6c3Bfc2VhcmNoX3RoZW1hdGljX2J0ZjozMDEwOTgzMjA3MTYyMDI6OjQ6Og&url=%2FTorqueHome-Portable-Blender-Cup-Self-Cleaning%2Fdp%2FB0FX5J6V6Q%2Fref%3Dsxbs_pa_sp_search_thematic_btf_sspa%3Fcontent-id%3Damzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%253Aamzn1.sym.502f29c7-6a9c-40da-9475-bc147691be32%26cv_ct_cx%3Dportable%2Bblender%26keywords%3Dportable%2Bblender%26pd_rd_i%3DB0FX5J6V6Q%26pd_rd_r%3Dad1353b6-4205-445d-93dc-38b70f3ff1c1%26pd_rd_w%3D4Qbng%26pd_rd_wg%3DPFTv6%26pf_rd_p%3D502f29c7-6a9c-40da-9475-bc147691be32%26pf_rd_r%3DEP6M3ZHE52TRWGVP1H81%26qid%3D1775532057%26sbo%3DRZvfv%252F%252FHxDF%252BO5021pAnSA%253D%253D%26sr%3D1-4-fb395260-7243-4e30-82ce-3176e35831b6-spons%26aref%3DV58qacOGNK%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWNfYnRm%26psc%3D1&aref=V58qacOGNK",
+          "link_clean": "https://www.amazon.com/dp/B0FX5J6V6Q/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0FX5J6V6Q&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/7185KMToXML._AC_UL320_.jpg",
+          "rating": 4.5,
+          "reviews": 11,
+          "bought_last_month": "100+ bought in past month",
+          "price": "$38.99",
+          "extracted_price": 38.99,
+          "old_price": "$49.99",
+          "extracted_old_price": 49.99,
+          "delivery": [
+            "FREE delivery Sat, Apr 11Or fastest delivery Wed, Apr 8",
+            "FREE delivery Sat, Apr 11",
+            "Or fastest delivery Wed, Apr 8"
+          ]
+        }
+      ]
+    }
+  ],
+  "video_results": [
+    {
+      "block_position": "top",
+      "video_thumbnail": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/48363b4c-2eef-4c5d-9cce-6b1b1a7e88a9.mp4/r/THUMBNAIL_360P_FRAME_3_CAPTURE_2.JPG",
+      "video_src": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/48363b4c-2eef-4c5d-9cce-6b1b1a7e88a9.mp4/productVideoOptimized.mp4",
+      "video_link": "https://aax-us-east-retail-direct.amazon.com/x/c/JJXqPOaQjJXMs8mOplYZy2cAAAGdZfUk1wEAAAH2AQBvbm9fdHhuX2JpZDQgICBvbm9fdHhuX2ltcDIgICARJLGd/clv1c_ek-wBHHWbcbSXQ5XYxuhu68Ir00da3BBMX6ppb-qzu9-Ix7FIkXg4Tl49pTgBjHs3UwqSGqpgcvre7dD9e0-uN0azjswW2BXU6YmRyGziI2OAR_l2EQJay7-8cmEBzMm04ErR4ykjfkx4pn4tFyHm_h7odOIBpXqw4d1zzTyqGbfW2xnaXD95X9kXBwGx-hK_48DrUlYHQug5c1dtUJ236ExH30tlsR3mgikilEh57DE5FdPOqlfsEUJPGB_SHv1wvPslXNxYFXoWgVqsUBL22JHppifp7JPZV-XYZ6S0wNVpccvfPHdMSWqU0_PJp-gOSE8FieioKmcymQHoYUbkqok5kJQ6fd-l-kgmyYRL3DaxGl2wRX-Volo0FZH3ByF40dC3ab7yE0d269CzBag_YCyqeCiRQiz0fWoq52XajnqYebVYCCRNuZBC9tzYDVAhnJnsAsGvEuVX6ZFDtH5jMjEiPBNyOiLc8TfxUSufwH2nl3Ts9sGcIsWk8BtBCfIWsgkUgQ0ERzALuVahhKZBYK7x3n6tq-n6Fzx-JtRfLj6J3gc3cpv1JJzZ_q510u_vVHMAW3MonxyTOfkmt5TTVou4wkNp5VaX2GW1RkWoEXtsih4_Gud-MniYgXOYx6btetQ_AB8UIAjamzjrWrvzTH58nR43Euq742RWoR_GjQtAYrTJ4Tqr1c-yKnelHo3nRQcTBoofyTpJ4CXAQ0fTqOAPsq0J1OGCG_oklcMhl3rW2Auxv-sgRPibAGvp6VY5sgx-C32glDhjFhj2N3gMonYw_DE7r4vfQ6IhyMACLk9kQJyaoffqkduDaen7nCOZ0pLviVA-kJs9HLWXnr_pKx76JxKkHApyOo9PhXcxl3bTs-hdfP_AUnGXiiNxF9OoO4YFwNBrV-pQ1-_TMh0YMFv03zCATN6hiK13Jb-YGyUkv0s9RYjqz9iGNycnwVLkosEyqVBKZdNdo1vdGi4P-FwlN6RbobmHKVmOk6t27Ob0TAFw20jJi5_oM4rukQRnNM8KCyDUAqyIR8O-Xj7tgbfcT-zI6KkAaw162iUnVAK_LlL9t9BUyECt3bSRPp76uoZqJEX0kp4v2Vatc8NEVlI-OpQ51chzPTscgfn7_roJpzizKHXcIGgrxOewijYVo8-5ptu457VM8WFmD79GRaSb1FoHcaxUOU8G-DNBXDmXlYO_NG2Ah1ZaahDRbvBfAWOaow46u_WW-rRDixechd9-b074hUyuKICg80HmsjSJaLUu54xThJbOKbhESMwr0KnpFRWe0cMJJ0UUV_k_V_kALYU5gnnUXKtYwpaPONyAH2kmsBdSSsRjOWdwW571-VPSx_mWvLJZ6TQ4WzVM5t5Omy1Kai3xXJ4ttehB3ftIWRp5s2xrpY083UumOQElds1lnVM8RzEbt4eMggPM-lDVb_vRyR1buy9FypZNZaTAfgzTdvvpl3lzF7Muez2dw39QCwCFoCzRUXZJzD15jDVLy-jfzrZfSbjGQOoVb_TLsqIoELvEwHmWb1ulUmY05mBtuZECDTLDkVIJrrvV2DRGVZCELSPfxKoR3-Bx5-HNcKI0fvU8kFmt9YWZLvaL0R3J_Gb3ZxI-14_Q3iWCT24XltcqBalUDbQrfWQ3ULJKJXQj-9N3fVyBRQmpUjFZR7IWts/https://www.amazon.com/dp/B0CT2BY5KL?pd_rd_i=B0CT2BY5KL&pf_rd_p=c8b39f81-ded8-4d75-80c2-6dfa03cbb699&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=XnBO1&pd_rd_w=kt0dV&pd_rd_r=16346b54-0867-40e4-8983-97ac63e3858b",
+      "products": [
+        {
+          "position": 1,
+          "asin": "B0CT2BY5KL",
+          "sponsored": true,
+          "title": "Portable Blender Personal Juicer for Shakes and Smoothies - 20 OZ Electric Protein Shaker Bottle with Insulated Sleeve, Travel Lid, USB-C Rechargeable - Mini Small Blender Cup for Kitchen, Office, Gym",
+          "link": "https://aax-us-east-retail-direct.amazon.com/x/c/JJXqPOaQjJXMs8mOplYZy2cAAAGdZfUk1wEAAAH2AQBvbm9fdHhuX2JpZDQgICBvbm9fdHhuX2ltcDIgICARJLGd/clv1c_ek-wBHHWbcbSXQ5XYxuhu68Ir00da3BBMX6ppb-qzu9-Ix7FIkXg4Tl49pTgBjHs3UwqSGqpgcvre7dD9e0-uN0azjswW2BXU6YmRyGziI2OAR_l2EQJay7-8cmEBzMm04ErR4ykjfkx4pn4tFyHm_h7odOIBpXqw4d1zzTyqGbfW2xnaXD95X9kXBwGx-hK_48DrUlYHQug5c1dtUJ236ExH30tlsR3mgikilEh57DE5FdPOqlfsEUJPGB_SHv1wvPslXNxYFXoWgVqsUBL22JHppifp7JPZV-XYZ6S0wNVpccvfPHdMSWqU0_PJp-gOSE8FieioKmcymQHoYUbkqok5kJQ6fd-l-kgmyYRL3DaxGl2wRX-Volo0FZH3ByF40dC3ab7yE0d269CzBag_YCyqeCiRQiz0fWoq52XajnqYebVYCCRNuZBC9tzYDVAhnJnsAsGvEuVX6ZFDtH5jMjEiPBNyOiLc8TfxUSufwH2nl3Ts9sGcIsWk8BtBCfIWsgkUgQ0ERzALuVahhKZBYK7x3n6tq-n6Fzx-JtRfLj6J3gc3cpv1JJzZ_q510u_vVHMAW3MonxyTOfkmt5TTVou4wkNp5VaX2GW1RkWoEXtsih4_Gud-MniYgXOYx6btetQ_AB8UIAjamzjrWrvzTH58nR43Euq742RWoR_GjQtAYrTJ4Tqr1c-yKnelHo3nRQcTBoofyTpJ4CXAQ0fTqOAPsq0J1OGCG_oklcMhl3rW2Auxv-sgRPibAGvp6VY5sgx-C32glDhjFhj2N3gMonYw_DE7r4vfQ6IhyMACLk9kQJyaoffqkduDaen7nCOZ0pLviVA-kJs9HLWXnr_pKx76JxKkHApyOo9PhXcxl3bTs-hdfP_AUnGXiiNxF9OoO4YFwNBrV-pQ1-_TMh0YMFv03zCATN6hiK13Jb-YGyUkv0s9RYjqz9iGNycnwVLkosEyqVBKZdNdo1vdGi4P-FwlN6RbobmHKVmOk6t27Ob0TAFw20jJi5_oM4rukQRnNM8KCyDUAqyIR8O-Xj7tgbfcT-zI6KkAaw162iUnVAK_LlL9t9BUyECt3bSRPp76uoZqJEX0kp4v2Vatc8NEVlI-OpQ51chzPTscgfn7_roJpzizKHXcIGgrxOewijYVo8-5ptu457VM8WFmD79GRaSb1FoHcaxUOU8G-DNBXDmXlYO_NG2Ah1ZaahDRbvBfAWOaow46u_WW-rRDixechd9-b074hUyuKICg80HmsjSJaLUu54xThJbOKbhESMwr0KnpFRWe0cMJJ0UUV_k_V_kALYU5gnnUXKtYwpaPONyAH2kmsBdSSsRjOWdwW571-VPSx_mWvLJZ6TQ4WzVM5t5Omy1Kai3xXJ4ttehB3ftIWRp5s2xrpY083UumOQElds1lnVM8RzEbt4eMggPM-lDVb_vRyR1buy9FypZNZaTAfgzTdvvpl3lzF7Muez2dw39QCwCFoCzRUXZJzD15jDVLy-jfzrZfSbjGQOoVb_TLsqIoELvEwHmWb1ulUmY05mBtuZECDTLDkVIJrrvV2DRGVZCELSPfxKoR3-Bx5-HNcKI0fvU8kFmt9YWZLvaL0R3J_Gb3ZxI-14_Q3iWCT24XltcqBalUDbQrfWQ3ULJKJXQj-9N3fVyBRQmpUjFZR7IWts/https://www.amazon.com/Portable-Blender-Personal-Insulated-Smoothies/dp/B0CT2BY5KL/ref=sxin_28_sbv_search_btf?content-id=amzn1.sym.c8b39f81-ded8-4d75-80c2-6dfa03cbb699%3Aamzn1.sym.c8b39f81-ded8-4d75-80c2-6dfa03cbb699&cv_ct_cx=portable+blender&keywords=portable+blender&pd_rd_i=B0CT2BY5KL&pd_rd_r=16346b54-0867-40e4-8983-97ac63e3858b&pd_rd_w=kt0dV&pd_rd_wg=XnBO1&pf_rd_p=c8b39f81-ded8-4d75-80c2-6dfa03cbb699&pf_rd_r=EP6M3ZHE52TRWGVP1H81&qid=1775532057&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sr=1-1-5190daf0-67e3-427c-bea6-c72c1df98776",
+          "link_clean": "https://www.amazon.com/dp/B0CT2BY5KL/",
+          "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&asin=B0CT2BY5KL&device=desktop&engine=amazon_product",
+          "thumbnail": "https://m.media-amazon.com/images/I/71MdREq4nEL._AC_UL640_QL65_.jpg",
+          "rating": 4.2,
+          "reviews": 804,
+          "bought_last_month": "800+ bought in past month",
+          "price": "$39.99",
+          "extracted_price": 39.99,
+          "delivery": [
+            "FREE delivery Sat, Apr 11",
+            "Or fastest delivery Wed, Apr 8"
+          ]
+        }
+      ]
+    }
+  ],
+  "related_searches": [
+    {
+      "position": 1,
+      "query": "blendjet",
+      "link": "https://www.amazon.com/s?k=blendjet&ref=rsl_sug_0_0&pd_rd_w=rh4Ro&content-id=amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871:amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_p=3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=PFTv6&pd_rd_r=ad1353b6-4205-445d-93dc-38b70f3ff1c1&qid=1775532057"
+    },
+    {
+      "position": 2,
+      "query": "blender bottle",
+      "link": "https://www.amazon.com/s?k=blender+bottle&ref=rsl_sug_0_3&pd_rd_w=rh4Ro&content-id=amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871:amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_p=3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=PFTv6&pd_rd_r=ad1353b6-4205-445d-93dc-38b70f3ff1c1&qid=1775532057"
+    },
+    {
+      "position": 3,
+      "query": "blender",
+      "link": "https://www.amazon.com/s?k=blender&ref=rsl_sug_0_1&pd_rd_w=rh4Ro&content-id=amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871:amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_p=3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=PFTv6&pd_rd_r=ad1353b6-4205-445d-93dc-38b70f3ff1c1&qid=1775532057"
+    },
+    {
+      "position": 4,
+      "query": "portable blender rechargeable",
+      "link": "https://www.amazon.com/s?k=portable+blender+rechargeable&ref=rsl_sug_0_4&pd_rd_w=rh4Ro&content-id=amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871:amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_p=3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=PFTv6&pd_rd_r=ad1353b6-4205-445d-93dc-38b70f3ff1c1&qid=1775532057"
+    },
+    {
+      "position": 5,
+      "query": "personal blender",
+      "link": "https://www.amazon.com/s?k=personal+blender&ref=rsl_sug_0_2&pd_rd_w=rh4Ro&content-id=amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871:amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_p=3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=PFTv6&pd_rd_r=ad1353b6-4205-445d-93dc-38b70f3ff1c1&qid=1775532057"
+    },
+    {
+      "position": 6,
+      "query": "blend jet",
+      "link": "https://www.amazon.com/s?k=blend+jet&ref=rsl_sug_0_5&pd_rd_w=rh4Ro&content-id=amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871:amzn1.sym.3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_p=3be64970-3b95-4a6d-a45d-78077a3ff871&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=PFTv6&pd_rd_r=ad1353b6-4205-445d-93dc-38b70f3ff1c1&qid=1775532057"
+    }
+  ],
+  "sponsored_brands": {
+    "title": "Brands related to your search",
+    "brands": [
+      {
+        "position": 1,
+        "image": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/d3a2dbe9-a70d-48f4-80f5-f09413bbadde._SL5000_CR0,358,5000,2618_.jpg",
+        "name": "Ninja",
+        "headline": "Push to Blend for Perfect Drinks",
+        "link": "https://aax-us-east-retail-direct.amazon.com/x/c/JCvTN14S4_cXsyfPCFp31bkAAAGdZfUlxwEAAAH2AQBvbm9fdHhuX2JpZDYgICBvbm9fdHhuX2ltcDEgICA2S6r3/clv1c_ek-wxPHXbcbaDlXQl5oAGFLdGZNCLAMZhSViRaDWDikVO9TnMSaJwNuo6ghtw872o0w-2KIVHIb169CBcOG6zEzsUvs1RKDg6X9zKznldkYHg_GeGvg2yRvzwM00ZvQzou-ChEKyFy8Vy7VICYRELWRxosjMtlXtmPTW3U-yDCYdVHYRtgB6_zkwLlLzlb66nc027LdoW9cIFmT_BMrM3h4YVcsalB7m8JyfynCJ_3oAs9ZpZl-ptQeFmbk_4vKBFb3KlyAuB5heKkO1PoDqVMY9we_0JQCIO9KGWpbRWD6FcJ5FcSReAsNagAGO7P5nHeIbQQ8YhNrzx5AF1v9A4WNfrX9Qn9u6E9NgILNItYQF7h_BP0RZHa43jIuoaTpMPEw3BaO0y8YZVLOVQ7kKaaL2vzTXkAwgkUt5JS6Qbdzkvm7i7ShlUsE6Tu0BvEWNbdknbdZU6f-CeK4Gcy3CvKRH_E5M8xhyApYQB35CpQ573iC8Nqz8dSvidJ5yvM6AhDwW_RLsHFASl8svq4dRBpJf8-96w8llXiANL_7IebSw1CnN6CXaE9D0PE_7ERA8o_CGH__L4zdtpnJv_ZH1PluNzWWm7QQPsdMNR-5TBRwQr0bxshKSH0_zYGtnBgs4_cjMGmZ-1LJF26I4jKCa3a-sf7jtOUeq72ms6vMwBkUk8pKxwB7P4s5kCaIWp9fWOzSNHONku2MT7JzpruRUabwEoRs3P4P1cq-rW_F0fqabjmThuMf4ODOXpqDxKmufRgg54IM-m9vJ1hiiYk3D2GBKnrAr32AliaaeafLkH0DVPCv95Yu8wkg96IH4Rk24v65Bg8D2jXOCRGZff6-kgQK5T7ekzQ8sPDj7VJ1zgCwvHty3a0ulL1q42dCclkg_XRUGD8IoQNClGulX1BG0R4Wj0POU3pcUmqT8AboACaphKojAq9TvqDCoAK7a6ODQl8pd2PAm6YdznUHt6jwb69IRvKQ2VsvpIULchk1ALL4V-9rLCnOiPcCIz37eZF2ZeoXocJiiXtYRXWfcLRNBqleKi0bk4baA5e6j03F8QUDA4u7idWqEy4tSfCL3ws95jm9U9xCsyAqMbasZOf2YMj6pWHZ-At_eZ2gM8icnGpOIiSMXDJ8E2P8-r6g1pJ0KM7qzc2Y34ocU9e-Bw0yCj3l9JOGi4Ts3hzng_n_yy7g9FO-7Zk0XzdrvdAymWtbe2LfuqRBEqIQQbOHB-pKpEjyYdd7uIAmj1Vpww_GMF2zxKiXtGy3cIkJ8GpX1iTyu4h1auV1KAL0WskX3PUJYGZcjsCoKWY6mkHRot-2lt83bc1BE8xksq5wkqVkyIX0oBwqSXxNj_kMnjQyPXysuZYjocmu0VhsDAfAKAInQ4I3yTz_LQUZDd26BuxK4Z-E2pxXlilxEc3oKXewaET8LxB-AjZagJk-s3N1n5YOoX-Pv1BQtF-isr3253uSpYuUCIZq5NKG0l3N2bxk95pA9uH61n-r1Av8cQR2yAHasfs5FoyRQHG-1A0vWdirMATDFbXC6JFLI9k92YOhxx98SyDffFBfDWZk-DMMb9AHGX8PHRHFigAH_GE7AkYLyNEZOAxgs1uJisahQ2cTzR3-DUMCdmzsA0Mabc_DcfT8kTE8TIcJtt7A2r7EFqMMB1pCH454pIlVGXfhYauywx8EaUd4/https://www.amazon.com/stores/page/CE41F873-C5E9-47D5-A324-ACA40D90CF4C/?_encoding=UTF8&store_ref=SB_A06853922QY03ULI738YA-A091605239BPD4DZ8KIOI&pd_rd_plhdr=t&aaxitk=f86a2d2764cbdc6e3a288748c5049566&hsa_cr_id=0&lp_asins=B0FSGSYF79%2CB0FSFPFNWP%2CB0FSFVP979&lp_query=portable%20blender&lp_slot=desktop-hsa-3psl&ref_=sbx_be_s_3psl_mbd_mb0_bkgd&pd_rd_w=Zhasx&content-id=amzn1.sym.7d5eb573-01e8-49db-b262-65baa247c724%3Aamzn1.sym.7d5eb573-01e8-49db-b262-65baa247c724&pf_rd_p=7d5eb573-01e8-49db-b262-65baa247c724&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=A6DKE&pd_rd_r=6b20a084-13df-42c9-bf9f-73d7fb3d9a73",
+        "logo": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/3cfb0e15-17b9-4617-b678-b2077cd3478b._CR0,0,2400,400_AC_SX278_SY200_CB1169409_QL70_.jpg"
+      },
+      {
+        "position": 2,
+        "image": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/09fdfec1-54d2-477f-917d-c78a48e50427._CR0,0,1200,628_SX920_CB1169409_QL70_.jpg",
+        "name": "NutriBullet",
+        "headline": "Flexible design, powerful portability.",
+        "link": "https://aax-us-east-retail-direct.amazon.com/x/c/JHfta-uBkGmCAhPtEBCuBksAAAGdZfUlyAEAAAH2AQBvbm9fdHhuX2JpZDYgICBvbm9fdHhuX2ltcDEgICBmtDq4/clv1c_ek-wBPHXFbbWzjK3YoscrxfcOWxCnjqP720D0JLnFUmL5dIebYINvL8Ou-0Kjslu1VL-c-vByK3L6U4zEDABssYE5aVD7k8_Pj9hCtjFWPz0g35opxbnszVog_t4gAYpbNVGvhImIcnqmD3RDSPvT0KRpdiMVlTpgJT2_TOSjCUcXGArkgnBLpvA3-rG_2KOT0CLaNUMPUvApUQ-EgrD9PyyVNUzJmQclsHawIsy46IqDSGaEea0ZrG8jr1lL0QPcr_kJA1hOIMOd_aMZfrZTMbPQX_BTEzry-9mlejZ27GGVPcJTjCYEUVREvihAtJAVQ4plbDCWPS0GMeGybxTrzz4Mt-vpICKItcnvfXEo8qYudZpDzd3GgSK2nAkZ01ERupr-HkBiTfcj2dvuLvUlA-WuRPspeWTuaxVBfeugsh0VsmlQRpL9MgSoH5RmQLK2tDvxAM_Da9yYjgegcLeK2sdK5Cj3B9ZZsVke_GsJfpDiAUMsvJylqlkOS_bkjTC3wTRENHnxOIb4x5aRo4zTYkWWR2nEs5OMiCFZry3AoqlFPGzmPzLo6iJb3KhJxCI8oi1PWnX30eb83TjGiutRcnKNTMS6vtSjfiRE8-ifsRzuUrGwqr1igojuqE6wSr-rlINI67ArgKCC5JAJEnWYZFq47T3DN4iBuu_YxZFiWouzUUoKG_cViJ4e9KRAYZzdBKqtQkPLCntjOU-gAteXahb1cVtLEnUptJ26pIMkiEi9u1aFrAF8FknkJBfpwByH6tLZeWHIFkyl1WhYVGPfCYAoWqZJG84YgIOOMD0C010272hBTWcd3UIO3HxByaCDWmGfUe35fKB0RabVPmi5f-2JhIA7Fb-viOu8u6kJWHDfAok1XC69beu4R9h21b0EALI76SeGJJqmHkOReFD7B34n1nqhX6Cik5tMruTprFmjtcWON83oO0ax3DD2wWV40Ji1Y90PoVxE_ExK89tR74dwYfiW9BBALwkLPcJOCHkeL87uBtEgnpKTU56tCUibl0t4H5Ho-NHsAJpm8YIqhJqJWozEVKXHnbuDFJwiUyXQdimdFjqJCxOaO19OW_APMXBh_xHQtBepQ4aR5H3wrprESqR_JwQjjMtwLPi3G7cQsI43DA-Lvrr-YO78MQgmNsIEapHe1w0yI8UV_bYZmlOMz_cohrzfN8dsCduSPfofC6xnm1WbcK4qnpdIyXCufnqVwFN5p03abcSoPFh04Z-w2JbcgrK7vi7UdpkA0DsZvEoLMPYINt2sC-ovj1cb59cRRj4JAPru34hlYOtvtATkeqPB--hXPOhzmcWirEwBfn1_Yig6BhCXOTrJqO-8iDrwoy0swVP1rJT89SLipqxAx7GxYc-3dwHlgBbu1NuyUn5vjQ_DijdFB5CcKTbqbsDQcs_alqcEiG5gtWZQViAOEmnhiQUYS1qW6CbZMQkUarWRjMEJDQ79qLhgv14o-mf0sE7kF0LY9riaMkG34AU-1rKgjNUNbOT90KryA5eTD2nIzIAas7qikXwHJVgyalSxdgN1j9X7WJxUCA7Qw0kp0P73xS9YnsbCNCHlVWM1bqfMqbQqMPu84_xxhneqzYyLslKTmpKicomMS86rlJVKvDsNHK2fLx8ot3Au9uD8sXhmh1-AILnFtYhMRLeV7n5FtyKdxLWLcyqlL5M3vk9rkQ/https://www.amazon.com/stores/page/449E2F2E-BFAD-48AE-88B9-33230670604A/?_encoding=UTF8&store_ref=SB_A0818946317R13ZKK7VNF-A07587307NY04ZD5YRMX&pd_rd_plhdr=t&aaxitk=b6ef7a71f9333db3a8970f5b2b84760a&hsa_cr_id=0&lp_asins=B0FKRW2MBK%2CB0FLKVKHLH%2CB0FLN8DF5R&lp_query=portable%20blender&lp_slot=desktop-hsa-3psl&ref_=sbx_be_s_3psl_mbd_mb1_bkgd&pd_rd_w=Zhasx&content-id=amzn1.sym.7d5eb573-01e8-49db-b262-65baa247c724%3Aamzn1.sym.7d5eb573-01e8-49db-b262-65baa247c724&pf_rd_p=7d5eb573-01e8-49db-b262-65baa247c724&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=A6DKE&pd_rd_r=6b20a084-13df-42c9-bf9f-73d7fb3d9a73",
+        "logo": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/0236e99d-863f-44cc-aa81-3dca38b5eca2._CR0,0,1200,1200_AC_SX278_SY200_CB1169409_QL70_.png"
+      },
+      {
+        "position": 3,
+        "image": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/5fc726b9-6a7c-4cc2-8c4f-4d274cb8dcf9._CR0,0,1200,628_SX920_CB1169409_QL70_.png",
+        "name": "BLENDi",
+        "headline": "Powerful & Perfect for Smoothies & Shakes",
+        "link": "https://aax-us-east-retail-direct.amazon.com/x/c/JKN3jbT2nTv31XA-szmBpf4AAAGdZfUlyQEAAAH2AQBvbm9fdHhuX2JpZDYgICBvbm9fdHhuX2ltcDEgICBksC04/clv1c_ek-wxPfXFbbSTPHXb5sApQu3ERwuLvsnaKjNy8-XHimNxYztHtqf_YeJi0AIvuImz6U2macqvERURwBItyy5Uje2uUSDkhsLxmDmEiFRwT8uS1ENW-kgEXGn7zFEpnAszexC_L1i4z7CQJiydoIlQcLoa66Ml1PmwuTx5maLDIQVShuFvoCKWxy5N1TlZHmykvkGQTOf0UVI1OXrg5D5psr6h-2TFM91VN6m4Q80q7gij1bbuK46c9zQKdITiFtWiF-4CWnKTjbPSEzk8nErBb9IefQjXew-BC1oAryDg8k--YuSzmgINsq8SW6J-sfw996NTiOgP2semaG5-MpL12YqUfOda0lwKR1NFkYg1rYnhbJwLXCWQ1pXktewnxH1AsIzdv-7hEg-AkWdjUUX5MGhgiLA2eIZeu7Lmu5yLuFvvjhAZQHfysRhgQQd7DYeO4n1dXvFOlMLnH555nmiGa0zjfKWjnljRRf_L0O9ez6tAH4VillL-1dn8o-SV3OTUtIh4wvhl47ZOKUBIHjF89xXJa16S_L9NVg0RIs3sIucaX45iDs6c86DusKakzeTtJUuUF9-p_62-rEohsxADwC_RKGArYCTHCezZmmXuYfL5wZNciB_4Y8gs7T-Bel-t364KuGUiwSvWwC4JNmpZsYVYH3Ig1ZsjBX7f94SvlfLRWp-wOFST6YLAdna4ESeux9jo0UgbqMtR2vNbiE3MwwWvvK32PFFlqLh5lELO0GVcJ-W128Xt8Msl3yGALyq--b5TFjCCDloeqPc4SKv2TH5ZN-qYlF47BbWEswtyOCdAdg9tBl602D-DPkmbrvTlpCpPyRhdqrzJ-wGuxQdZ5Tbot3_GmqDgnSw5Ql2WmE4PmIOIWOsvbZsaR9hFCQ0JkaEhm2Q6cdSLquIGCkwU49yoMXiYL-Gir6YorVFwGw4GjEbBcYau0VAdXI4JhKW6GXIIK6jiyZxF20bKxjmaS4Ci3GqYmSQZ_g4eKliBrydjuDSMqsh7CSya54iM1Ve38r1NJmcKNKfJl7_M2TJKah59wOQ6H3m47cAPAjksdwXeXQNSTwHHMn96H_I4go0RW8NxkFGbfG29z4vyA3ByLSVocRb4oqbPfPbVbLSxJha1md39ZsjIvXTcFSNEeBmr0z5EMtzkpesInKl057T2mb1fhFylidJKm4DPOqZOzyUIpjuJNp-2X1uNe7jDQxWlKp-wzVlGDmza_xboEc4rFaME8mYk84htk4Q0qg_oTzhzY8_ETCo5zyn-eipbmS65Za89XGrGjy1CzcpMBm3aw3CJQ1SJGsPnjDVkoDS3UWkHX9OebhLdAnPlmJRmNDjUB6Y8o5-eth5P4yOUXybuVIrdb5nIZDGNnxYitetuWbLe9cc0mLvwZwYIGa953I8b9FbFyrrfb4HzQMydEug1VFJphL4QWhU9Pc4LocASBMlisxjmBmE13Wa41-JUKT3xjFP_zBFKhId7XwOFNOcADzBuuS1f5tIsF3Ho9rgIdOGi6ZFLTjMGjRgPmyVAQCqe6ujBf_YLQQn9Mu1s5EDek3bRj8IWGYa-U3174TMJJF2J_gD-YT4LTFjWlzDyJefmZAdlmSz417IFM3Yt0t_zqFL8QK2AdC3gD7PTaY8Ez2M9rk4rpAafxPIKOyZwCFLZLVPSkOS9sMCQMJc07_OthnyjWsZx7wu/https://www.amazon.com/stores/page/766A41EC-8FCE-437D-A8C1-161131B9E3F1/?_encoding=UTF8&store_ref=SB_A00607622KBGZBCIWBHC7-A1029835EIAYGIQX7HGZ&pd_rd_plhdr=t&aaxitk=1351b55ad3e546b3d58be0f3f6921eed&hsa_cr_id=0&lp_asins=B0F9B5Y3KY%2CB0DJ1WYLC1%2CB0F9B5PYHX&lp_query=portable%20blender&lp_slot=desktop-hsa-3psl&ref_=sbx_be_s_3psl_mbd_mb2_bkgd&pd_rd_w=Zhasx&content-id=amzn1.sym.7d5eb573-01e8-49db-b262-65baa247c724%3Aamzn1.sym.7d5eb573-01e8-49db-b262-65baa247c724&pf_rd_p=7d5eb573-01e8-49db-b262-65baa247c724&pf_rd_r=EP6M3ZHE52TRWGVP1H81&pd_rd_wg=A6DKE&pd_rd_r=6b20a084-13df-42c9-bf9f-73d7fb3d9a73",
+        "logo": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/19d78774-7be0-485f-993c-521e79b25d8c._CR0,0,400,400_AC_SX278_SY200_CB1169409_QL70_.png"
+      }
+    ]
+  },
+  "categories": [
+    {
+      "position": 1,
+      "name": "Books",
+      "link": "https://www.amazon.com/books-used-books-textbooks/b/?ie=UTF8&node=283155&ref_=nav_cs_books",
+      "node": "283155",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=283155"
+    },
+    {
+      "position": 2,
+      "name": "Gift Cards",
+      "link": "https://www.amazon.com/gift-cards/b/?ie=UTF8&node=2238192011&ref_=nav_cs_gc",
+      "node": "2238192011",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=2238192011"
+    },
+    {
+      "position": 3,
+      "name": "Sell",
+      "link": "https://www.amazon.com/b/?_encoding=UTF8&ld=AZUSSOA-sell&node=12766669011&ref_=nav_cs_sell",
+      "node": "12766669011",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=12766669011"
+    },
+    {
+      "position": 4,
+      "name": "Smart Home",
+      "link": "https://www.amazon.com/Smart-Home/b/?ie=UTF8&node=6563140011&ref_=nav_cs_smart_home",
+      "node": "6563140011",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=6563140011"
+    },
+    {
+      "position": 5,
+      "name": "Fashion",
+      "link": "https://www.amazon.com/amazon-fashion/b/?ie=UTF8&node=7141123011&ref_=nav_cs_fashion",
+      "node": "7141123011",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=7141123011"
+    },
+    {
+      "position": 6,
+      "name": "Amazon Home",
+      "link": "https://www.amazon.com/home-garden-kitchen-furniture-bedding/b/?ie=UTF8&node=1055398&ref_=nav_cs_home",
+      "node": "1055398",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=1055398"
+    },
+    {
+      "position": 7,
+      "name": "Automotive",
+      "link": "https://www.amazon.com/automotive-auto-truck-replacements-parts/b/?ie=UTF8&node=15684181&ref_=nav_cs_automotive",
+      "node": "15684181",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=15684181"
+    },
+    {
+      "position": 8,
+      "name": "Sports & Outdoors",
+      "link": "https://www.amazon.com/sports-outdoors/b/?ie=UTF8&node=3375251&ref_=nav_cs_sports",
+      "node": "3375251",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=3375251"
+    },
+    {
+      "position": 9,
+      "name": "Toys & Games",
+      "link": "https://www.amazon.com/toys/b/?ie=UTF8&node=165793011&ref_=nav_cs_toys",
+      "node": "165793011",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=165793011"
+    },
+    {
+      "position": 10,
+      "name": "Baby",
+      "link": "https://www.amazon.com/baby-car-seats-strollers-bedding/b/?ie=UTF8&node=165796011&ref_=nav_cs_baby",
+      "node": "165796011",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=165796011"
+    },
+    {
+      "position": 11,
+      "name": "Home Improvement",
+      "link": "https://www.amazon.com/Tools-and-Home-Improvement/b/?ie=UTF8&node=228013&ref_=nav_cs_hi",
+      "node": "228013",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=228013"
+    },
+    {
+      "position": 12,
+      "name": "Beauty & Personal Care",
+      "link": "https://www.amazon.com/Beauty-Makeup-Skin-Hair-Products/b/?ie=UTF8&node=3760911&ref_=nav_cs_beauty",
+      "node": "3760911",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=3760911"
+    },
+    {
+      "position": 13,
+      "name": "Kindle Books",
+      "link": "https://www.amazon.com/Kindle-eBooks/b/?ie=UTF8&node=154606011&ref_=nav_cs_kindle_books",
+      "node": "154606011",
+      "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&node=154606011"
+    }
+  ],
+  "filters": {
+    "popular_shopping_ideas": [
+      {
+        "position": 1,
+        "name": "Rechargeable",
+        "link": "https://www.amazon.com/s?k=rechargeable+portable+blender&ref=sr_nr_p_rag_integrated_qb_0",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=rechargeable+portable+blender"
+      },
+      {
+        "position": 2,
+        "name": "Personal",
+        "link": "https://www.amazon.com/s?k=personal+portable+blender&ref=sr_nr_p_rag_integrated_qb_1",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=personal+portable+blender"
+      },
+      {
+        "position": 3,
+        "name": "Smoothie",
+        "link": "https://www.amazon.com/s?k=portable+smoothie+blender&ref=sr_nr_p_rag_integrated_qb_2",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+smoothie+blender"
+      },
+      {
+        "position": 4,
+        "name": "24 Oz",
+        "link": "https://www.amazon.com/s?k=portable+blender+24+oz&ref=sr_nr_p_rag_integrated_qb_3",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender+24+oz"
+      },
+      {
+        "position": 5,
+        "name": "Magic Bullet",
+        "link": "https://www.amazon.com/s?k=magic+bullet+portable+blender&ref=sr_nr_p_rag_integrated_qb_4",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=magic+bullet+portable+blender"
+      },
+      {
+        "position": 6,
+        "name": "Usb",
+        "link": "https://www.amazon.com/s?k=usb+portable+blender&ref=sr_nr_p_rag_integrated_qb_5",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=usb+portable+blender"
+      },
+      {
+        "position": 7,
+        "name": "Blendjet",
+        "link": "https://www.amazon.com/s?k=blendjet+portable+blender&ref=sr_nr_p_rag_integrated_qb_6",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=blendjet+portable+blender"
+      },
+      {
+        "position": 8,
+        "name": "Mini",
+        "link": "https://www.amazon.com/s?k=mini+portable+blender&ref=sr_nr_p_rag_integrated_qb_7",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=mini+portable+blender"
+      },
+      {
+        "position": 9,
+        "name": "2-pack",
+        "link": "https://www.amazon.com/s?k=portable+blender+2+pack&ref=sr_nr_p_rag_integrated_qb_8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender+2+pack"
+      },
+      {
+        "position": 10,
+        "name": "Bottle",
+        "link": "https://www.amazon.com/s?k=blender+bottle+portable&ref=sr_nr_p_rag_integrated_qb_9",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=blender+bottle+portable"
+      }
+    ],
+    "eligible_for_free_shipping": [
+      {
+        "position": 1,
+        "name": "Free Shipping by Amazon",
+        "description": "Get FREE Shipping on eligible orders shipped by Amazon",
+        "rh": "p_76:1249155011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_76%3A1249155011&dc&qid=1775532057&rnid=1249153011&ref=sr_nr_p_76_1&ds=v1%3AGfDykm9kwJXet9BVRTQZa7cUIbOkj3TArevZLU0HnVA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_76%3A1249155011"
+      }
+    ],
+    "customer_reviews": [
+      {
+        "position": 1,
+        "name": "& Up",
+        "rh": "p_72:1248867011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_72%3A1248867011&dc&qid=1775532057&rnid=1248865011&ref=sr_nr_p_72_1&ds=v1%3AIiijaCGYf7vSx5CdoGYtBexJs%2F2FcgJv2aG2R91wh5I",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_72%3A1248867011"
+      }
+    ],
+    "price": [
+      {
+        "position": 1,
+        "name": "All Discounts",
+        "rh": "p_n_deal_type:23566065011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_deal_type%3A23566065011&dc&qid=1775532057&rnid=23566063011&ref=sr_nr_p_n_deal_type_1&ds=v1%3AtEOVzfH6s%2FjdQhkr7gyInjrLX%2FZ28K%2FRzjQBu4xuf3w",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_deal_type%3A23566065011"
+      },
+      {
+        "position": 2,
+        "name": "Today's Deals",
+        "rh": "p_n_deal_type:23566064011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_deal_type%3A23566064011&dc&qid=1775532057&rnid=23566063011&ref=sr_nr_p_n_deal_type_2&ds=v1%3A%2BHx8BzBkBAUF1s7mCXdkLRwzJx%2F8mX85fZisefADfhU",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_deal_type%3A23566064011"
+      }
+    ],
+    "special_features": [
+      {
+        "position": 1,
+        "name": "Portable",
+        "rh": "p_n_g-1003351322111:24003338011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003338011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_1&ds=v1%3A4wz8QP39t9zI%2F%2FTmfJqqAknEtLKWv2mdrQuVDqk0%2F4E",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003338011"
+      },
+      {
+        "position": 2,
+        "name": "USB Rechargeable",
+        "rh": "p_n_g-1003351322111:78722128011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A78722128011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_2&ds=v1%3Ac1Z35qjoNhyxLx%2BZuBrPw9l8juzttJ%2FxlP0pDC3xcQo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A78722128011"
+      },
+      {
+        "position": 3,
+        "name": "Lightweight",
+        "rh": "p_n_g-1003351322111:78722130011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A78722130011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_3&ds=v1%3A%2BeblZ9UCNoV479lym8wIuoGF7sHORhSUwFIBzqmRFl8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A78722130011"
+      },
+      {
+        "position": 4,
+        "name": "Adjustable Speed Control",
+        "rh": "p_n_g-1003351322111:98063452011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063452011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_4&ds=v1%3AhMpj9vnlj0pEe5EOkb9pOoGpUfgtjlxksC8zNrCAdPo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063452011"
+      },
+      {
+        "position": 5,
+        "name": "Adjustable Time",
+        "rh": "p_n_g-1003351322111:98063448011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063448011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_5&ds=v1%3AMyj0BAbQMU5OiCAOsXlJaymTNusb1Jp6ewLfs1Ikaqo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063448011"
+      },
+      {
+        "position": 6,
+        "name": "Auto Shut Off",
+        "rh": "p_n_g-1003351322111:24003343011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003343011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_6&ds=v1%3AX7frTInIUbGo3PUREzcLwQRkLK0VQEKMKUok%2BD8pubo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003343011"
+      },
+      {
+        "position": 7,
+        "name": "Automatic Cleaning",
+        "rh": "p_n_g-1003351322111:98063444011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063444011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_7&ds=v1%3AyLTyfD3YQZMG3Y7hAhoGHGCgkRq%2BDzDNvMR%2FXOlgAt8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063444011"
+      },
+      {
+        "position": 8,
+        "name": "Compact",
+        "rh": "p_n_g-1003351322111:98063470011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063470011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_8&ds=v1%3AeZqvJtAhAcHeL%2BaCOKjClssifv7GOABWURQzpcJwSjY",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063470011"
+      },
+      {
+        "position": 9,
+        "name": "Cordless",
+        "rh": "p_n_g-1003351322111:78722126011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A78722126011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_9&ds=v1%3AmMVxNozkZHvy1ujEMUc72eIhPLsWo1MCgSV8lniWEPA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A78722126011"
+      },
+      {
+        "position": 10,
+        "name": "Countdown Timer",
+        "rh": "p_n_g-1003351322111:98063454011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063454011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_10&ds=v1%3AdH0AFsxJCDMfvPnPgUzmB6jYppdRkQ%2FJ3RzZQWXPZyQ",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063454011"
+      },
+      {
+        "position": 11,
+        "name": "Detachable Attachment",
+        "rh": "p_n_g-1003351322111:78722133011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A78722133011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_11&ds=v1%3APlKdOQFkwAwixjuwyOSyDWFbr9Q4bYAg9tQ86hhsvWo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A78722133011"
+      },
+      {
+        "position": 12,
+        "name": "Ergonomic Handle",
+        "rh": "p_n_g-1003351322111:98063456011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063456011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_12&ds=v1%3AqrspGfAXsewOGwiYMTU6A%2Fc%2F1LubOeVy1pPNHLnMx9Y",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063456011"
+      },
+      {
+        "position": 13,
+        "name": "Heat Resistant Glass Container",
+        "rh": "p_n_g-1003351322111:98063472011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063472011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_13&ds=v1%3AL9%2F1ZegJsNzx7aWcO9XbK%2BSIxu6reaoN1D1hqz%2FNuyk",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063472011"
+      },
+      {
+        "position": 14,
+        "name": "Heavy Duty",
+        "rh": "p_n_g-1003351322111:98063446011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063446011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_14&ds=v1%3A7zsjVHiiCALnA0ZnXqvSl9epd0QU30XPY17hAq4Bbr0",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063446011"
+      },
+      {
+        "position": 15,
+        "name": "Keep Warm Setting",
+        "rh": "p_n_g-1003351322111:24003344011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003344011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_15&ds=v1%3AGafkly8sAIaJGYNR8XfZwtm0TNeRxOGKwaIKrS%2BNyKs",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003344011"
+      },
+      {
+        "position": 16,
+        "name": "Multiple Attachments",
+        "rh": "p_n_g-1003351322111:24003340011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003340011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_16&ds=v1%3AvQiDN5hAWjQHztAErcaPvAQSJHCedMzww0PJ0WfberY",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003340011"
+      },
+      {
+        "position": 17,
+        "name": "Multiple Speeds",
+        "rh": "p_n_g-1003351322111:24003337011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003337011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_17&ds=v1%3AObhMLVprnIsS2E8x72hriden9ok7BCCbPDpNiCGlBmo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003337011"
+      },
+      {
+        "position": 18,
+        "name": "One-handed Drinking",
+        "rh": "p_n_g-1003351322111:98063468011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063468011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_18&ds=v1%3A5TVdsld020znEcDZlzMfkQZeBZenk2KJkQ5gnvZ6DdI",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063468011"
+      },
+      {
+        "position": 19,
+        "name": "Pre-Programmed",
+        "rh": "p_n_g-1003351322111:98063458011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063458011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_19&ds=v1%3AjYrQyh6bR5B7CDMTugV6UGeCW5LKN1cc2648ItuDRME",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063458011"
+      },
+      {
+        "position": 20,
+        "name": "Pulse Technology",
+        "rh": "p_n_g-1003351322111:98063467011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063467011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_20&ds=v1%3A9T%2Flwyr2F89FIFutaEQZLk2QRXSlciYTO1ZqeFXYaNw",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063467011"
+      },
+      {
+        "position": 21,
+        "name": "Removable Blade",
+        "rh": "p_n_g-1003351322111:24003342011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003342011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_21&ds=v1%3Af1%2F%2FCXv4ftpqHLlgt7GFfaBZaA3G9sMbsyJpqcut7tE",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003342011"
+      },
+      {
+        "position": 22,
+        "name": "Removable Glass Container",
+        "rh": "p_n_g-1003351322111:98063466011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063466011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_22&ds=v1%3Ai5FNdAkpuMsNJENvTIr6jeHCvL6yzZ9vG3jEnxHDhm4",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063466011"
+      },
+      {
+        "position": 23,
+        "name": "Safety Lock",
+        "rh": "p_n_g-1003351322111:24003336011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003336011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_23&ds=v1%3At%2F2qx%2BE8Fkq%2BlFi%2FkAo1r0sub36v%2BBXqqGaaT6gqBtw",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003336011"
+      },
+      {
+        "position": 24,
+        "name": "Single Serve",
+        "rh": "p_n_g-1003351322111:24003341011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003341011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_24&ds=v1%3A1MT%2FVR%2B7T36OVR3vunOUZ3pSTTmV0xwDn8QzMU3KFsI",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A24003341011"
+      },
+      {
+        "position": 25,
+        "name": "Thermal Protection System",
+        "rh": "p_n_g-1003351322111:98063469011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063469011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_25&ds=v1%3AOnVvgPULy2NnfP5UwDCApFWM48%2Fr99WQhShKELvEFZY",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063469011"
+      },
+      {
+        "position": 26,
+        "name": "Touch Control Panel",
+        "rh": "p_n_g-1003351322111:98063471011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063471011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_26&ds=v1%3AOUjq%2FefhCW6ii9DLxqFYrZlmcr9kdKtJkD4x4G7%2Fjh8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063471011"
+      },
+      {
+        "position": 27,
+        "name": "Turbo Boost",
+        "rh": "p_n_g-1003351322111:98063450011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063450011&dc&qid=1775532057&rnid=24003285011&ref=sr_nr_p_n_g-1003351322111_27&ds=v1%3AkxO6tlKDaA9wBatP4Ff7aTYWVFS%2BJTL5VH1oN9t2feA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003351322111%3A98063450011"
+      }
+    ],
+    "condition": [
+      {
+        "position": 1,
+        "name": "New",
+        "rh": "p_n_condition-type:6358196011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_condition-type%3A6358196011&dc&qid=1775532057&rnid=6358194011&ref=sr_nr_p_n_condition-type_1&ds=v1%3ANebTj2LPSMeTOv5VyUfM4WPEKHzy%2BAYb%2FcNe7Qkp%2B4M",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_condition-type%3A6358196011"
+      },
+      {
+        "position": 2,
+        "name": "Renewed",
+        "rh": "p_n_condition-type:16907721011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_condition-type%3A16907721011&dc&qid=1775532057&rnid=6358194011&ref=sr_nr_p_n_condition-type_2&ds=v1%3A%2BTaiFTOEFP39TYAYJHZaO0P8QNz6sOc%2F4%2F%2BXIOkUDGQ",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_condition-type%3A16907721011"
+      },
+      {
+        "position": 3,
+        "name": "Used",
+        "rh": "p_n_condition-type:6358198011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_condition-type%3A6358198011&dc&qid=1775532057&rnid=6358194011&ref=sr_nr_p_n_condition-type_3&ds=v1%3A3CfnzimsABgT7T%2BamcAVaboof4nPmtrmtWH5oRtnwqA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_condition-type%3A6358198011"
+      }
+    ],
+    "color": [
+      {
+        "position": 1,
+        "name": "Black",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254098011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254098011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_1&ds=v1%3AfDW2W8BKXITkFaSLXYTtW0XYCVeMEVM7WTQvxyljd7I",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254098011"
+      },
+      {
+        "position": 2,
+        "name": "White",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254100011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254100011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_2&ds=v1%3AgQJIPkSiKSYYuRwI9QqVfddkxg4QjtkJKkZRZfU9FGI",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254100011"
+      },
+      {
+        "position": 3,
+        "name": "Pink",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254104011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254104011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_3&ds=v1%3AsKPEzRX%2BHj3gaC4rRq2rTeQEgc8J6hSbTK%2BNltqqQbc",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254104011"
+      },
+      {
+        "position": 4,
+        "name": "Grey",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254099011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254099011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_4&ds=v1%3AtIYEqbkFSTtgFNovjzOMFIvCDnseH3x%2B9SkdSd35XNs",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254099011"
+      },
+      {
+        "position": 5,
+        "name": "Brown",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254101011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254101011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_5&ds=v1%3A6sP2AR1B4IUpjwcERPTiPs5jPO5WTlyxvIXlweVPDeg",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254101011"
+      },
+      {
+        "position": 6,
+        "name": "Beige",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254102011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254102011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_6&ds=v1%3A5S%2Bl6qYbrR1MCBICyUPsYybRj1j%2F%2BgIXSIm%2BpMDOYBA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254102011"
+      },
+      {
+        "position": 7,
+        "name": "Red",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254103011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254103011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_7&ds=v1%3ALCUwhsJHgRR0814w0LCBtE8tgyRYTKT2dpYAmTIwNSA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254103011"
+      },
+      {
+        "position": 8,
+        "name": "Orange",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254105011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254105011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_8&ds=v1%3Ad8P0yIpPU2E8IEXPJ9FtkuMIczHxzefb3vDJwzsBqwE",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254105011"
+      },
+      {
+        "position": 9,
+        "name": "Yellow",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254106011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254106011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_9&ds=v1%3A7YBBUJQ3Tdro%2F7CGrw2BzO0vixwgBYm6wjavhnwm4NQ",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254106011"
+      },
+      {
+        "position": 10,
+        "name": "Ivory",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254107011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254107011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_10&ds=v1%3AC%2FSO3droRXT%2FahS7J%2BKpCjTaNAxeKz39t0EKWhvlh0Y",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254107011"
+      },
+      {
+        "position": 11,
+        "name": "Green",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254108011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254108011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_11&ds=v1%3AjQqgxzdugkuYs9MEgB8p8rugnbuDQe4f454K8%2BcCGoU",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254108011"
+      },
+      {
+        "position": 12,
+        "name": "Blue",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254109011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254109011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_12&ds=v1%3AqluBpNEyP%2B%2BrKEeUglc9Hd%2FmVTnsnEK5kqC726li494",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254109011"
+      },
+      {
+        "position": 13,
+        "name": "Purple",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254110011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254110011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_13&ds=v1%3AFs7I1vv67qMmcr%2FIkIUSuWl2%2B%2B%2BwafQntz9Ro0jXqG0",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254110011"
+      },
+      {
+        "position": 14,
+        "name": "Gold",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254111011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254111011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_14&ds=v1%3Ai8ER32gi2Kqn72Phc7BVMjsnPuY6XW5uogi3FWzAOYw",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254111011"
+      },
+      {
+        "position": 15,
+        "name": "Silver",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254112011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254112011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_15&ds=v1%3AOPJ5LjNOgigusqdJxgXP%2F747vmJlcFNJdOx92ZzMD5Y",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254112011"
+      },
+      {
+        "position": 16,
+        "name": "Multi",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254113011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254113011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_16&ds=v1%3A%2FCEE2MWYunV13CGAcxNSxdwG52nuFqJcxUGwluIIk54",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254113011"
+      },
+      {
+        "position": 17,
+        "name": "Clear",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254114011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254114011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_17&ds=v1%3AGJ45AQ7VrwhdscqhMtldvu8nDhvBr2LM6ptZKLVh%2B5w",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254114011"
+      },
+      {
+        "position": 18,
+        "name": "Stainless Steel",
+        "image": "https://m.media-amazon.com/images/G/01/nav2/images/gui/clothingcolorsprite._CB437558320_.png",
+        "rh": "p_n_g-1004162223091:3254115011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254115011&dc&qid=1775532057&rnid=3254097011&ref=sr_nr_p_n_g-1004162223091_18&ds=v1%3ALbvHJWnt8b6MlXj2iKGN7L8JG5itkTqDqleb5Tc41RY",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1004162223091%3A3254115011"
+      }
+    ],
+    "uses": [
+      {
+        "position": 1,
+        "name": "Blending",
+        "rh": "p_n_g-1003352723111:23983820011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983820011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_1&ds=v1%3As10HkM7WlNhF7Z49qQXiJNCF6%2FzmJ%2FUMDdVsblFQIiM",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983820011"
+      },
+      {
+        "position": 2,
+        "name": "Mixing",
+        "rh": "p_n_g-1003352723111:23983818011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983818011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_2&ds=v1%3AOdhIRKdLaRymiXhEuJutb8tNPcxKPSdBhyxET1UbpQM",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983818011"
+      },
+      {
+        "position": 3,
+        "name": "Juices",
+        "rh": "p_n_g-1003352723111:23983816011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983816011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_3&ds=v1%3AN1%2FSL5wVMLtHqrUqZWZVzhPFRckKh3HXTuiwtDjl%2B2U",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983816011"
+      },
+      {
+        "position": 4,
+        "name": "Crushing",
+        "rh": "p_n_g-1003352723111:23983819011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983819011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_4&ds=v1%3AlOjpBaVmYGP5MTHvAMnSTnHiK3jt02UzkkafCt0bnj4",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983819011"
+      },
+      {
+        "position": 5,
+        "name": "Beats",
+        "rh": "p_n_g-1003352723111:23983811011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983811011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_5&ds=v1%3Aph3mRkrLTu5O%2FdiLH6qUwNV9sPQutfSOaWZJq4FJvkM",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983811011"
+      },
+      {
+        "position": 6,
+        "name": "Chopping",
+        "rh": "p_n_g-1003352723111:23983822011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983822011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_6&ds=v1%3A2e8al7j7%2FIoSNeuwfnR9xQPOn52X1aJHWaa1JObYUuw",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983822011"
+      },
+      {
+        "position": 7,
+        "name": "Coffee",
+        "rh": "p_n_g-1003352723111:23983814011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983814011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_7&ds=v1%3ApcQUJd1XBMu094ukrDMeNNEvBaOCN8Iyl9xhBMFlG8Q",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983814011"
+      },
+      {
+        "position": 8,
+        "name": "Creams",
+        "rh": "p_n_g-1003352723111:23983823011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983823011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_8&ds=v1%3AutOpsioTZtixKd%2FGIamkqrJAoD077azrSdhlmyNnPYo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983823011"
+      },
+      {
+        "position": 9,
+        "name": "Emulsifying",
+        "rh": "p_n_g-1003352723111:23983817011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983817011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_9&ds=v1%3AKk46ClmlmuGYK5ACUN6DGlWX3mSPsFuF%2BlrA%2FIsZeT0",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983817011"
+      },
+      {
+        "position": 10,
+        "name": "Grinding",
+        "rh": "p_n_g-1003352723111:23983825011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983825011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_10&ds=v1%3A28ujhs8TXFMKX%2B356A8IxFcgkNUkYi0%2BWxrDCaHVGxE",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983825011"
+      },
+      {
+        "position": 11,
+        "name": "Ice Crush",
+        "rh": "p_n_g-1003352723111:23983812011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983812011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_11&ds=v1%3AsE0ZDayEJeVC6J0i7AzaRNVo42AihcQsNpckMdHC2tE",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983812011"
+      },
+      {
+        "position": 12,
+        "name": "Protein",
+        "rh": "p_n_g-1003352723111:23983821011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983821011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_12&ds=v1%3AVI2K8Z3R8sNXU5TFsMazCrVFgY9abI66D8WKgkDRaR0",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983821011"
+      },
+      {
+        "position": 13,
+        "name": "Pulse",
+        "rh": "p_n_g-1003352723111:23983824011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983824011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_13&ds=v1%3Al3K6yXDiqwvtyg4iOloGqj8Ry3tlNd3APPOoBoH1C10",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983824011"
+      },
+      {
+        "position": 14,
+        "name": "Pureeing",
+        "rh": "p_n_g-1003352723111:23983826011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983826011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_14&ds=v1%3A9LfvAQb07qd1uI5DEs4QOvKlUTEti%2FIHvx6UOuu0h3Q",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983826011"
+      },
+      {
+        "position": 15,
+        "name": "Whipping",
+        "rh": "p_n_g-1003352723111:23983813011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983813011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_15&ds=v1%3ALc3yTM8OzIZkWVGL01rHPWD9Xsinh95PwSXHHUJ36s4",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983813011"
+      },
+      {
+        "position": 16,
+        "name": "Whisking",
+        "rh": "p_n_g-1003352723111:23983815011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983815011&dc&qid=1775532057&rnid=23983785011&ref=sr_nr_p_n_g-1003352723111_16&ds=v1%3Ae6pZdSfM%2B5aP7N3rWJra5HlsYaGkODCa3kKQszyHdcA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1003352723111%3A23983815011"
+      }
+    ],
+    "brands": [
+      {
+        "position": 1,
+        "name": "Ninja",
+        "rh": "p_123:391646",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A391646&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_1&ds=v1%3Ao4pEZu828cR%2B%2Ftr%2F5GLr6pzuMKXhQWVMk4u7yoXAA7c",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A391646"
+      },
+      {
+        "position": 2,
+        "name": "NutriBullet",
+        "rh": "p_123:465748",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A465748&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_2&ds=v1%3AsKmw2h1D5E0VKde6IK%2FdT27R3yiUMXmOTHbToKUMTzA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A465748"
+      },
+      {
+        "position": 3,
+        "name": "Hamilton Beach",
+        "rh": "p_123:64426",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A64426&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_3&ds=v1%3AVIwBSy89%2ByMkZQ4vcBQgNPvBughn15%2BMgEzqewsMPJo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A64426"
+      },
+      {
+        "position": 4,
+        "name": "Oster",
+        "rh": "p_123:237228",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A237228&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_4&ds=v1%3AzJpaxD7Olos163LspwxBH4xjGoQlDZFyb2shU28uf3U",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A237228"
+      },
+      {
+        "position": 5,
+        "name": "Vitamix",
+        "rh": "p_123:233704",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A233704&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_5&ds=v1%3AMfeGYO09WlP10Q3d2FlU4m95gme5xblJ%2F6UYOazX7dg",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A233704"
+      },
+      {
+        "position": 6,
+        "name": "KitchenAid",
+        "rh": "p_123:46640",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A46640&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_6&ds=v1%3AA%2FJbzYs2NcUJQXINl43yn%2BdX7DA8QwN1Mxznvl9O63E",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A46640"
+      },
+      {
+        "position": 7,
+        "name": "KOIOS",
+        "rh": "p_123:307479",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A307479&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_7&ds=v1%3AdpQ9ALJTWPBwI%2F9ROgoCuZqqzRXpTvTmKAt%2Bk8v%2BwoM",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A307479"
+      },
+      {
+        "position": 8,
+        "name": "BLACK+DECKER",
+        "rh": "p_123:196436",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A196436&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_8&ds=v1%3AdPZE1K0XOeFOE3DBtkQu5LR13jT%2FxvLYLWMH25Cynhs",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A196436"
+      },
+      {
+        "position": 9,
+        "name": "Smeg",
+        "rh": "p_123:304040",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A304040&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_9&ds=v1%3Aleg3MtxTBVu5c2Pu9rSIwPB2lIOL0vyp46GDP%2FDm8qI",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A304040"
+      },
+      {
+        "position": 10,
+        "name": "DASH",
+        "rh": "p_123:463973",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A463973&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_10&ds=v1%3AP8qTjjv%2FH%2FPwpuoxBRotVM1H7707nCyaFaEAUu2gI44",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A463973"
+      },
+      {
+        "position": 11,
+        "name": "Tribest",
+        "rh": "p_123:223842",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A223842&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_11&ds=v1%3A9a3jZckY5%2BvvsKNTguU5JY05XxrLz3CK%2BU0qH%2BBcNTE",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A223842"
+      },
+      {
+        "position": 12,
+        "name": "Waring",
+        "rh": "p_123:255441",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A255441&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_12&ds=v1%3AT76tPCYoZuNfFdiR3LHECsA1bcoQfx%2FgwwQ1%2BehptP8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A255441"
+      },
+      {
+        "position": 13,
+        "name": "La Reveuse",
+        "rh": "p_123:415684",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A415684&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_13&ds=v1%3Ad4MV%2Fn6K8LC%2B9IgbWEE1ju7lMMuRULRcu%2FHcZjzI6KE",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A415684"
+      },
+      {
+        "position": 14,
+        "name": "Ganiza",
+        "rh": "p_123:1851642",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A1851642&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_14&ds=v1%3AqlGCKp9FHeM%2BePE%2Bx%2BaO3Le0tWJ%2FURWOIL9yO4kUv5U",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A1851642"
+      },
+      {
+        "position": 15,
+        "name": "Aeitto",
+        "rh": "p_123:473506",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A473506&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_15&ds=v1%3A5KfAhWpi9Rgn%2BF531egHg01cLzI8wI7taZsVDEaPwBc",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A473506"
+      },
+      {
+        "position": 16,
+        "name": "EMSON",
+        "rh": "p_123:319332",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A319332&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_16&ds=v1%3ACPE9RGtCWqMa3gM1cwLYH0NnudjoG0VBbvmYaVTc6%2B0",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A319332"
+      },
+      {
+        "position": 17,
+        "name": "Brentwood",
+        "rh": "p_123:261566",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A261566&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_17&ds=v1%3AfAi8q9ivcwQcdzrqy6Ft86Myo6c%2BbuU85W7ZiSBQck0",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A261566"
+      },
+      {
+        "position": 18,
+        "name": "Proctor Silex",
+        "rh": "p_123:236695",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A236695&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_18&ds=v1%3AVzLzh7sGFUr6T7PkdQQMwuC3YQN01k5Thciiw2tAF4Y",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A236695"
+      },
+      {
+        "position": 19,
+        "name": "JOYOUNG",
+        "rh": "p_123:2837",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A2837&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_19&ds=v1%3AcWQSLvyGywR%2BIV8i0evvMgMb4oblmfmzyuEB03pa110",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A2837"
+      },
+      {
+        "position": 20,
+        "name": "Tiger",
+        "rh": "p_123:232932",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A232932&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_20&ds=v1%3Am2iuH4O1KjYpd4WUFcgdqJAqkA7n6GR6q3SfBlW%2Bi0k",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A232932"
+      },
+      {
+        "position": 21,
+        "name": "Nuwave",
+        "rh": "p_123:246898",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A246898&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_21&ds=v1%3AAj3UaKRKA%2F2V42J5aZDQkT7NAUjvPITJBXWDpKC8ofs",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A246898"
+      },
+      {
+        "position": 22,
+        "name": "Elite Gourmet",
+        "rh": "p_123:307453",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A307453&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_22&ds=v1%3ARoSGDmKCrHPw4p73ZPAfZVLmTIv%2FglANJTUyRbfR28o",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A307453"
+      },
+      {
+        "position": 23,
+        "name": "Simple Deluxe",
+        "rh": "p_123:304871",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A304871&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_23&ds=v1%3AyCrSSq%2FU1sSkNfsNTTvjN2CKomO4NQvJnVTFZ7KWHMc",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A304871"
+      },
+      {
+        "position": 24,
+        "name": "BESNOOW",
+        "rh": "p_123:2190984",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A2190984&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_24&ds=v1%3AD3umdsZE8Mgi0MgyrDKpwsW1nXqUVimBihi0jqjFbt4",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A2190984"
+      },
+      {
+        "position": 25,
+        "name": "MEGAWISE",
+        "rh": "p_123:851150",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A851150&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_25&ds=v1%3AC2Yh0YPO7UI0cGCxRiX2e5XASgRjp3ZJlTuuEg%2BkzM0",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A851150"
+      },
+      {
+        "position": 26,
+        "name": "topzee",
+        "rh": "p_123:8828359",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A8828359&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_26&ds=v1%3AxMZpIAsqtL1wshgvKUlWwcjbYhlfbLIsCNnmmRkgZ1I",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A8828359"
+      },
+      {
+        "position": 27,
+        "name": "BLENDI",
+        "rh": "p_123:6934694",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A6934694&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_27&ds=v1%3AJNkf3zM9Wh%2FxBRruNEBTG0c9GJvarB7wrV7xmQpN8oo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A6934694"
+      },
+      {
+        "position": 28,
+        "name": "evoloop",
+        "rh": "p_123:2172067",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_123%3A2172067&dc&qid=1775532057&rnid=85457740011&ref=sr_nr_p_123_28&ds=v1%3AFHiAlTDa38xgWeKJN3732Ar26w%2B3JYxID%2F1OGVAhFGk",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_123%3A2172067"
+      }
+    ],
+    "top_brands": [
+      {
+        "position": 1,
+        "name": "Top Brands",
+        "rh": "p_n_g-101014971069111:119653281011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101014971069111%3A119653281011&dc&qid=1775532057&rnid=119653280011&ref=sr_nr_p_n_g-101014971069111_1&ds=v1%3A8zHQt6fxgaKkAPKxJkgAJlTCZnZTbqF0LByTixmnccw",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101014971069111%3A119653281011"
+      }
+    ],
+    "container_material": [
+      {
+        "position": 1,
+        "name": "Plastic",
+        "rh": "p_n_material_browse:17592570011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_material_browse%3A17592570011&dc&qid=1775532057&rnid=17592567011&ref=sr_nr_p_n_material_browse_1&ds=v1%3A2tig7dEoxsv3nm9ofpdmLK6IheJh%2FBvR1JlCUb56r6A",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_material_browse%3A17592570011"
+      },
+      {
+        "position": 2,
+        "name": "Glass",
+        "rh": "p_n_material_browse:17592568011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_material_browse%3A17592568011&dc&qid=1775532057&rnid=17592567011&ref=sr_nr_p_n_material_browse_2&ds=v1%3AGVJZztuF%2FF3kCHaLReLGNHy1t7UA11kDYuYrGeVPnb8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_material_browse%3A17592568011"
+      },
+      {
+        "position": 3,
+        "name": "Metal",
+        "rh": "p_n_material_browse:17592569011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_material_browse%3A17592569011&dc&qid=1775532057&rnid=17592567011&ref=sr_nr_p_n_material_browse_3&ds=v1%3AF7r1p99OqQ8qU8hOIILKO%2BXEGodQCn0HSns1sOQTyg8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_material_browse%3A17592569011"
+      }
+    ],
+    "grade": [
+      {
+        "position": 1,
+        "name": "Commercial Grade",
+        "rh": "p_n_g-1001308806111:5616183011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1001308806111%3A5616183011&dc&qid=1775532057&rnid=5616182011&ref=sr_nr_p_n_g-1001308806111_1&ds=v1%3AT7c9uQqr7rajFXgM6HZ9a5RLQ4HfWLrRtiGgFmaIGm4",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-1001308806111%3A5616183011"
+      }
+    ],
+    "seller": [
+      {
+        "position": 1,
+        "name": "Amazon.com",
+        "rh": "p_6:ATVPDKIKX0DER",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_6%3AATVPDKIKX0DER&dc&qid=1775532057&rnid=275225011&ref=sr_nr_p_6_1&ds=v1%3AHeNBlNdK%2BW81631mxKnTzviPTJuFxxxr5yWVinyQ3qI",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_6%3AATVPDKIKX0DER"
+      },
+      {
+        "position": 2,
+        "name": "Amazon Resale",
+        "rh": "p_6:A2L77EE7U53NWQ",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA2L77EE7U53NWQ&dc&qid=1775532057&rnid=275225011&ref=sr_nr_p_6_2&ds=v1%3AvOXO8YUP3mTUtDNfv0reO9SmfRr6G9PMjEZZTXCAi9w",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA2L77EE7U53NWQ"
+      },
+      {
+        "position": 3,
+        "name": "XWEIWEI",
+        "rh": "p_6:A2PTW8TXZ4N7BR",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA2PTW8TXZ4N7BR&dc&qid=1775532057&rnid=275225011&ref=sr_nr_p_6_3&ds=v1%3ASDBFQl4BtWx6vrr871Y7Lcj3o%2F6oBMRxFJHqGNM3sVY",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA2PTW8TXZ4N7BR"
+      },
+      {
+        "position": 4,
+        "name": "zhixianshangdain",
+        "rh": "p_6:A33XN3KKN1VAVG",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA33XN3KKN1VAVG&dc&qid=1775532057&rnid=275225011&ref=sr_nr_p_6_4&ds=v1%3ARXtTlQ%2BKqGvu0THchHpCKGg%2FRs7QEKp9trRHavKV7xM",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA33XN3KKN1VAVG"
+      },
+      {
+        "position": 5,
+        "name": "WZZHHJ",
+        "rh": "p_6:A24DCZX35GW3OT",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA24DCZX35GW3OT&dc&qid=1775532057&rnid=275225011&ref=sr_nr_p_6_5&ds=v1%3ANHPP9XDyXGfnW%2B0CHmHQjObI3S%2FDkpQuN3mqQJqnBUw",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA24DCZX35GW3OT"
+      },
+      {
+        "position": 6,
+        "name": "Value-Source",
+        "rh": "p_6:A359HKADR8BCNM",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA359HKADR8BCNM&dc&qid=1775532057&rnid=275225011&ref=sr_nr_p_6_6&ds=v1%3AVUJWMWDhEjVWg5J9AmBqHKkUYsb8Aqu3NKmhxb2VwOc",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_6%3AA359HKADR8BCNM"
+      }
+    ],
+    "premium_brands": [
+      {
+        "position": 1,
+        "name": "Premium Brands",
+        "rh": "p_n_g-101015887018111:204376014011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101015887018111%3A204376014011&dc&qid=1775532057&rnid=204376013011&ref=sr_nr_p_n_g-101015887018111_1&ds=v1%3AsDjuZYnCUncO4bb%2F1y9CM26ak%2BKiX8bT%2BBdFOC%2BDbz8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101015887018111%3A204376014011"
+      }
+    ],
+    "number_of_speeds": [
+      {
+        "position": 1,
+        "name": "1",
+        "rh": "p_n_g-101016937446111:210992624011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016937446111%3A210992624011&dc&qid=1775532057&rnid=210992622011&ref=sr_nr_p_n_g-101016937446111_1&ds=v1%3AU2bDRpnBpmALo6ucRxh%2BUdAvbzsX%2BcLMnBITOfw1R4k",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016937446111%3A210992624011"
+      },
+      {
+        "position": 2,
+        "name": "2 to 3",
+        "rh": "p_n_g-101016937446111:210992625011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016937446111%3A210992625011&dc&qid=1775532057&rnid=210992622011&ref=sr_nr_p_n_g-101016937446111_2&ds=v1%3AE1KU6c0XcXgwd741twF1MCKf8Nt%2BE4cJaTvQCXzBHHA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016937446111%3A210992625011"
+      },
+      {
+        "position": 3,
+        "name": "4 to 5",
+        "rh": "p_n_g-101016937446111:210992626011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016937446111%3A210992626011&dc&qid=1775532057&rnid=210992622011&ref=sr_nr_p_n_g-101016937446111_3&ds=v1%3AfXLYE4ZnT8WxS%2BWaCeaTrCmOuA41GomPEKHeLgV2aA4",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016937446111%3A210992626011"
+      },
+      {
+        "position": 4,
+        "name": "6 & above",
+        "rh": "p_n_g-101016937446111:210992623011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016937446111%3A210992623011&dc&qid=1775532057&rnid=210992622011&ref=sr_nr_p_n_g-101016937446111_4&ds=v1%3AcnzdLjTeqSFIIF3zNX9sFtTNK5Xybirg5ZvxHIYc19U",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016937446111%3A210992623011"
+      }
+    ],
+    "capacity": [
+      {
+        "position": 1,
+        "name": "Up to 14 fl. oz.",
+        "rh": "p_n_g-101016790555111:210968407011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016790555111%3A210968407011&dc&qid=1775532057&rnid=210968402011&ref=sr_nr_p_n_g-101016790555111_1&ds=v1%3AVG2IUXCMhDFXI9FDQ5gVSflG03LKpneMK977sCC8S%2Fg",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016790555111%3A210968407011"
+      },
+      {
+        "position": 2,
+        "name": "15 to 29 fl. oz.",
+        "rh": "p_n_g-101016790555111:210968408011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016790555111%3A210968408011&dc&qid=1775532057&rnid=210968402011&ref=sr_nr_p_n_g-101016790555111_2&ds=v1%3AOTE7qil5sEmX7SQ1GLxmd47mn0hiWvGWWwhSsISVzKs",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016790555111%3A210968408011"
+      },
+      {
+        "position": 3,
+        "name": "30 to 44 fl. oz.",
+        "rh": "p_n_g-101016790555111:210968405011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016790555111%3A210968405011&dc&qid=1775532057&rnid=210968402011&ref=sr_nr_p_n_g-101016790555111_3&ds=v1%3AWVbF6N9x3aZZCetW4MNbifOYh%2B9J5jMsyVpUGpIaMoE",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016790555111%3A210968405011"
+      },
+      {
+        "position": 4,
+        "name": "45 fl. oz. & above",
+        "rh": "p_n_g-101016790555111:210968404011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016790555111%3A210968404011&dc&qid=1775532057&rnid=210968402011&ref=sr_nr_p_n_g-101016790555111_4&ds=v1%3A0LgL%2BygruUabO7PatMmKrQmheb1rzJi8YAXA8ZIZLOw",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101016790555111%3A210968404011"
+      }
+    ],
+    "wattage": [
+      {
+        "position": 1,
+        "name": "Up to 149 W",
+        "rh": "p_n_g-101017359321111:214669289011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669289011&dc&qid=1775532057&rnid=214669284011&ref=sr_nr_p_n_g-101017359321111_1&ds=v1%3AmcHKi1MpBjIvG6geKb%2BK8VXNYSBu3J8jHwn25hgJ8Og",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669289011"
+      },
+      {
+        "position": 2,
+        "name": "150 to 299 W",
+        "rh": "p_n_g-101017359321111:214669286011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669286011&dc&qid=1775532057&rnid=214669284011&ref=sr_nr_p_n_g-101017359321111_2&ds=v1%3Ao2jTVyu7KtDAUYglaS6UIaFRPaYuTr0PbFxPuPUzdJo",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669286011"
+      },
+      {
+        "position": 3,
+        "name": "300 to 449 W",
+        "rh": "p_n_g-101017359321111:214669288011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669288011&dc&qid=1775532057&rnid=214669284011&ref=sr_nr_p_n_g-101017359321111_3&ds=v1%3AklMEiPnOF7e9qG1k04Lnw%2BmUvbMTNIyzyvlM%2FCXYggA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669288011"
+      },
+      {
+        "position": 4,
+        "name": "450 to 549 W",
+        "rh": "p_n_g-101017359321111:214669290011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669290011&dc&qid=1775532057&rnid=214669284011&ref=sr_nr_p_n_g-101017359321111_4&ds=v1%3AfR1JUg6OUe%2B36Gg3FejM4Xxa8kYRIJhFDiO5Gewnv2A",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669290011"
+      },
+      {
+        "position": 5,
+        "name": "550 to 699 W",
+        "rh": "p_n_g-101017359321111:214669285011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669285011&dc&qid=1775532057&rnid=214669284011&ref=sr_nr_p_n_g-101017359321111_5&ds=v1%3ANs1bybB4Y6CgaKUGULuPtIFVC%2BGpBZ6zE%2B1d%2BVmuc8Q",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669285011"
+      },
+      {
+        "position": 6,
+        "name": "700 W & above",
+        "rh": "p_n_g-101017359321111:214669287011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669287011&dc&qid=1775532057&rnid=214669284011&ref=sr_nr_p_n_g-101017359321111_6&ds=v1%3A9NiuCs1o5nyO2sQpfUZCvJTBPMrriPY6VmXSbdDkU48",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_g-101017359321111%3A214669287011"
+      }
+    ],
+    "grinder_capacity": [
+      {
+        "position": 1,
+        "name": "Up to 3.9 oz.",
+        "rh": "p_n_feature_eleven_browse-bin:17696988011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_feature_eleven_browse-bin%3A17696988011&dc&qid=1775532057&rnid=17696987011&ref=sr_nr_p_n_feature_eleven_browse-bin_1&ds=v1%3ACMP%2FrJU3Wx0JJJxMinA2ehJD%2F1kQ9rLgB%2F07dag81Ng",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_feature_eleven_browse-bin%3A17696988011"
+      },
+      {
+        "position": 2,
+        "name": "6 to 8.9 oz.",
+        "rh": "p_n_feature_eleven_browse-bin:17696990011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_feature_eleven_browse-bin%3A17696990011&dc&qid=1775532057&rnid=17696987011&ref=sr_nr_p_n_feature_eleven_browse-bin_2&ds=v1%3AVd%2BKp0dTzS9a4eVIN9CuiVVg%2Bwuydu6wbbZVylgv6hs",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_feature_eleven_browse-bin%3A17696990011"
+      },
+      {
+        "position": 3,
+        "name": "9 oz. & above",
+        "rh": "p_n_feature_eleven_browse-bin:17696991011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_feature_eleven_browse-bin%3A17696991011&dc&qid=1775532057&rnid=17696987011&ref=sr_nr_p_n_feature_eleven_browse-bin_3&ds=v1%3ALykq8yY8ld1YLGuImPtCB%2BCWYeK%2FlLDceN0DIUEdv%2Bk",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_feature_eleven_browse-bin%3A17696991011"
+      }
+    ],
+    "sustainability_features": [
+      {
+        "position": 1,
+        "name": "Any Feature",
+        "rh": "p_n_cpf_labels:121136630011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A121136630011&dc&qid=1775532057&rnid=116845681011&ref=sr_nr_p_n_cpf_labels_1&ds=v1%3A69ub7bGs37MJ05BR%2BoaOj3IXx16Oj3dSJL%2FBJLd1kPs",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A121136630011"
+      },
+      {
+        "position": 2,
+        "name": "Carbon Impact",
+        "rh": "p_n_cpf_labels:116845688011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A116845688011&dc&qid=1775532057&rnid=116845681011&ref=sr_nr_p_n_cpf_labels_2&ds=v1%3An4wDyX12h3L7CGEZCicMT8CQV0SIotqckPDuh%2FrOrQg",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A116845688011"
+      },
+      {
+        "position": 3,
+        "name": "Recycled Materials",
+        "rh": "p_n_cpf_labels:116845689011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A116845689011&dc&qid=1775532057&rnid=116845681011&ref=sr_nr_p_n_cpf_labels_3&ds=v1%3A3fhsvb4rmZNLwbOTa6EkL4makTccCyIP8DU7udpFZwM",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A116845689011"
+      },
+      {
+        "position": 4,
+        "name": "Safer Chemicals",
+        "rh": "p_n_cpf_labels:116845683011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A116845683011&dc&qid=1775532057&rnid=116845681011&ref=sr_nr_p_n_cpf_labels_4&ds=v1%3AgqonJkU4jcUcodO1MI3u8mmsT9HslrWj4jei0yjb%2BC8",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A116845683011"
+      },
+      {
+        "position": 5,
+        "name": "Worker Wellbeing",
+        "rh": "p_n_cpf_labels:116845686011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A116845686011&dc&qid=1775532057&rnid=116845681011&ref=sr_nr_p_n_cpf_labels_5&ds=v1%3Ab38P%2BFq7D%2FEuWdlwFbdCu%2BnvzCIKJET5D69Ko0SSqoA",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_cpf_labels%3A116845686011"
+      }
+    ],
+    "subscribe_save": [
+      {
+        "position": 1,
+        "name": "Subscribe & Save Eligible",
+        "rh": "p_n_is_sns_available:2617006011",
+        "link": "https://www.amazon.com/s?k=portable+blender&rh=n%3A21514953011%2Cp_n_is_sns_available%3A2617006011&dc&qid=1775532057&rnid=2617005011&ref=sr_nr_p_n_is_sns_available_1&ds=v1%3AVwrHYuPuxJWbUiassY9wTLA0BTkiVbjoEhaSIaF1p7I",
+        "serpapi_link": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&rh=n%3A21514953011%2Cp_n_is_sns_available%3A2617006011"
+      }
+    ]
+  },
+  "serpapi_pagination": {
+    "current": 1,
+    "next": "https://serpapi.com/search.json?amazon_domain=amazon.com&device=desktop&engine=amazon&k=portable+blender&page=2"
+  }
+}
