@@ -122,7 +122,8 @@
       "Bash(pkill -f \"spring-boot:run\\\\|tradeflow.*jar\")",
       "Bash(SPRING_PROFILES_ACTIVE=local nohup mvn spring-boot:run)",
       "Bash(echo \"PID: $!\")",
-      "Skill(commit-commands:commit)"
+      "Skill(commit-commands:commit)",
+      "Bash(cat /Users/coolmood/TradeFlow/tradeflow-web-next/src/lib/*.ts)"
     ]
   },
   "enableAllProjectMcpServers": true,
