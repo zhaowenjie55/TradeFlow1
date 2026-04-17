@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useAppI18n } from "@/components/layout/locale-provider"
 import { useAgentStore } from "@/stores/agent-store"
 import { useTaskStore } from "@/stores/task-store"
+import { SEARCH_PHASE_CONFIG } from "@/components/agent/search-processing-workflow"
 import { getLiveStageMessage, humanizeTaskLog, isKeyTaskLog, resolveTaskLogCategory } from "@/lib/presentation"
 
 function formatTaskTime(timestamp: string) {
@@ -20,6 +21,8 @@ function formatTaskTime(timestamp: string) {
 export function ThinkingLog() {
   const { t } = useAppI18n()
   const logs = useAgentStore((state) => state.taskLogs)
+  const stagedReasoningLogs = useAgentStore((state) => state.stagedReasoningLogs)
+  const searchExperienceActive = useAgentStore((state) => state.searchExperienceActive)
   const isPolling = useTaskStore((state) => state.isPolling)
   const stage = useTaskStore((state) => state.stage)
   const [filter, setFilter] = useState<"all" | "key">("all")
@@ -27,6 +30,7 @@ export function ThinkingLog() {
   const [autoFollowEnabled, setAutoFollowEnabled] = useState(true)
 
   const visibleLogs = useMemo(() => (filter === "all" ? logs : logs.filter(isKeyTaskLog)), [filter, logs])
+  const showOnlyStagedReasoning = searchExperienceActive && stagedReasoningLogs.length > 0
 
   const containerRef = useRef<HTMLDivElement>(null)
   const isUserScrolledRef = useRef(false)
@@ -58,7 +62,7 @@ export function ThinkingLog() {
     if (!isUserScrolledRef.current && containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight
     }
-  }, [keyedLogs, typedLengths, isPolling])
+  }, [keyedLogs, typedLengths, isPolling, stagedReasoningLogs])
 
   useEffect(() => {
     const nextKeys = keyedLogs.map((item) => item.key)
@@ -99,7 +103,7 @@ export function ThinkingLog() {
     return () => window.clearInterval(timer)
   }, [keyedLogs])
 
-  if (!visibleLogs.length) {
+  if (!visibleLogs.length && !stagedReasoningLogs.length) {
     return (
       <div className="flex h-full min-h-[14rem] items-center justify-center px-6 text-sm text-[var(--tf-text-subtle)]">
         {t("analysisPanel.emptyLogs")}
@@ -134,7 +138,45 @@ export function ThinkingLog() {
       </div>
       <div ref={containerRef} className="tradeflow-scrollbar h-full overflow-auto px-3 py-3">
         <div className="space-y-2">
-          {keyedLogs.map(({ key, entry, view, category }) => {
+          {stagedReasoningLogs.length > 0 && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between px-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-600">
+                <span>Agent reasoning</span>
+                {searchExperienceActive && <span className="animate-pulse">Active</span>}
+              </div>
+              {stagedReasoningLogs.map((entry, index) => {
+                const isLatest = index === stagedReasoningLogs.length - 1 && searchExperienceActive
+                return (
+                  <div
+                    key={entry.id}
+                    className={[
+                      "tf-log-entry rounded-2xl border p-3",
+                      isLatest
+                        ? "border-blue-200 bg-blue-50 text-blue-900"
+                        : "border-[var(--tf-border)] bg-white text-[var(--tf-text)]",
+                    ].join(" ")}
+                  >
+                    <div className="mb-1 flex items-center justify-between gap-2 text-[11px] text-[var(--tf-text-subtle)]">
+                      <span>{SEARCH_PHASE_CONFIG[entry.phase].label}</span>
+                      <span>{formatTaskTime(entry.timestamp)}</span>
+                    </div>
+                    <p className="text-xs leading-5">
+                      {entry.message}
+                      {isLatest && <span className="ml-0.5 inline-block animate-pulse">▋</span>}
+                    </p>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {!showOnlyStagedReasoning && stagedReasoningLogs.length > 0 && keyedLogs.length > 0 && (
+            <div className="px-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--tf-text-subtle)]">
+              System events
+            </div>
+          )}
+
+          {!showOnlyStagedReasoning && keyedLogs.map(({ key, entry, view, category }) => {
             const typed = typedLengths[key]
             const message = typeof typed === "number" ? view.message.slice(0, typed) : view.message
             const isStillTyping = typeof typed === "number" && typed < view.message.length
@@ -144,7 +186,7 @@ export function ThinkingLog() {
                 className={[
                   "tf-log-entry rounded-2xl border p-3",
                   category === "alert"
-                    ? "border-amber-200 bg-amber-50"
+                    ? "border-sky-200 bg-sky-50"
                     : "border-[var(--tf-border)] bg-[var(--tf-bg-soft)]",
                 ].join(" ")}
               >
@@ -159,7 +201,7 @@ export function ThinkingLog() {
               </div>
             )
           })}
-          {isPolling && (
+          {!showOnlyStagedReasoning && isPolling && (
             <div className="rounded-2xl border border-blue-200 bg-blue-50 p-3">
               <p className="text-xs text-blue-700">
                 {getLiveStageMessage(stage)}

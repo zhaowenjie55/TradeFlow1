@@ -21,10 +21,10 @@
   --input: 226 232 240;
   --ring: 96 165 250;
   --radius: 1rem;
-  --tf-bg: #eef2f8;
-  --tf-bg-elevated: rgba(255, 255, 255, 0.84);
-  --tf-bg-panel: rgba(255, 255, 255, 0.92);
-  --tf-bg-soft: #f7f9fc;
+  --tf-bg: #ffffff;
+  --tf-bg-elevated: #ffffff;
+  --tf-bg-panel: #ffffff;
+  --tf-bg-soft: #ffffff;
   --tf-bg-strong: #ffffff;
   --tf-border: rgba(148, 163, 184, 0.24);
   --tf-border-strong: rgba(100, 116, 139, 0.26);
@@ -101,10 +101,7 @@ body {
   height: 100%;
   min-height: 100dvh;
   overflow: hidden;
-  background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.1), transparent 28%),
-    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 24%),
-    var(--tf-bg);
+  background: var(--tf-bg);
   color: var(--tf-text);
 }
 
@@ -189,6 +186,15 @@ body {
   100% { background-position: -200% 0; }
 }
 
+@keyframes animation-path {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
 .tf-log-entry {
   animation: tf-entry-fade 0.2s ease-out;
 }
@@ -214,4 +220,69 @@ body {
   );
   background-size: 200% 100%;
   animation: tf-shimmer 1.5s linear infinite;
+}
+
+.cpu-architecture {
+  offset-anchor: 10px 0px;
+  animation: animation-path;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.75, -0.01, 0, 0.99);
+}
+
+.cpu-line-1 {
+  offset-path: path("M 10 20 h 79.5 q 5 0 5 5 v 30");
+  animation-duration: 5s;
+  animation-delay: 1s;
+}
+
+.cpu-line-2 {
+  offset-path: path("M 180 10 h -69.7 q -5 0 -5 5 v 40");
+  animation-delay: 6s;
+  animation-duration: 2s;
+}
+
+.cpu-line-3 {
+  offset-path: path("M 130 20 v 21.8 q 0 5 -5 5 h -25");
+  animation-delay: 4s;
+  animation-duration: 6s;
+}
+
+.cpu-line-4 {
+  offset-path: path("M 170 80 v -21.8 q 0 -5 -5 -5 h -65");
+  animation-delay: 3s;
+  animation-duration: 3s;
+}
+
+.cpu-line-5 {
+  offset-path: path(
+    "M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -35"
+  );
+  animation-delay: 9s;
+  animation-duration: 4s;
+}
+
+.cpu-line-6 {
+  offset-path: path("M 94.8 95 v -46");
+  animation-delay: 3s;
+  animation-duration: 7s;
+}
+
+.cpu-line-7 {
+  offset-path: path(
+    "M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 28"
+  );
+  animation-delay: 4s;
+  animation-duration: 4s;
+}
+
+.cpu-line-8 {
+  offset-path: path("M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 35");
+  animation-delay: 3s;
+  animation-duration: 3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cpu-architecture {
+    animation: none !important;
+  }
 }

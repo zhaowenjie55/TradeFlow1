@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { useUIStore } from "@/stores/ui-store"
 
 const items = [
-  { key: "workspace", href: "/", icon: Boxes, labelKey: "nav.workspace" },
+  { key: "workspace", href: "/app", icon: Boxes, labelKey: "nav.workspace" },
   { key: "history", href: "/history", icon: History, labelKey: "nav.history" },
   { key: "reports", href: "/reports", icon: ClipboardList, labelKey: "nav.reports" },
   { key: "settings", href: "/settings", icon: Settings2, labelKey: "nav.settings" },
@@ -29,8 +29,7 @@ export function Sidebar() {
       <div className="mt-2 flex flex-col gap-1.5">
         {items.map((item) => {
           const Icon = item.icon
-          const active =
-            pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`)) || activePanel === item.key
+          const active = pathname === item.href || pathname.startsWith(`${item.href}/`) || activePanel === item.key
           return (
             <Link
               key={item.key}

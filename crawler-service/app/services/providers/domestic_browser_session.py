@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 import random
@@ -7,13 +8,14 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
+from urllib.request import urlopen
 
-from playwright.sync_api import Error as PlaywrightError
-from playwright.sync_api import Browser
-from playwright.sync_api import BrowserContext
-from playwright.sync_api import Page
-from playwright.sync_api import Playwright
-from playwright.sync_api import sync_playwright
+from playwright.async_api import Error as PlaywrightError
+from playwright.async_api import Browser
+from playwright.async_api import BrowserContext
+from playwright.async_api import Page
+from playwright.async_api import Playwright
+from playwright.async_api import async_playwright
 
 
 logger = logging.getLogger(__name__)
@@ -27,6 +29,9 @@ PROFILE_LOCK_ERROR_MARKERS = (
     "ProcessSingleton",
     "SingletonLock",
     "profile is already in use",
+    # Chromium closes immediately when a stale lock prevents it from acquiring the profile
+    "Target page, context or browser has been closed",
+    "context or browser has been closed",
 )
 STEALTH_INIT_SCRIPT = """
 (() => {
@@ -82,7 +87,7 @@ class DomesticBrowserSessionManager:
         self._session: DomesticBrowserSession | None = None
         self._last_navigation_at = 0.0
 
-    def acquire(
+    async def acquire(
         self,
         *,
         cdp_url: str,
@@ -92,11 +97,11 @@ class DomesticBrowserSessionManager:
         storage_state_path: str,
     ) -> tuple[BrowserContext, Page]:
         now = time.monotonic()
-        self._close_if_idle(now)
+        await self._close_if_idle(now)
 
-        if self._session is None or not self._is_usable(self._session):
-            self.invalidate()
-            self._session = self._start_session(
+        if self._session is None or not await self._is_usable(self._session):
+            await self.invalidate()
+            self._session = await self._start_session(
                 cdp_url=cdp_url,
                 user_data_dir=user_data_dir,
                 launch_kwargs=launch_kwargs,
@@ -106,18 +111,25 @@ class DomesticBrowserSessionManager:
             logger.info("domestic browser session started mode=%s", self._session.mode)
         else:
             self._refresh_page_reference(self._session)
+            if self._session.mode == "cdp" and self._session.verification_required:
+                self._session.page = await self._session.context.new_page()
+                self._session.verification_required = False
+                logger.info(
+                    "domestic_browser_session.cdp.new_page_after_verification last_url=%s",
+                    self._session.last_verification_url,
+                )
 
-        self._apply_pacing(now)
+        await self._apply_pacing(now)
         self._session.last_used_at = time.monotonic()
         return self._session.context, self._session.page
 
-    def mark_success(self) -> None:
+    async def mark_success(self) -> None:
         if self._session is None:
             return
         self._session.last_used_at = time.monotonic()
         self._session.verification_required = False
         self._session.last_verification_url = None
-        self._persist_storage_state()
+        await self._persist_storage_state()
 
     def mark_verification_required(self, page: Page) -> None:
         if self._session is None:
@@ -125,48 +137,53 @@ class DomesticBrowserSessionManager:
         self._session.last_used_at = time.monotonic()
         self._session.verification_required = True
         self._session.last_verification_url = page.url
+        if self._session.mode == "cdp":
+            self._session.cooldown_until = 0.0
+            logger.warning("domestic anti-bot detected on CDP page; next request will open a fresh tab")
+            return
         self._session.cooldown_until = time.monotonic() + ANTI_BOT_COOLDOWN_SECONDS
         logger.warning("domestic anti-bot detected; session enters cooldown until %.2f", self._session.cooldown_until)
 
-    def has_pending_verification(self, anti_bot_detector) -> bool:
-        if self._session is None or not self._is_usable(self._session):
+    async def has_pending_verification(self, anti_bot_detector) -> bool:
+        if self._session is None or not await self._is_usable(self._session):
             return False
         page = self._session.page
         if not page.url or page.url == "about:blank":
             return False
         try:
-            blocked = anti_bot_detector(page)
+            blocked = await anti_bot_detector(page)
         except PlaywrightError:
-            self.invalidate()
+            await self.invalidate()
             return False
         if blocked:
             self._session.verification_required = True
             self._session.last_verification_url = page.url
         return blocked
 
-    def invalidate(self) -> None:
+    async def invalidate(self) -> None:
         if self._session is None:
             return
+        if self._session.mode != "cdp":
+            try:
+                await self._session.context.close()
+            except Exception:
+                pass
+            try:
+                if self._session.browser is not None:
+                    await self._session.browser.close()
+            except Exception:
+                pass
         try:
-            self._session.context.close()
-        except Exception:
-            pass
-        try:
-            if self._session.browser is not None:
-                self._session.browser.close()
-        except Exception:
-            pass
-        try:
-            self._session.playwright.stop()
+            await self._session.playwright.stop()
         except Exception:
             pass
         self._session = None
 
-    def status(self) -> dict[str, Any]:
+    async def status(self) -> dict[str, Any]:
         now = time.monotonic()
-        self._close_if_idle(now)
+        await self._close_if_idle(now)
         session = self._session
-        if session is None or not self._is_usable(session):
+        if session is None or not await self._is_usable(session):
             return {
                 "active": False,
                 "mode": None,
@@ -192,7 +209,7 @@ class DomesticBrowserSessionManager:
             "idleTtlSeconds": SESSION_IDLE_TTL_SECONDS,
         }
 
-    def _start_session(
+    async def _start_session(
         self,
         *,
         cdp_url: str,
@@ -201,41 +218,43 @@ class DomesticBrowserSessionManager:
         context_kwargs: dict[str, Any],
         storage_state_path: str,
     ) -> DomesticBrowserSession:
-        playwright = sync_playwright().start()
+        playwright = await async_playwright().start()
         browser: Browser | None = None
         launch_kwargs = self._normalize_launch_kwargs(launch_kwargs)
 
         if cdp_url:
-            browser = playwright.chromium.connect_over_cdp(cdp_url)
-            context = browser.contexts[0] if browser.contexts else browser.new_context(**context_kwargs)
-            page = self._select_preferred_page(context) or context.new_page()
+            browser = await playwright.chromium.connect_over_cdp(cdp_url)
+            logger.info("domestic_browser_session.attach.cdp ws=%s", self._resolve_cdp_ws_url(cdp_url))
+            context = browser.contexts[0] if browser.contexts else await browser.new_context(**context_kwargs)
+            page = self._select_preferred_page(context) or await context.new_page()
             mode = "cdp"
         elif user_data_dir:
             persistent_kwargs = dict(context_kwargs)
             persistent_kwargs.pop("storage_state", None)
             try:
-                context = playwright.chromium.launch_persistent_context(
+                context = await playwright.chromium.launch_persistent_context(
                     user_data_dir,
                     **launch_kwargs,
                     **persistent_kwargs,
                 )
-                page = self._select_preferred_page(context) or context.new_page()
+                page = self._select_preferred_page(context) or await context.new_page()
                 mode = "persistent"
             except PlaywrightError as exc:
                 if not self._is_profile_lock_error(exc):
                     raise
                 logger.warning("persistent domestic profile is locked; falling back to ephemeral browser")
-                browser = playwright.chromium.launch(**launch_kwargs)
-                context = browser.new_context(**context_kwargs)
-                page = context.new_page()
+                browser = await playwright.chromium.launch(**launch_kwargs)
+                context = await browser.new_context(**context_kwargs)
+                page = await context.new_page()
                 mode = "ephemeral"
         else:
-            browser = playwright.chromium.launch(**launch_kwargs)
-            context = browser.new_context(**context_kwargs)
-            page = context.new_page()
+            browser = await playwright.chromium.launch(**launch_kwargs)
+            context = await browser.new_context(**context_kwargs)
+            page = await context.new_page()
             mode = "ephemeral"
 
-        context.add_init_script(STEALTH_INIT_SCRIPT)
+        if mode != "cdp":
+            await context.add_init_script(STEALTH_INIT_SCRIPT)
 
         return DomesticBrowserSession(
             playwright=playwright,
@@ -261,13 +280,14 @@ class DomesticBrowserSessionManager:
                 url = page.url or ""
             except PlaywrightError:
                 continue
+            if self._is_anti_bot_url(url):
+                continue
             score = 0
             if url and url != "about:blank":
                 score += 2
             if "1688.com" in url:
                 score += 4
-            if "_____tmd_____" not in url and "captcha" not in url and "punish" not in url:
-                score += 1
+            score += 1
             candidates.append((score, page))
 
         if not candidates:
@@ -275,7 +295,11 @@ class DomesticBrowserSessionManager:
         candidates.sort(key=lambda item: item[0], reverse=True)
         return candidates[0][1]
 
-    def _apply_pacing(self, now: float) -> None:
+    def _is_anti_bot_url(self, url: str) -> bool:
+        lowered = url.lower()
+        return "_____tmd_____" in lowered or "captcha" in lowered or "punish" in lowered
+
+    async def _apply_pacing(self, now: float) -> None:
         delay_seconds = 0.0
         if self._session is not None and self._session.cooldown_until > now:
             delay_seconds = max(delay_seconds, self._session.cooldown_until - now)
@@ -283,23 +307,23 @@ class DomesticBrowserSessionManager:
         elapsed_since_last_navigation = now - self._last_navigation_at if self._last_navigation_at else float("inf")
         delay_seconds = max(delay_seconds, max(0.0, (jitter_ms / 1000.0) - elapsed_since_last_navigation))
         if delay_seconds > 0:
-            time.sleep(delay_seconds)
+            await asyncio.sleep(delay_seconds)
         self._last_navigation_at = time.monotonic()
 
-    def _close_if_idle(self, now: float) -> None:
+    async def _close_if_idle(self, now: float) -> None:
         if self._session is None:
             return
         if now - self._session.last_used_at <= SESSION_IDLE_TTL_SECONDS:
             return
         logger.info("domestic browser session closed after %.0fs idle", now - self._session.last_used_at)
-        self.invalidate()
+        await self.invalidate()
 
-    def _is_usable(self, session: DomesticBrowserSession) -> bool:
+    async def _is_usable(self, session: DomesticBrowserSession) -> bool:
         try:
             if self._context_is_closed(session.context):
                 return False
             if session.page.is_closed():
-                session.page = session.context.new_page()
+                session.page = await session.context.new_page()
             return True
         except PlaywrightError:
             return False
@@ -317,7 +341,7 @@ class DomesticBrowserSessionManager:
         except PlaywrightError:
             return True
 
-    def _persist_storage_state(self) -> None:
+    async def _persist_storage_state(self) -> None:
         if self._session is None:
             return
         path = self._session.storage_state_path
@@ -325,7 +349,7 @@ class DomesticBrowserSessionManager:
             return
         try:
             Path(path).parent.mkdir(parents=True, exist_ok=True)
-            self._session.context.storage_state(path=path)
+            await self._session.context.storage_state(path=path)
         except PlaywrightError:
             logger.debug("failed to persist storage state", exc_info=True)
 
@@ -340,3 +364,15 @@ class DomesticBrowserSessionManager:
             ignore_default_args.append("--enable-automation")
         normalized["ignore_default_args"] = ignore_default_args
         return normalized
+
+    def _resolve_cdp_ws_url(self, cdp_url: str) -> str:
+        if cdp_url.startswith("ws://") or cdp_url.startswith("wss://"):
+            return cdp_url
+        try:
+            import json
+
+            with urlopen(f"{cdp_url.rstrip('/')}/json/version", timeout=2) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            return str(payload.get("webSocketDebuggerUrl") or cdp_url)
+        except Exception:
+            return cdp_url

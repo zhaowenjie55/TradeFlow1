@@ -356,14 +356,14 @@ export function ParameterForm() {
             )}
 
             {taskStore.status === "WAITING_1688_VERIFICATION" && (
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-3">
+              <div className="rounded-2xl border border-sky-200 bg-sky-50 px-3 py-3">
                 <div className="flex flex-col gap-2">
                   <div className="flex items-start gap-2">
-                    <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-600" />
+                    <AlertTriangle className="mt-0.5 size-4 shrink-0 text-sky-600" />
                     <div className="min-w-0">
-                      <p className="text-xs font-semibold leading-5 text-amber-900">{verificationGuidance.title}</p>
-                      <p className="mt-1 text-xs leading-[1.5] text-amber-800">{verificationGuidance.detail}</p>
-                      <p className="mt-2 text-[11px] leading-5 text-amber-700">{verificationGuidance.hint}</p>
+                      <p className="text-xs font-semibold leading-5 text-sky-900">{verificationGuidance.title}</p>
+                      <p className="mt-1 text-xs leading-[1.5] text-sky-800">{verificationGuidance.detail}</p>
+                      <p className="mt-2 text-[11px] leading-5 text-sky-700">{verificationGuidance.hint}</p>
                     </div>
                   </div>
                   <Button size="sm" variant="outline" className="h-8 shrink-0 self-start rounded-xl bg-white text-xs" onClick={continueDomesticVerification} disabled={isResumingVerification}>
@@ -443,7 +443,7 @@ export function ParameterForm() {
                     </div>
                   </div>
                   {voicePreviewDirty && (
-                    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm text-amber-700">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700">
                       {t("workspace.voiceDirtyHint")}
                     </div>
                   )}
@@ -585,7 +585,7 @@ function getToneClasses(tone: "success" | "info" | "warning" | "danger") {
     case "success":
       return "border-emerald-200 bg-emerald-50 text-emerald-800"
     case "warning":
-      return "border-amber-200 bg-amber-50 text-amber-800"
+      return "border-sky-200 bg-sky-50 text-sky-800"
     case "danger":
       return "border-red-200 bg-red-50 text-red-800"
     default:

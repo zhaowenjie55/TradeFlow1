@@ -318,7 +318,7 @@
     "targetMarket": "目标市场",
     "topN": "搜索商品数量",
     "verificationBannerTitle": "1688 浏览器会话仍需人工验证",
-    "verificationBannerHint": "先在独立 Chrome 窗口完成登录、滑块或验证码，再回到这里继续。不要刷新任务，也不要切换到新的浏览器会话。",
+    "verificationBannerHint": "正在等待您完成 1688 验证，验证通过后将自动继续。如果 30 秒后仍未恢复，请点击下方按钮手动续传。",
     "voiceRiskTitle": "检测到 1688 风控。请先在弹出的浏览器窗口完成登录或滑块验证，然后点击继续抓取。",
     "resumeVerification": "完成验证后继续抓取",
     "resumingVerification": "正在恢复...",

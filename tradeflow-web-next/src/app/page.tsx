@@ -1,11 +1,11 @@
 import { Suspense } from "react"
 
-import { Workbench } from "@/components/layout/workbench"
+import { AgentEntry } from "@/components/agent/agent-entry"
 
 export default function Page() {
   return (
     <Suspense fallback={null}>
-      <Workbench />
+      <AgentEntry />
     </Suspense>
   )
 }

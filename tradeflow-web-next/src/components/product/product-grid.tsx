@@ -1,16 +1,26 @@
 "use client"
 
-import { useMemo } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { AlertTriangle, CheckCircle2, Clock3, ShoppingBag } from "lucide-react"
 
 import { useAppI18n } from "@/components/layout/locale-provider"
+import { SearchProcessingPanel } from "@/components/agent/search-processing-panel"
 import { ProductCard } from "@/components/product/product-card"
 import { ImageWithFallback } from "@/components/ui/image-with-fallback"
 import { Card, CardContent } from "@/components/ui/card"
 import { getReadableOriginalTitle, getReadableProductName, getReadableStageLabel, humanizeQualityTier, humanizeReportSource } from "@/lib/presentation"
 import { useTaskRunner } from "@/hooks/use-task-runner"
+import { useAgentStore } from "@/stores/agent-store"
 import { getFilteredCandidates, useProductsStore } from "@/stores/products-store"
 import { useTaskStore } from "@/stores/task-store"
+
+const SEARCH_MIN_PROCESSING_MS = 3000
+const SEARCH_PHASE_TIMINGS = [
+  { phase: "marketplace_search", delay: 700 },
+  { phase: "candidate_filtering", delay: 1500 },
+  { phase: "candidate_ranking", delay: 2300 },
+] as const
+const SEARCH_BATCH_INTERVAL_MS = 1700
 
 export function ProductGrid() {
   const { t } = useAppI18n()
@@ -22,7 +32,28 @@ export function ProductGrid() {
   const status = useTaskStore((state) => state.status)
   const stage = useTaskStore((state) => state.stage)
   const isPolling = useTaskStore((state) => state.isPolling)
+  const currentTaskId = useTaskStore((state) => state.currentTaskId)
+  const currentTaskPhase = useTaskStore((state) => state.currentTaskPhase)
+  const searchExperienceActive = useAgentStore((state) => state.searchExperienceActive)
+  const searchExperiencePhase = useAgentStore((state) => state.searchExperiencePhase)
+  const visibleCandidateCount = useAgentStore((state) => state.visibleCandidateCount)
+  const startSearchExperience = useAgentStore((state) => state.startSearchExperience)
+  const setSearchExperiencePhase = useAgentStore((state) => state.setSearchExperiencePhase)
+  const setVisibleCandidateCount = useAgentStore((state) => state.setVisibleCandidateCount)
+  const finishSearchExperience = useAgentStore((state) => state.finishSearchExperience)
+  const resetSearchExperience = useAgentStore((state) => state.resetSearchExperience)
   const { analyzeProduct } = useTaskRunner()
+  const activeSearchTaskRef = useRef<string | null>(null)
+  const searchStartedAtRef = useRef(0)
+  const phaseTimersRef = useRef<number[]>([])
+  const streamTimersRef = useRef<number[]>([])
+
+  const isPhaseOneSearch = currentTaskPhase === "PHASE1" && Boolean(currentTaskId)
+  const visibleCandidates = useMemo(() => {
+    if (!searchExperienceActive || !isPhaseOneSearch) return candidates
+    return candidates.slice(0, Math.min(visibleCandidateCount, candidates.length))
+  }, [candidates, isPhaseOneSearch, searchExperienceActive, visibleCandidateCount])
+  const displayCandidateCount = visibleCandidates.length
 
   const currentCandidate = useMemo(() => {
     if (!selectedProductId) return null
@@ -34,14 +65,123 @@ export function ProductGrid() {
   }, [productState.reportsByProductId, selectedProductId])
 
   const workflowSteps = useMemo(() => {
-    const hasCandidates = candidates.length > 0
+    const hasCandidates = displayCandidateCount > 0
     const hasSelection = Boolean(selectedProductId)
     return [
       { key: "discover", title: t("productGrid.step1"), state: hasCandidates ? "complete" : isPolling ? "active" : "pending" },
       { key: "select", title: t("productGrid.step2"), state: hasSelection ? "complete" : hasCandidates ? "active" : "pending" },
       { key: "report", title: t("productGrid.step3"), state: isAnalyzingReport ? "active" : status === "REPORT_READY" ? "complete" : "pending" },
     ] as const
-  }, [candidates.length, isAnalyzingReport, isPolling, selectedProductId, status, t])
+  }, [displayCandidateCount, isAnalyzingReport, isPolling, selectedProductId, status, t])
+
+  useEffect(() => {
+    return () => {
+      clearSearchTimers(phaseTimersRef.current)
+      clearSearchTimers(streamTimersRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isPhaseOneSearch || !currentTaskId) {
+      activeSearchTaskRef.current = null
+      clearSearchTimers(phaseTimersRef.current)
+      clearSearchTimers(streamTimersRef.current)
+      resetSearchExperience()
+      return
+    }
+
+    const searchIsRunning =
+      isLoading ||
+      isPolling ||
+      status === "CREATED" ||
+      status === "QUEUED" ||
+      status === "RUNNING" ||
+      status === "WAITING_USER_SELECTION"
+
+    if (!searchIsRunning) return
+    if (activeSearchTaskRef.current === currentTaskId) return
+
+    activeSearchTaskRef.current = currentTaskId
+    searchStartedAtRef.current = Date.now()
+    clearSearchTimers(phaseTimersRef.current)
+    clearSearchTimers(streamTimersRef.current)
+    startSearchExperience()
+    phaseTimersRef.current = SEARCH_PHASE_TIMINGS.map(({ phase, delay }) =>
+      window.setTimeout(() => setSearchExperiencePhase(phase), delay),
+    )
+  }, [
+    currentTaskId,
+    isLoading,
+    isPhaseOneSearch,
+    isPolling,
+    resetSearchExperience,
+    setSearchExperiencePhase,
+    startSearchExperience,
+    status,
+  ])
+
+  useEffect(() => {
+    if (!searchExperienceActive || !isPhaseOneSearch || candidates.length === 0) return
+    if (searchExperiencePhase === "results_streaming" || searchExperiencePhase === "complete") return
+
+    const elapsed = Date.now() - searchStartedAtRef.current
+    const delay = Math.max(SEARCH_MIN_PROCESSING_MS - elapsed, 0)
+    clearSearchTimers(streamTimersRef.current)
+    streamTimersRef.current = [
+      window.setTimeout(() => {
+        setSearchExperiencePhase("results_streaming")
+        setVisibleCandidateCount(getCandidateBatchCount(candidates.length, 1))
+      }, delay),
+    ]
+  }, [
+    candidates.length,
+    isPhaseOneSearch,
+    searchExperienceActive,
+    searchExperiencePhase,
+    setSearchExperiencePhase,
+    setVisibleCandidateCount,
+  ])
+
+  useEffect(() => {
+    if (!searchExperienceActive || searchExperiencePhase !== "results_streaming" || candidates.length === 0) return
+
+    clearSearchTimers(streamTimersRef.current)
+    setVisibleCandidateCount(getCandidateBatchCount(candidates.length, 1))
+    streamTimersRef.current = [
+      window.setTimeout(
+        () => setVisibleCandidateCount(getCandidateBatchCount(candidates.length, 2)),
+        SEARCH_BATCH_INTERVAL_MS,
+      ),
+      window.setTimeout(() => {
+        setVisibleCandidateCount(candidates.length)
+        finishSearchExperience()
+      }, SEARCH_BATCH_INTERVAL_MS * 2),
+    ]
+  }, [
+    candidates.length,
+    finishSearchExperience,
+    searchExperienceActive,
+    searchExperiencePhase,
+    setVisibleCandidateCount,
+  ])
+
+  useEffect(() => {
+    if (!searchExperienceActive || !isPhaseOneSearch || candidates.length > 0) return
+    if (isLoading || isPolling || status !== "FAILED") return
+
+    const elapsed = Date.now() - searchStartedAtRef.current
+    const delay = Math.max(SEARCH_MIN_PROCESSING_MS - elapsed, 0)
+    clearSearchTimers(streamTimersRef.current)
+    streamTimersRef.current = [window.setTimeout(() => resetSearchExperience(), delay)]
+  }, [
+    candidates.length,
+    isLoading,
+    isPhaseOneSearch,
+    isPolling,
+    resetSearchExperience,
+    searchExperienceActive,
+    status,
+  ])
 
   const currentReportBadges = useMemo(() => {
     const provenance = currentReport?.provenance
@@ -61,6 +201,14 @@ export function ProductGrid() {
   }, [currentReport?.provenance, t])
 
   const processBanner = useMemo(() => {
+    if (searchExperienceActive && searchExperiencePhase === "results_streaming" && candidates.length > displayCandidateCount) {
+      return {
+        tone: "info" as const,
+        title: "Results streaming",
+        description: "TradeFlow is releasing ranked candidates in batches as the agent finalizes the shortlist.",
+      }
+    }
+
     if (status === "WAITING_1688_VERIFICATION") {
       return {
         tone: "warning" as const,
@@ -89,7 +237,7 @@ export function ProductGrid() {
       }
     }
 
-    if (status === "WAITING_USER_SELECTION" && candidates.length > 0) {
+    if (status === "WAITING_USER_SELECTION" && displayCandidateCount > 0) {
       return {
         tone: "info" as const,
         title: t("productGrid.bannerSelectionTitle"),
@@ -106,7 +254,25 @@ export function ProductGrid() {
     }
 
     return null
-  }, [candidates.length, currentCandidate, isAnalyzingReport, isLoading, isPolling, status, t])
+  }, [
+    candidates.length,
+    currentCandidate,
+    displayCandidateCount,
+    isAnalyzingReport,
+    isLoading,
+    isPolling,
+    searchExperienceActive,
+    searchExperiencePhase,
+    status,
+    t,
+  ])
+
+  const showProcessingPanel =
+    searchExperienceActive &&
+    isPhaseOneSearch &&
+    searchExperiencePhase !== "complete" &&
+    (searchExperiencePhase !== "results_streaming" || displayCandidateCount === 0)
+  const showPendingTaskPanel = isLoading && !currentTaskId && candidates.length === 0
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -116,7 +282,7 @@ export function ProductGrid() {
             <div className="flex items-center gap-2">
               <ShoppingBag className="size-5 text-[var(--tf-text-subtle)]" />
               <h2 className="text-lg font-semibold text-[var(--tf-text)]">{t("productGrid.title")}</h2>
-              <span className="shrink-0 text-sm text-[var(--tf-text-subtle)]">{t("productGrid.results", { count: candidates.length })}</span>
+              <span className="shrink-0 text-sm text-[var(--tf-text-subtle)]">{t("productGrid.results", { count: displayCandidateCount })}</span>
             </div>
             <p className="mt-1 text-xs leading-5 text-[var(--tf-text-muted)]">{t("productGrid.subtitle")}</p>
           </div>
@@ -235,26 +401,15 @@ export function ProductGrid() {
       </div>
 
       <div className="tradeflow-scrollbar min-h-0 flex-1 overflow-auto px-4 py-4">
-        {isLoading && candidates.length === 0 ? (
-          <div className="grid gap-3 lg:grid-cols-3">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className="overflow-hidden rounded-[22px] border border-[var(--tf-border)] bg-[var(--tf-bg-soft)]">
-                <div className="tf-skeleton aspect-[4/3]" />
-                <div className="space-y-2 p-3">
-                  <div className="tf-skeleton h-3 w-3/4 rounded" />
-                  <div className="tf-skeleton h-3 w-1/2 rounded" />
-                  <div className="tf-skeleton h-8 w-full rounded-xl" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : candidates.length === 0 ? (
+        {(showProcessingPanel && searchExperiencePhase) || showPendingTaskPanel ? (
+          <SearchProcessingPanel phase={searchExperiencePhase ?? "query_parsed"} candidateCount={candidates.length} />
+        ) : displayCandidateCount === 0 ? (
           <div className="flex h-full min-h-[24rem] items-center justify-center text-center text-sm text-[var(--tf-text-subtle)]">
             {t("productGrid.empty")}
           </div>
         ) : (
           <div className="grid gap-3 lg:grid-cols-3">
-            {candidates.map((candidate) => (
+            {visibleCandidates.map((candidate) => (
               <ProductCard
                 key={candidate.productId}
                 candidate={candidate}
@@ -282,10 +437,21 @@ function ProcessBannerIcon({ tone }: { tone: "info" | "warning" | "success" }) {
   }
 }
 
+function clearSearchTimers(timers: number[]) {
+  timers.forEach((timer) => window.clearTimeout(timer))
+  timers.length = 0
+}
+
+function getCandidateBatchCount(total: number, batch: 1 | 2) {
+  if (total <= 3) return total
+  if (batch === 1) return Math.min(3, total)
+  return Math.min(6, total)
+}
+
 function getBannerToneClasses(tone: "info" | "warning" | "success") {
   switch (tone) {
     case "warning":
-      return "border-amber-200 bg-amber-50 text-amber-900"
+      return "border-sky-200 bg-sky-50 text-sky-900"
     case "success":
       return "border-emerald-200 bg-emerald-50 text-emerald-900"
     default:

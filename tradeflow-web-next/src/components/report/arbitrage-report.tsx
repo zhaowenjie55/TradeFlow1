@@ -455,7 +455,7 @@ function getTrustToneClasses(tone: "success" | "info" | "warning" | "danger") {
     case "success":
       return "border-emerald-200 bg-emerald-50 text-emerald-900"
     case "warning":
-      return "border-amber-200 bg-amber-50 text-amber-900"
+      return "border-sky-200 bg-sky-50 text-sky-900"
     case "danger":
       return "border-red-200 bg-red-50 text-red-900"
     default:

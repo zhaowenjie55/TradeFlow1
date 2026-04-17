@@ -10,6 +10,8 @@ import { useTaskStore } from "@/stores/task-store"
 import type { AnalysisFormValues, ReportDetail, TaskConstraintRequest, TaskStatusResponse } from "@/types"
 
 const POLL_INTERVAL = 1000
+const VERIFICATION_RETRY_INTERVAL = 3000
+const VERIFICATION_AUTO_RESUME_WINDOW_MILLIS = 30_000
 const PHASE2_MAX_POLL_MILLIS = 90_000
 
 function parseConstraints(): TaskConstraintRequest[] {
@@ -46,12 +48,14 @@ function resolveErrorMessage(error: unknown, fallback: string) {
 
 export function useTaskRunner() {
   const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const verificationWaitStartedAtRef = useRef<number | null>(null)
 
   const stopPolling = useCallback(() => {
     if (pollTimerRef.current) {
       clearTimeout(pollTimerRef.current)
       pollTimerRef.current = null
     }
+    verificationWaitStartedAtRef.current = null
     useTaskStore.getState().setPolling(false)
   }, [])
 
@@ -84,6 +88,30 @@ export function useTaskRunner() {
       const run = async (): Promise<void> => {
         try {
           const snapshot = await getTaskStatus(taskId)
+          const isWaitingFor1688Verification =
+            snapshot.phase === "PHASE2" && snapshot.status === "WAITING_1688_VERIFICATION"
+
+          if (isWaitingFor1688Verification) {
+            const now = Date.now()
+            verificationWaitStartedAtRef.current ??= now
+            const waitingMillis = now - verificationWaitStartedAtRef.current
+
+            if (waitingMillis < VERIFICATION_AUTO_RESUME_WINDOW_MILLIS) {
+              useAgentStore.getState().setTaskLogs(snapshot.logs)
+              useProductsStore.getState().setLoading(false)
+              useProductsStore.getState().setReportAnalyzing(true)
+
+              if (useTaskStore.getState().isPolling) {
+                pollTimerRef.current = setTimeout(() => {
+                  void run()
+                }, VERIFICATION_RETRY_INTERVAL)
+              }
+              return
+            }
+          } else {
+            verificationWaitStartedAtRef.current = null
+          }
+
           applySnapshot(snapshot)
 
           if (snapshot.phase === "PHASE2" && Date.now() - startedAt > PHASE2_MAX_POLL_MILLIS) {

@@ -1,14 +1,16 @@
+import asyncio
 import os
 import re
 import logging
+import random
+import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from threading import RLock
 from typing import Any, Optional
 from urllib.parse import quote
 
-from playwright.sync_api import Error as PlaywrightError
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+from playwright.async_api import Error as PlaywrightError
+from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 
 from app.services.providers.domestic_browser_session import DomesticBrowserSessionManager
 
@@ -91,7 +93,8 @@ EMPTY_RESULT_MARKERS = (
 PRICE_PATTERN = re.compile(r"(\d+(?:\.\d+)?)")
 ITEM_ID_PATTERN = re.compile(r"/offer/(\d+)\.html")
 ITEM_ID_QUERY_PATTERN = re.compile(r"[?&]offerId=(\d+)")
-DOMESTIC_BROWSER_LOCK = RLock()
+# asyncio.Lock replaces threading.RLock — safe to create at module level in Python 3.10+
+DOMESTIC_BROWSER_LOCK = asyncio.Lock()
 DOMESTIC_SESSION_MANAGER = DomesticBrowserSessionManager()
 logger = logging.getLogger(__name__)
 
@@ -132,17 +135,16 @@ class DomesticSearchItem:
     rawData: dict[str, Any]
 
 
-def search_1688_products(keyword: str, page: int) -> list[dict[str, Any]]:
-    items = _fetch_1688_search_results(keyword, page)
+async def search_1688_products(keyword: str, page: int) -> list[dict[str, Any]]:
+    items = await _fetch_1688_search_results(keyword, page)
     return [asdict(item) for item in items]
 
 
-def fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
-    detail = _fetch_1688_product_detail(external_item_id)
-    return detail
+async def fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
+    return await _fetch_1688_product_detail(external_item_id)
 
 
-def _fetch_1688_search_results(keyword: str, page: int) -> list[DomesticSearchItem]:
+async def _fetch_1688_search_results(keyword: str, page: int) -> list[DomesticSearchItem]:
     url = build_1688_search_url(keyword, page)
     headless = env_flag("PLAYWRIGHT_HEADLESS", False)
     slow_mo = int(os.getenv("PLAYWRIGHT_SLOW_MO_MS", "0") or "0")
@@ -156,7 +158,7 @@ def _fetch_1688_search_results(keyword: str, page: int) -> list[DomesticSearchIt
     cdp_url = os.getenv("PLAYWRIGHT_CDP_URL", "").strip()
 
     try:
-        with DOMESTIC_BROWSER_LOCK:
+        async with DOMESTIC_BROWSER_LOCK:
             launch_kwargs: dict[str, Any] = {
                 "headless": headless,
                 "slow_mo": slow_mo,
@@ -178,7 +180,7 @@ def _fetch_1688_search_results(keyword: str, page: int) -> list[DomesticSearchIt
             }
             if storage_state_path and Path(storage_state_path).exists():
                 context_kwargs["storage_state"] = storage_state_path
-            _context, page_ref = DOMESTIC_SESSION_MANAGER.acquire(
+            _context, page_ref = await DOMESTIC_SESSION_MANAGER.acquire(
                 cdp_url=cdp_url,
                 user_data_dir=user_data_dir,
                 launch_kwargs=launch_kwargs,
@@ -186,72 +188,72 @@ def _fetch_1688_search_results(keyword: str, page: int) -> list[DomesticSearchIt
                 storage_state_path=storage_state_path,
             )
 
-            if DOMESTIC_SESSION_MANAGER.has_pending_verification(looks_like_antibot):
+            if await DOMESTIC_SESSION_MANAGER.has_pending_verification(looks_like_antibot):
                 if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
-                    if _await_manual_verification(
+                    if await _await_manual_verification(
                             page_ref,
                             manual_solve_timeout_ms,
                             "1688 验证过程中浏览器会话已关闭，请重新打开会话后重试。",
                     ):
-                        DOMESTIC_SESSION_MANAGER.mark_success()
-                if looks_like_antibot(page_ref):
-                    dump_debug_artifacts(page_ref, debug_dir, "blocked_session")
+                        await DOMESTIC_SESSION_MANAGER.mark_success()
+                if await looks_like_antibot(page_ref):
+                    await dump_debug_artifacts(page_ref, debug_dir, "blocked_session")
                     raise DomesticVerificationRequiredError(
                         "1688 浏览器会话仍停留在风控/验证码页面，请在复用浏览器中先完成验证后重试。"
                     )
 
             try:
-                page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
+                await page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
             except PlaywrightTimeoutError as exc:
                 if not page_ref.url or page_ref.url == "about:blank":
-                    DOMESTIC_SESSION_MANAGER.invalidate()
+                    await DOMESTIC_SESSION_MANAGER.invalidate()
                     raise DomesticSearchError("1688 页面打开超时，请稍后重试。") from exc
             try:
-                page_ref.wait_for_load_state("networkidle", timeout=15000)
+                await page_ref.wait_for_load_state("networkidle", timeout=15000)
             except PlaywrightTimeoutError:
                 # 1688 长轮询较多，networkidle 不稳定，不作为硬失败条件。
                 pass
 
-            if looks_like_antibot(page_ref):
+            if await looks_like_antibot(page_ref):
                 DOMESTIC_SESSION_MANAGER.mark_verification_required(page_ref)
                 if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
-                    if _await_manual_verification(
+                    if await _await_manual_verification(
                             page_ref,
                             manual_solve_timeout_ms,
                             "1688 验证过程中浏览器会话已关闭，请重新打开会话后重试。",
                     ):
-                        wait_for_results(page_ref)
-                        items = extract_items(page_ref)
+                        await wait_for_results(page_ref)
+                        items = await extract_items(page_ref)
                         if items:
-                            DOMESTIC_SESSION_MANAGER.mark_success()
+                            await DOMESTIC_SESSION_MANAGER.mark_success()
                             return items
-                dump_debug_artifacts(page_ref, debug_dir, "anti_bot")
+                await dump_debug_artifacts(page_ref, debug_dir, "anti_bot")
                 raise DomesticVerificationRequiredError(
                     f"1688 返回了风控/验证码页面，已预留约 {manual_solve_timeout_ms // 1000} 秒人工登录/验证时间，请完成后重试。"
                 )
 
-            wait_for_results(page_ref)
-            items = extract_items(page_ref)
+            await wait_for_results(page_ref)
+            items = await extract_items(page_ref)
             if not items:
-                if looks_like_empty_result(page_ref):
-                    DOMESTIC_SESSION_MANAGER.mark_success()
+                if await looks_like_empty_result(page_ref):
+                    await DOMESTIC_SESSION_MANAGER.mark_success()
                     return []
-                dump_debug_artifacts(page_ref, debug_dir, "no_results")
+                await dump_debug_artifacts(page_ref, debug_dir, "no_results")
                 raise DomesticSearchError(
                     "1688 页面已打开，但未解析到商品卡片。需要我本地在浏览器中确认 selector。"
                 )
-            DOMESTIC_SESSION_MANAGER.mark_success()
+            await DOMESTIC_SESSION_MANAGER.mark_success()
             logger.info("1688 search succeeded keyword='%s' page=%s count=%s", keyword, page, len(items))
             return items
-            
+
     except DomesticSearchError:
         raise
     except PlaywrightError as exc:
-        DOMESTIC_SESSION_MANAGER.invalidate()
+        await DOMESTIC_SESSION_MANAGER.invalidate()
         raise DomesticSearchError(f"Playwright 启动或执行失败: {exc}") from exc
 
 
-def _fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
+async def _fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
     url = f"https://detail.1688.com/offer/{external_item_id}.html?offerId={external_item_id}"
     headless = env_flag("PLAYWRIGHT_HEADLESS", False)
     slow_mo = int(os.getenv("PLAYWRIGHT_SLOW_MO_MS", "0") or "0")
@@ -265,7 +267,7 @@ def _fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
     cdp_url = os.getenv("PLAYWRIGHT_CDP_URL", "").strip()
 
     try:
-        with DOMESTIC_BROWSER_LOCK:
+        async with DOMESTIC_BROWSER_LOCK:
             launch_kwargs: dict[str, Any] = {
                 "headless": headless,
                 "slow_mo": slow_mo,
@@ -287,7 +289,7 @@ def _fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
             }
             if storage_state_path and Path(storage_state_path).exists():
                 context_kwargs["storage_state"] = storage_state_path
-            _context, page_ref = DOMESTIC_SESSION_MANAGER.acquire(
+            _context, page_ref = await DOMESTIC_SESSION_MANAGER.acquire(
                 cdp_url=cdp_url,
                 user_data_dir=user_data_dir,
                 launch_kwargs=launch_kwargs,
@@ -295,57 +297,57 @@ def _fetch_1688_product_detail(external_item_id: str) -> dict[str, Any]:
                 storage_state_path=storage_state_path,
             )
 
-            if DOMESTIC_SESSION_MANAGER.has_pending_verification(looks_like_antibot):
+            if await DOMESTIC_SESSION_MANAGER.has_pending_verification(looks_like_antibot):
                 if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
-                    if _await_manual_verification(
+                    if await _await_manual_verification(
                             page_ref,
                             manual_solve_timeout_ms,
                             "1688 详情验证过程中浏览器会话已关闭，请重新打开会话后重试。",
                     ):
-                        DOMESTIC_SESSION_MANAGER.mark_success()
-                if looks_like_antibot(page_ref):
-                    dump_debug_artifacts(page_ref, debug_dir, "detail_blocked_session")
+                        await DOMESTIC_SESSION_MANAGER.mark_success()
+                if await looks_like_antibot(page_ref):
+                    await dump_debug_artifacts(page_ref, debug_dir, "detail_blocked_session")
                     raise DomesticVerificationRequiredError(
                         "1688 浏览器会话仍停留在风控/验证码页面，请先完成验证后重试详情抓取。"
                     )
 
             try:
-                page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
+                await page_ref.goto(url, wait_until="domcontentloaded", timeout=navigation_timeout_ms)
             except PlaywrightTimeoutError as exc:
                 if not page_ref.url or page_ref.url == "about:blank":
-                    DOMESTIC_SESSION_MANAGER.invalidate()
+                    await DOMESTIC_SESSION_MANAGER.invalidate()
                     raise DomesticDetailError("1688 详情页打开超时，请稍后重试。") from exc
 
-            if looks_like_antibot(page_ref):
+            if await looks_like_antibot(page_ref):
                 DOMESTIC_SESSION_MANAGER.mark_verification_required(page_ref)
                 if allow_manual_solve and manual_solve_timeout_ms > 0 and not headless:
-                    if _await_manual_verification(
+                    if await _await_manual_verification(
                             page_ref,
                             manual_solve_timeout_ms,
                             "1688 详情验证过程中浏览器会话已关闭，请重新打开会话后重试。",
                     ):
-                        wait_for_detail(page_ref)
-                        detail = extract_detail_payload(page_ref, external_item_id)
+                        await wait_for_detail(page_ref)
+                        detail = await extract_detail_payload(page_ref, external_item_id)
                         if detail:
-                            DOMESTIC_SESSION_MANAGER.mark_success()
+                            await DOMESTIC_SESSION_MANAGER.mark_success()
                             return detail
-                dump_debug_artifacts(page_ref, debug_dir, "detail_anti_bot")
+                await dump_debug_artifacts(page_ref, debug_dir, "detail_anti_bot")
                 raise DomesticVerificationRequiredError(
                     f"1688 详情页返回了风控/验证码页面，已预留约 {manual_solve_timeout_ms // 1000} 秒人工登录/验证时间，请完成后重试。"
                 )
 
-            wait_for_detail(page_ref)
-            detail = extract_detail_payload(page_ref, external_item_id)
+            await wait_for_detail(page_ref)
+            detail = await extract_detail_payload(page_ref, external_item_id)
             if not detail:
-                dump_debug_artifacts(page_ref, debug_dir, "detail_no_data")
+                await dump_debug_artifacts(page_ref, debug_dir, "detail_no_data")
                 raise DomesticDetailError("1688 详情页已打开，但未提取到结构化详情数据。")
-            DOMESTIC_SESSION_MANAGER.mark_success()
+            await DOMESTIC_SESSION_MANAGER.mark_success()
             logger.info("1688 detail succeeded external_item_id=%s", external_item_id)
             return detail
     except DomesticDetailError:
         raise
     except PlaywrightError as exc:
-        DOMESTIC_SESSION_MANAGER.invalidate()
+        await DOMESTIC_SESSION_MANAGER.invalidate()
         raise DomesticDetailError(f"Playwright 启动或执行详情抓取失败: {exc}") from exc
 
 
@@ -359,50 +361,76 @@ def build_1688_search_url(keyword: str, page: int) -> str:
     return f"https://s.1688.com/selloffer/offer_search.htm?keywords={encoded}&beginPage={page}"
 
 
-def wait_for_results(page_ref) -> None:
+async def wait_for_results(page_ref) -> None:
     for selector in RESULT_READY_SELECTORS:
         try:
-            page_ref.wait_for_selector(selector, timeout=10000)
-            page_ref.wait_for_timeout(1200)
+            await page_ref.wait_for_selector(selector, timeout=10000)
+            await page_ref.wait_for_timeout(1200)
             return
         except PlaywrightTimeoutError:
             continue
-    dump_debug_artifacts(page_ref, os.getenv("PLAYWRIGHT_DEBUG_DIR", "").strip(), "selector_timeout")
+    await dump_debug_artifacts(page_ref, os.getenv("PLAYWRIGHT_DEBUG_DIR", "").strip(), "selector_timeout")
     raise DomesticSearchError("1688 搜索结果未正常渲染，未找到可用结果 selector。")
 
 
-def wait_for_detail(page_ref) -> None:
+async def wait_for_detail(page_ref) -> None:
     for selector in DETAIL_READY_SELECTORS:
         try:
-            page_ref.wait_for_selector(selector, timeout=10000)
-            page_ref.wait_for_timeout(1000)
+            await page_ref.wait_for_selector(selector, timeout=10000)
+            await page_ref.wait_for_timeout(1000)
             return
         except PlaywrightTimeoutError:
             continue
-    dump_debug_artifacts(page_ref, os.getenv("PLAYWRIGHT_DEBUG_DIR", "").strip(), "detail_selector_timeout")
+    await dump_debug_artifacts(page_ref, os.getenv("PLAYWRIGHT_DEBUG_DIR", "").strip(), "detail_selector_timeout")
     raise DomesticDetailError("1688 详情页未正常渲染，未找到可用详情 selector。")
 
 
-def _await_manual_verification(page_ref, timeout_ms: int, closed_message: str) -> bool:
+async def _await_manual_verification(page_ref, timeout_ms: int, closed_message: str) -> bool:
     try:
-        page_ref.bring_to_front()
+        await page_ref.bring_to_front()
     except PlaywrightError:
-        DOMESTIC_SESSION_MANAGER.invalidate()
+        await DOMESTIC_SESSION_MANAGER.invalidate()
         raise DomesticVerificationRequiredError(closed_message)
+
+    started_at = time.monotonic()
     try:
-        page_ref.wait_for_timeout(timeout_ms)
-    except PlaywrightError as exc:
-        DOMESTIC_SESSION_MANAGER.invalidate()
-        raise DomesticVerificationRequiredError(closed_message) from exc
+        x5secdata = await extract_x5secdata_marker(page_ref)
+        logger.warning(
+            "verification.detected x5secdata=%s url=%s",
+            x5secdata,
+            page_ref.url,
+        )
+    except PlaywrightError:
+        await DOMESTIC_SESSION_MANAGER.invalidate()
+        raise DomesticVerificationRequiredError(closed_message)
+
+    deadline = started_at + (timeout_ms / 1000.0)
+    while time.monotonic() < deadline:
+        try:
+            if not await looks_like_antibot(page_ref):
+                elapsed_ms = int((time.monotonic() - started_at) * 1000)
+                logger.info(
+                    "verification.cleared elapsed_ms=%s url=%s",
+                    elapsed_ms,
+                    page_ref.url,
+                )
+                return True
+        except PlaywrightError as exc:
+            await DOMESTIC_SESSION_MANAGER.invalidate()
+            raise DomesticVerificationRequiredError(closed_message) from exc
+
+        delay_ms = max(200, 1500 + random.randint(-300, 300))
+        await page_ref.wait_for_timeout(delay_ms)
+
     try:
-        return not looks_like_antibot(page_ref)
+        return not await looks_like_antibot(page_ref)
     except PlaywrightError as exc:
-        DOMESTIC_SESSION_MANAGER.invalidate()
+        await DOMESTIC_SESSION_MANAGER.invalidate()
         raise DomesticVerificationRequiredError(closed_message) from exc
 
 
-def extract_items(page_ref) -> list[DomesticSearchItem]:
-    items = page_ref.evaluate(
+async def extract_items(page_ref) -> list[DomesticSearchItem]:
+    items = await page_ref.evaluate(
         """(config) => {
             const normalizeText = (value) => {
               if (!value) return null;
@@ -516,8 +544,8 @@ def extract_items(page_ref) -> list[DomesticSearchItem]:
     return normalized
 
 
-def extract_detail_payload(page_ref, external_item_id: str) -> Optional[dict[str, Any]]:
-    payload = page_ref.evaluate(
+async def extract_detail_payload(page_ref, external_item_id: str) -> Optional[dict[str, Any]]:
+    payload = await page_ref.evaluate(
         """() => {
             const clone = (value) => {
               try {
@@ -705,27 +733,40 @@ def env_flag(name: str, default: bool) -> bool:
     return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def looks_like_antibot(page_ref) -> bool:
+async def looks_like_antibot(page_ref) -> bool:
     current_url = page_ref.url or ""
     if any(marker in current_url for marker in ANTI_BOT_MARKERS):
         return True
     try:
-        content = page_ref.content()
+        content = await page_ref.content()
     except PlaywrightError:
         return False
     lowered = content.lower()
     return any(marker.lower() in lowered for marker in ANTI_BOT_MARKERS)
 
 
-def looks_like_empty_result(page_ref) -> bool:
+async def extract_x5secdata_marker(page_ref) -> str:
+    haystacks = [page_ref.url or ""]
     try:
-        content = page_ref.content()
+        haystacks.append(await page_ref.content())
+    except PlaywrightError:
+        pass
+    for haystack in haystacks:
+        match = re.search(r"x5secdata[^&\"'<>\\s]*", haystack, flags=re.IGNORECASE)
+        if match:
+            return match.group(0)[:40]
+    return ""
+
+
+async def looks_like_empty_result(page_ref) -> bool:
+    try:
+        content = await page_ref.content()
     except PlaywrightError:
         return False
     return any(marker in content for marker in EMPTY_RESULT_MARKERS)
 
 
-def dump_debug_artifacts(page_ref, debug_dir: str, label: str) -> None:
+async def dump_debug_artifacts(page_ref, debug_dir: str, label: str) -> None:
     if not debug_dir:
         return
     output_dir = Path(debug_dir)
@@ -733,8 +774,8 @@ def dump_debug_artifacts(page_ref, debug_dir: str, label: str) -> None:
     html_path = output_dir / f"1688_{label}.html"
     png_path = output_dir / f"1688_{label}.png"
     try:
-        html_path.write_text(page_ref.content(), encoding="utf-8")
-        page_ref.screenshot(path=str(png_path), full_page=True)
+        html_path.write_text(await page_ref.content(), encoding="utf-8")
+        await page_ref.screenshot(path=str(png_path), full_page=True)
     except Exception:
         return
 
